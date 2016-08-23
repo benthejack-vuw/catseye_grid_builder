@@ -1,6 +1,9 @@
-let gon = null;
-let initLine = null;
-let pt1, pt2 = null;
+// @codekit-prepend "lib/p5.js"
+// @codekit-prepend "src/Geometry/NGon.js"
+
+var gon = null;
+var initLine = null;
+var pt1, pt2 = null;
 
 
 function setup() {
