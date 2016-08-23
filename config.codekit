@@ -309,7 +309,7 @@
 	"javascriptCreateSourceMap": 1,
 	"javascriptOutputStyle": 1,
 	"javascriptSyntaxCheckerStyle": 1,
-	"jsCheckerReservedNamesString": "",
+	"jsCheckerReservedNamesString": "mouseX, mouseY, PI, fill(), stroke(), sin(), cos(), abs(), createVector(), background(), strokeWeight(), color(), createCanvas() ",
 	"jsHintFlags2": {
 		"asi": {
 			"active": 0,
