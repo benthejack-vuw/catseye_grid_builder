@@ -98,28 +98,6 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/Geometry\/min\/Grid-min.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/min\/Grid-min.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/Grid-min-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/Geometry\/min\/PolygonGrid-min.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/min\/PolygonGrid-min.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/PolygonGrid-min-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
 	"\/src\/Geometry\/NGon.js": {
 		"fileType": 64,
 		"ignore": 1,
@@ -159,28 +137,6 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/src\/Interaction\/InteractionBindings.js",
 		"outputAbbreviatedPath": "\/src\/Interaction\/min\/InteractionBindings-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/Interaction\/min\/InteractionManager-min.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Interaction\/min\/InteractionManager-min.js",
-		"outputAbbreviatedPath": "\/src\/Interaction\/min\/min\/InteractionManager-min-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/Interaction\/min\/P5InteractionManager-min.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Interaction\/min\/P5InteractionManager-min.js",
-		"outputAbbreviatedPath": "\/src\/Interaction\/min\/min\/P5InteractionManager-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
