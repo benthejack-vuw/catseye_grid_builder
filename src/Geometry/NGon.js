@@ -1,4 +1,5 @@
 //NGon is an interactive polygon object composed of InteractiveLines
+//NGons are the building block for grids
 var NGon = function(sides){
 
 	this.sides = sides;
@@ -86,6 +87,18 @@ var NGon = function(sides){
 			this.edges[i].draw();
 		}
 	};
+
+	//this strips out all the p5JS Vector data and returns an array of objects with x and y properties
+	this.to_vertex_position_array = function(){
+		var out = []
+		for(var i = 0; i < this.vertices.length; ++i){
+			out.push({
+				x: this.vertices[i].x,
+				y: this.vertices[i].y
+			});
+		}
+		return out;
+	}
 
 
 }
