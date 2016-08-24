@@ -1,1 +1,0 @@
-var InteractionManager=function(n,a){loadJSON(n,setup_interactions)};
