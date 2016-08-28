@@ -1,15 +1,33 @@
-//this file specifies all of the callback functions each interaction event triggers
-//pass the url of this file to the constructor of P5InteractionManager along with the object that contains these functions
 {
-		"click->leftMouse" :  "add_polygon_on_edge",
-		"click->rightMouse":  "remove_selected_polygon",
-		"mousePress->leftMouse":  "remove_selected_polygon",
-		"mouseMove": "select_polygon",
+	"mouse":{
+		
+		"click":{
+			"left" :  "add_polygon_on_edge",
+			"right":  "remove_selected_polygon",
+		},
 
-		"release->delete":    "remove_selected_polygon",
-		"press->space":     "add_polygon_on_edge",
-		"press->a":         "add_polygon_on_edge",
-		"press->command&d": "remove_selected_polygon",
+		"press":{
+			"left":  "remove_selected_polygon",
+		},
 
+		"move":"select_polygon",
+	},
+
+	"keyboard":{
+		
+		"press":{
+			"shift+space": "press_space",
+			"a+b": "press_a_b",
+			"e": "press_e",
+			"Q+*": "press_shift_q_8",
+			"any": "press_a_button"
+		},
+
+		"release":{
+			"delete": "delete_released",
+			"q": "q_released",
+			"any": "release_any"
+		}
 	}
+
 }

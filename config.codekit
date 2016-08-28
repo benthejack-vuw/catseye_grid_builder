@@ -55,6 +55,17 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
+	"\/min\/catseye_grid_interaction_definitions_file-min.json": {
+		"fileType": 524288,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/min\/catseye_grid_interaction_definitions_file-min.json",
+		"orderOutput": 0,
+		"outputAbbreviatedPath": "\/min\/catseye_grid_interaction_definitions_file-min-min.json",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1
+		},
 	"\/README.md": {
 		"criticStyle": 0,
 		"enableFootnotes": 1,
@@ -122,32 +133,21 @@
 		},
 	"\/src\/Interaction\/catseye_grid_interaction_definitions_file.json": {
 		"fileType": 524288,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
+		"ignore": 0,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/src\/Interaction\/catseye_grid_interaction_definitions_file.json",
 		"orderOutput": 0,
-		"outputAbbreviatedPath": "\/src\/Interaction\/catseye_grid_interaction_definitions_file-min.json",
+		"outputAbbreviatedPath": "\/min\/catseye_grid_interaction_definitions_file-min.json",
 		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
+		"outputPathIsSetByUser": 1,
 		"outputStyle": 1
 		},
-	"\/src\/Interaction\/InteractionBindings.js": {
+	"\/src\/Interaction\/InteractionManager.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Interaction\/InteractionBindings.js",
-		"outputAbbreviatedPath": "\/src\/Interaction\/min\/InteractionBindings-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/Interaction\/P5InteractionManager.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Interaction\/P5InteractionManager.js",
-		"outputAbbreviatedPath": "\/src\/Interaction\/min\/P5InteractionManager-min.js",
+		"inputAbbreviatedPath": "\/src\/Interaction\/InteractionManager.js",
+		"outputAbbreviatedPath": "\/src\/Interaction\/min\/InteractionManager-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
