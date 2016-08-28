@@ -1,4 +1,26 @@
+/*
+*	The interaction manager class deals with mouse,
+*	keyboard, and [eventually] touch interactions (not yet implemented)
+*
+*	It uses a json file to set up key and mouse combinations in the interaction_definitions_file. 
+*
+*	The constructor takes a callback object whose methods are linked to by key 
+*	and mouse combinations in the interaction_definitions_file. 
+* 	See example definitions file for how the links work.
+*
+*	all rights reserved Ben Jack
+*/
+
 var InteractionManager = function(callback_object, dom_listener_element, interaction_definitions_file){
+
+
+	var interactionManager = this;
+
+	this.dom_listener_element = dom_listener_element;
+	this.callback_object = callback_object;
+	this.pressed_keys = {};
+	this.mouse_data = {};
+	this.touches = [];
 
 	var interaction_key_bindings = {
 		
@@ -9,17 +31,18 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		"18":"alt",
 		"32":"space",
 		"46":"delete",
-		"91":"command",
-		"93":"command"
+		"91":"meta",
+		"93":"meta"
 	};
 
-	this.interactions = loadJSON(interaction_definitions_file);
-	var interactionManager = this;
 
-	this.callback_object = callback_object;
-	this.pressed_keys = {};
-	this.pressed_mouse_buttons = {};
-	this.touches = [];
+	// 0 : No button
+	// 1 : Left mouse button
+	// 2 : Wheel button or middle button (if present)
+	// 3 : Right mouse button
+	var mouse_map = ["none", "left", "middle", "right"];
+
+
 
 
 	this.keyDown = function(e){
@@ -27,7 +50,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		if(pressed){
 			interactionManager.pressed_keys[pressed] = true;
 		}
-	}
+	};
 
 	this.keyPressed = function(e){
 		
@@ -60,7 +83,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		 }
 
 		}
-	}
+	};
 
 	this.keyReleased = function(e){
 
@@ -86,27 +109,92 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 	 	if(released_interaction){
 	 		interactionManager.callback_object[released_interaction](released, interactionManager.pressed_keys);
 	 	}
+	};
+
+	this.set_local_mouse_position = function(e){
+		interactionManager.mouse_data["position"] = global_to_local(interactionManager.dom_listener_element, event.clientX, event.clientY);
 	}
 
-	this.mouseClicked = function(){
+	this.mouseButtonAction = function(action, e){
 
+		e.preventDefault();
+
+		interactionManager.set_local_mouse_position(e);
+		var mouse_button = mouse_map[e.which];
+		interactionManager.mouse_data[mouse_button] = (action == "click" || action ==  "release" ? false : true);
+
+		var callback = interactionManager.interactions.mouse[action][mouse_button];
+		console.log(callback);
+		if(callback)
+			interactionManager.callback_object[callback](interactionManager.mouse_data, mouse_button);
 	}
 
-	this.mousePressed = function(){
+	this.mouseClicked = function(e){
+		interactionManager.mouseButtonAction("click", e);
+	};
 
-	}
+	this.mousePressed = function(e){
+		interactionManager.mouseButtonAction("press", e);	
+	};
 
-	this.mouseReleased = function(){
+	this.mouseReleased = function(e){
+		interactionManager.mouseButtonAction("release", e);
+	};
+
+	this.stopContextMenu = function(e){
+		e.preventDefault();
+		return false;
+	};
+
+	this.isAnyMouseButtonPressed = function(){
+		return interactionManager.mouse_data["left"] || interactionManager.mouse_data["middle"] || interactionManager.mouse_data["right"];
+	};
+
+	this.mouseMoved = function(e){
+
+		interactionManager.mouse_data["position"] = global_to_local(interactionManager.dom_listener_element, event.clientX, event.clientY);
 		
+		var drag_callback = interactionManager.interactions.mouse.drag;
+		var move_callback = interactionManager.interactions.mouse.move;
+
+		if(move_callback || drag_callback){
+			if(drag_callback && interactionManager.isAnyMouseButtonPressed())
+				interactionManager.callback_object[drag_callback](interactionManager.mouse_data);
+			else if(move_callback)
+				interactionManager.callback_object[move_callback](interactionManager.mouse_data);
+		}
+
 	}
 
-	dom_listener_element.addEventListener( "keydown", this.keyDown,  false );
-	dom_listener_element.addEventListener( "keypress", this.keyPressed,  false );
-	dom_listener_element.addEventListener( "keyup"  , this.keyReleased, false );
 
-	dom_listener_element.addEventListener( "mousedown", this.mousePressed,  false );
-	dom_listener_element.addEventListener( "mouseup", this.mouseReleased,  false );
-	dom_listener_element.addEventListener( "click"  , this.mouseClicked, false );
 
+	this.setupInteractions = function(JSON_data){
+		interactionManager.interactions = JSON_data;
+
+		dom_listener_element.addEventListener( "keydown", interactionManager.keyDown,  false );
+		dom_listener_element.addEventListener( "keypress", interactionManager.keyPressed,  false );
+		dom_listener_element.addEventListener( "keyup"  , interactionManager.keyReleased, false );
+
+		dom_listener_element.addEventListener( "mousedown", interactionManager.mousePressed,  false );
+		dom_listener_element.addEventListener( "mouseup", interactionManager.mouseReleased,  false );
+
+		dom_listener_element.addEventListener( "click"  , interactionManager.mouseClicked, false );
+		dom_listener_element.addEventListener("contextmenu", interactionManager.stopContextMenu);
+
+		if(interactionManager.interactions.mouse.drag || interactionManager.interactions.mouse.move){
+			dom_listener_element.addEventListener( "mousemove"  , interactionManager.mouseMoved );
+		}
+	}
+
+	loadJSON(interaction_definitions_file, this.setupInteractions);
+
+}
+
+function global_to_local(context, globalX, globalY){
+    // Return the X/Y in the local context.
+    return({
+        x: Math.floor( globalX - context.offsetLeft ),
+        y: Math.floor( globalY - context.offsetHeight )
+    });
 
 }

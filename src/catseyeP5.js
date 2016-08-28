@@ -37,6 +37,30 @@ function InteractionTester(){
 		console.log("InteractionTester -> RELEASED_ANY");		
 	}
 
+	this.left_click = function(){
+		console.log("InteractionTester -> LEFT_CLICK");		
+	}
+
+	this.right_click = function(){
+		console.log("InteractionTester -> RIGHT_CLICK");	
+	}
+
+	this.left_press = function(){
+		console.log("InteractionTester -> LEFT_PRESS");	
+	}
+
+	this.right_release = function(){
+		console.log("InteractionTester -> RIGHT_RELEASE");	
+	}
+
+	this.mouse_move = function(){
+		console.log("InteractionTester -> MOUSE_MOVE");	
+	}
+
+	this.mouse_drag = function(){
+		console.log("InteractionTester -> MOUSE_DRAG");	
+	}
+
 }
 
 function setup() {

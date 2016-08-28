@@ -2,15 +2,21 @@
 	"mouse":{
 		
 		"click":{
-			"left" :  "add_polygon_on_edge",
-			"right":  "remove_selected_polygon",
+			"left" :  "left_click",
+			"right":  "right_click",
+			"middle": "middle_click",
 		},
 
 		"press":{
-			"left":  "remove_selected_polygon",
+			"left":  "left_press"
 		},
 
-		"move":"select_polygon",
+		"release":{
+			"right": "right_release"
+		},
+
+		"move":"mouse_move",
+		"drag":"mouse_drag"
 	},
 
 	"keyboard":{
