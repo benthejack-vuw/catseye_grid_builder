@@ -49,8 +49,24 @@ function InteractionTester(){
 		console.log("InteractionTester -> RIGHT_CLICK");	
 	}
 
+	this.any_click = function(){
+		console.log("InteractionTester -> ANY_CLICK");	
+	}
+
 	this.left_press = function(){
 		console.log("InteractionTester -> LEFT_PRESS");	
+	}
+
+	this.any_press = function(){
+		console.log("InteractionTester -> ANY_PRESS");	
+	}
+
+	this.any_release = function(){
+		console.log("InteractionTester -> ANY_RELEASE");	
+	}
+
+	this.any_click = function(){
+		console.log("InteractionTester -> ANY_CLICK");		
 	}
 
 	this.right_release = function(){

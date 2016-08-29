@@ -23,7 +23,6 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 	this.touches = [];
 
 	var interaction_key_bindings = {
-		
 		"8" :"backspace",
 		"13":"return",
 		"16":"shift",
@@ -35,23 +34,41 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		"93":"meta"
 	};
 
-
 	// 0 : No button
 	// 1 : Left mouse button
 	// 2 : Wheel button or middle button (if present)
 	// 3 : Right mouse button
 	var mouse_map = ["none", "left", "middle", "right"];
 
+<<<<<<< HEAD
 
 	this.checkAnyKeyBinding = function(event_type, button){
 		var any_key_binding = interactionManager.interactions.keyboard[event_type]["any"];
+=======
+	this.keyDown = function(e){
+		var pressed = interaction_key_bindings[e.keyCode];
+		if(pressed){
+			interactionManager.pressed_keys[pressed] = true;
+		}
+	};
+
+	this.keyPressed = function(e){
+		
+		e.preventDefault();
+
+		e = e || event;
+
+		var pressed = interaction_key_bindings[e.keyCode] || String.fromCharCode(e.keyCode || e.charCode);
+
+		var any_key_binding = interactionManager.interactions.keyboard.press["any"];
+>>>>>>> b7c7c135154c99cdfc976564f7cf7c7f1d5ebb2a
 		if(any_key_binding)
 			interactionManager.callback_object[any_key_binding](button, interactionManager.pressed_keys);
-	};
+	}
 
 	this.keyNameFromEvent = function(e){
 		return interaction_key_bindings[e.keyCode] || String.fromCharCode(e.keyCode || e.charCode);
-	};
+	}
 
 	this.checkKeyCombos = function(pressed){
 		 var interaction_keys = Object.keys(interactionManager.interactions.keyboard.press);
@@ -86,12 +103,9 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		var pressed = interactionManager.keyNameFromEvent(e);
 		interactionManager.checkAnyKeyBinding("press", pressed);
 		
-		if(any_key_binding){
-			interactionManager.callback_object[any_key_binding](released, interactionManager.pressed_keys);
-		}
 		if(pressed){
 			interactionManager.pressed_keys[pressed] = true;
-			interactionManager.checkKeyCombos();
+		 	interactionManager.checkKeyCombos();
 		}
 	};
 
@@ -100,7 +114,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 			interactionManager.pressed_keys = {}
 		}
 		else{
-			var key_name = keyNameFromEvent(e);
+			var key_name = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
 			if(key_name){
 				interactionManager.pressed_keys[key_name] = false;
 			}
@@ -112,7 +126,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 
 		e.preventDefault();
 
-		var released = keyNameFromEvent(e);
+		var released = interaction_key_bindings[e.keyCode] || String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
 
 		interactionManager.checkAnyKeyBinding("release", released);
 		interactionManager.unsetKey(e);
@@ -127,10 +141,14 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		interactionManager.mouse_data["position"] = global_to_local(interactionManager.dom_listener_element, e);
 	}
 
+<<<<<<< HEAD
+	this.mouseButtonAction = function(action, e){
+=======
 	this.mouseButtonAction = function(action, e, any){
 
 		e.preventDefault();
 
+>>>>>>> b7c7c135154c99cdfc976564f7cf7c7f1d5ebb2a
 		interactionManager.set_local_mouse_position(e);
 		var mouse_button = mouse_map[e.which];
 		interactionManager.mouse_data[mouse_button] = (action == "click" || action ==  "release" ? false : true);
@@ -154,8 +172,13 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 	};
 
 	this.mouseReleased = function(e){
+<<<<<<< HEAD
+		e.preventDefault();
+		interactionManager.mouseButtonAction("release", e);
+=======
 		interactionManager.mouseButtonAction("release", e); //check regular bindings
 		interactionManager.mouseButtonAction("release", e, true); //check for "any" mouserelease binding
+>>>>>>> b7c7c135154c99cdfc976564f7cf7c7f1d5ebb2a
 	};
 
 	this.stopContextMenu = function(e){

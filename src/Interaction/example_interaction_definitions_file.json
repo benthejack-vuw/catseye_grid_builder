@@ -5,6 +5,7 @@
 			"left" :  "left_click",
 			"right":  "right_click",
 			"middle": "middle_click",
+			"any": "any_click"
 		},
 
 		"press":{
