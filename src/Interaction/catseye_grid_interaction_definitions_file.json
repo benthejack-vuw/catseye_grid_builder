@@ -5,14 +5,17 @@
 			"left" :  "left_click",
 			"right":  "right_click",
 			"middle": "middle_click",
+			"any": "any_click"
 		},
 
 		"press":{
-			"left":  "left_press"
+			"left":  "left_press",
+			"any": "any_press"
 		},
 
 		"release":{
-			"right": "right_release"
+			"right": "right_release",
+			"any": "any_release"
 		},
 
 		"move":"mouse_move",

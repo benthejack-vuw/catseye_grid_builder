@@ -23,7 +23,6 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 	this.touches = [];
 
 	var interaction_key_bindings = {
-		
 		"8" :"backspace",
 		"13":"return",
 		"16":"shift",
@@ -35,15 +34,11 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		"93":"meta"
 	};
 
-
 	// 0 : No button
 	// 1 : Left mouse button
 	// 2 : Wheel button or middle button (if present)
 	// 3 : Right mouse button
 	var mouse_map = ["none", "left", "middle", "right"];
-
-
-
 
 	this.keyDown = function(e){
 		var pressed = interaction_key_bindings[e.keyCode];
@@ -115,7 +110,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		interactionManager.mouse_data["position"] = global_to_local(interactionManager.dom_listener_element, event.clientX, event.clientY);
 	}
 
-	this.mouseButtonAction = function(action, e){
+	this.mouseButtonAction = function(action, e, any){
 
 		e.preventDefault();
 
@@ -123,22 +118,27 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		var mouse_button = mouse_map[e.which];
 		interactionManager.mouse_data[mouse_button] = (action == "click" || action ==  "release" ? false : true);
 
+		if(!(any === undefined))
+			mouse_button = "any";
+
 		var callback = interactionManager.interactions.mouse[action][mouse_button];
-		console.log(callback);
 		if(callback)
 			interactionManager.callback_object[callback](interactionManager.mouse_data, mouse_button);
 	}
 
 	this.mouseClicked = function(e){
-		interactionManager.mouseButtonAction("click", e);
+		interactionManager.mouseButtonAction("click", e); //check regular bindings
+		interactionManager.mouseButtonAction("click", e, true); //check for "any" mouseclick binding
 	};
 
 	this.mousePressed = function(e){
-		interactionManager.mouseButtonAction("press", e);	
+		interactionManager.mouseButtonAction("press", e); //check regular bindings
+		interactionManager.mouseButtonAction("press", e, true); //check for "any" mousepress binding
 	};
 
 	this.mouseReleased = function(e){
-		interactionManager.mouseButtonAction("release", e);
+		interactionManager.mouseButtonAction("release", e); //check regular bindings
+		interactionManager.mouseButtonAction("release", e, true); //check for "any" mouserelease binding
 	};
 
 	this.stopContextMenu = function(e){
@@ -165,8 +165,6 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		}
 
 	}
-
-
 
 	this.setupInteractions = function(JSON_data){
 		interactionManager.interactions = JSON_data;
