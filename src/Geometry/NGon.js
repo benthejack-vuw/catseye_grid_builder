@@ -40,7 +40,7 @@ var NGon = function(sides){
 	};
 
 
-	//---------------------------CLASS METHODS------------------------------------------------
+	//-----------------------------------------INITIALIZERS------------------------------------------------
 
 	//this function sets up an un-rotated plain polygon
 	this.initialize = function(x, y, radius){
@@ -79,18 +79,57 @@ var NGon = function(sides){
 		this.create_edges(verts_from_line);
 	};
 
-	this.draw = function(){
-		fill(255);
-		stroke(0);
+	this.initialize_from_array = function(points){
 
+		this.empty();
+
+		//vertex function to be passed into create_edges
+		var verts_from_array = function(ngon, i){
+			var x = points[i].x;
+			var y = points[i].y;
+			return createVector(x, y);
+		};
+
+		this.create_edges(verts_from_array);
+	};
+
+	//-----------------------------------------------METHODS----------------------------------------------
+
+
+	//windng number algorithm taken from http://geomalgorithms.com/a03-_inclusion.html
+	this.is_under = function(pt)
+	{
+	    var wn = 0;    
+	    // loop through all edges of the ptolygon
+	    for (var i=0; i < this.edges.length; ++i) {   // edge from V[i] to  V[i+1]
+	        if (this.edges[i][0].y <= pt.y) {          // start y <= pt.y
+	            if (this.edges[i][1].y  > pt.y)      // an upward crossing
+	                 if (this.edges[i].isLeft(pt) > 0)  // pt left of  edge
+	                     ++wn;            // have  a valid up intersect
+	        }
+	        else {                        // start y > pt.y (no test needed)
+	            if (this.edges[i][1].y  <= pt.y)     // a downward crossing
+	                 if (this.edges[i].isLeft(pt) < 0)  // P right of  edge
+	                     --wn;            // have  a valid down intersect
+	        }
+	    }
+
+	    return wn > 0;
+	}
+
+
+	this.draw = function(){
+		beginShape();
 		for(var i = 0; i < this.edges.length; ++i){
-			this.edges[i].draw();
+			var pt = this.edges[i][0];
+			vertex(pt.x, pt.y);
 		}
+		endShape(CLOSE);
 	};
 
 	//this strips out all the p5JS Vector data and returns an array of objects with x and y properties
 	this.to_vertex_position_array = function(){
-		var out = []
+		var out = [];
 		for(var i = 0; i < this.vertices.length; ++i){
 			out.push({
 				x: this.vertices[i].x,
@@ -98,7 +137,7 @@ var NGon = function(sides){
 			});
 		}
 		return out;
-	}
+	};
 
 
-}
+};

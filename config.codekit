@@ -87,12 +87,23 @@
 		"randomFootnoteNumbers": 0,
 		"useCompatibilityMode": 0
 		},
-	"\/src\/catseyeP5.js": {
+	"\/src\/CatseyeController.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/catseyeP5.js",
-		"outputAbbreviatedPath": "\/src\/min\/catseyeP5-min.js",
+		"inputAbbreviatedPath": "\/src\/CatseyeController.js",
+		"outputAbbreviatedPath": "\/src\/min\/CatseyeController-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/CatseyeP5.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/CatseyeP5.js",
+		"outputAbbreviatedPath": "\/src\/min\/CatseyeP5-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -104,6 +115,17 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/src\/Geometry\/InteractiveLine.js",
 		"outputAbbreviatedPath": "\/src\/Geometry\/min\/InteractiveLine-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Geometry\/min\/PolygonGrid-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Geometry\/min\/PolygonGrid-min.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/PolygonGrid-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -142,34 +164,34 @@
 		"outputPathIsSetByUser": 1,
 		"outputStyle": 1
 		},
-	"\/src\/Interaction\/example_interaction_definitions_file.json": {
-		"fileType": 524288,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Interaction\/example_interaction_definitions_file.json",
-		"orderOutput": 0,
-		"outputAbbreviatedPath": "\/src\/Interaction\/example_interaction_definitions_file-min.json",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1
-		},
-	"\/src\/Interaction\/interaction_tester.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Interaction\/interaction_tester.js",
-		"outputAbbreviatedPath": "\/src\/Interaction\/min\/interaction_tester-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
 	"\/src\/Interaction\/InteractionManager.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/src\/Interaction\/InteractionManager.js",
 		"outputAbbreviatedPath": "\/src\/Interaction\/min\/InteractionManager-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Interaction\/min\/CatseyeController-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Interaction\/min\/CatseyeController-min.js",
+		"outputAbbreviatedPath": "\/src\/Interaction\/min\/min\/CatseyeController-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/min\/CatseyeController-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/min\/CatseyeController-min.js",
+		"outputAbbreviatedPath": "\/src\/min\/min\/CatseyeController-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -375,7 +397,7 @@
 	"javascriptCreateSourceMap": 1,
 	"javascriptOutputStyle": 1,
 	"javascriptSyntaxCheckerStyle": 1,
-	"jsCheckerReservedNamesString": "mouseX, mouseY, PI, fill(), stroke(), sin(), cos(), abs(), createVector(), background(), strokeWeight(), color(), createCanvas() ",
+	"jsCheckerReservedNamesString": "mouseX, mouseY, PI, fill, stroke, sin, cos, abs, createVector, background, strokeWeight, color, createCanvas, atan2, line",
 	"jsHintFlags2": {
 		"asi": {
 			"active": 0,

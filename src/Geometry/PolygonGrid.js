@@ -13,21 +13,21 @@ var PolygonGrid = function(){
 		this.polygons.push(poly);
 	};	
 
-	this.closest_edge = function(pt_x, pt_y){
+	this.closest_edge = function(pt){
 		var closest = null;
 		var min_dist = Number.MAX_SAFE_INTEGER;
 		for(var i = 0; i < this.polygons.length; ++i){
-			var dist = this.polygons[i].distance_to_edge_boundary(pt_x, pt_y);
+			var dist = this.polygons[i].distance_to_edge_boundary(pt.x, pt.y);
 			if(dist && dist < min_dist){
-				closest = this.polygons[i].closest_edge(pt_x, pt_y);
+				closest = this.polygons[i].closest_edge(pt.x, pt.y);
 				min_dist = dist;
 			}
 		}
 	};
 
-	this.polygon_under = function(pt_x, pt_y){
+	this.polygon_under = function(pt){
 		for(var i = 0; i < this.polygons.length; ++i){
-			if(this.polygons[i].is_under(pt_x, pt_y)){
+			if(this.polygons[i].is_under(pt.x, pt.y)){
 				return this.polygons[i];
 			}
 		}

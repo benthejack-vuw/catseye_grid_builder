@@ -16,7 +16,9 @@
 		"release":{
 			"right": "right_release",
 			"any": "any_release"
-		}
+		},
+
+		"move":"mouse_move"
 	},
 
 	"keyboard":{

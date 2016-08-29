@@ -27,4 +27,15 @@ var InteractiveLine = function(pt1, pt2){
 		line(this[0].x, this[0].y, this[1].x, this[1].y);
 	};
 
-}
+	// isLeft(): tests if a point is Left|On|Right of an infinite line.
+	//    Input:  three points P0, l2, and P2
+	//    Return: >0 for P2 left of the line through P0 and P1
+	//            =0 for P2  on the line
+	//            <0 for P2  right of the line
+	//   taken from http://geomalgorithms.com/a03-_inclusion.html
+	this.isLeft = function(pt)
+	{
+	    return ( (this[1].x - this[0].x) * (pt.y - this[0].y) - (pt.x -  this[0].x) * (this[1].y - this[0].y) );
+	}
+
+};
