@@ -6,12 +6,14 @@ var NGon = function(sides){
 	this.vertices = [];
 	this.edges = [];
 	this.theta = 6.28318/sides;
+	this.position = null;
 
 
 	//---------------------------HELPER FUNCTIONS------------------------------------------------
 	this.empty = function(){
 		this.vertices = [];
 		this.edges = [];
+		this.position = null;
 	};
 
 	//vertex_from_index takes the index of the point (zero indexed) 
@@ -43,14 +45,15 @@ var NGon = function(sides){
 	//-----------------------------------------INITIALIZERS------------------------------------------------
 
 	//this function sets up an un-rotated plain polygon
-	this.initialize = function(x, y, radius){
+	this.initialize = function(pt, radius){
 		this.empty();
+		this.position = pt;
 
 		this.radius = radius === undefined ? 1 : radius;
 
 		//vertex function to be passed into create_edges
 		var verts_from_radius = function(ngon, i){
-			return createVector(x + Math.cos(i*ngon.theta)*ngon.radius, y+Math.sin(i*ngon.theta)*ngon.radius);
+			return createVector(pt.x + Math.cos(i*ngon.theta)*ngon.radius, pt.y+Math.sin(i*ngon.theta)*ngon.radius);
 		};
 
 		this.create_edges(verts_from_radius);
@@ -63,11 +66,13 @@ var NGon = function(sides){
 		this.empty();
 
 		var half_inner_poly_angle = (((this.sides-2)*PI)/this.sides)/2.0;
-		var angle_to_centre_point = half_inner_poly_angle + interactive_line.angle();
+		var angle_to_centre_point = half_inner_poly_angle + interactive_line.angle(false);
 		this.radius = (interactive_line.length()/2.0)/sin(this.theta/2);
 
 		var centre_point_x = interactive_line[0].x + cos(angle_to_centre_point)*this.radius;
 		var centre_point_y = interactive_line[0].y + sin(angle_to_centre_point)*this.radius;
+
+		this.position = {x:centre_point_x, y:centre_point_y};
 
 		//vertex function to be passed into create_edges
 		var verts_from_line = function(ngon, i){
@@ -91,6 +96,9 @@ var NGon = function(sides){
 		};
 
 		this.create_edges(verts_from_array);
+
+		this.position = this.calculate_centroid();
+		this.radius = dist(points[0].x, points[0].y, this.position.x, this.position.y);
 	};
 
 	//-----------------------------------------------METHODS----------------------------------------------
@@ -103,20 +111,41 @@ var NGon = function(sides){
 	    // loop through all edges of the ptolygon
 	    for (var i=0; i < this.edges.length; ++i) {   // edge from V[i] to  V[i+1]
 	        if (this.edges[i][0].y <= pt.y) {          // start y <= pt.y
-	            if (this.edges[i][1].y  > pt.y)      // an upward crossing
-	                 if (this.edges[i].isLeft(pt) > 0)  // pt left of  edge
-	                     ++wn;            // have  a valid up intersect
+	            if (this.edges[i][1].y  > pt.y){      // an upward crossing
+	                 if (this.edges[i].isLeft(pt) > 0){  // pt left of  edge
+	                     ++wn;
+	                 }
+	            }            // have  a valid up intersect
 	        }
 	        else {                        // start y > pt.y (no test needed)
-	            if (this.edges[i][1].y  <= pt.y)     // a downward crossing
-	                 if (this.edges[i].isLeft(pt) < 0)  // P right of  edge
+	            if (this.edges[i][1].y  <= pt.y){     // a downward crossing
+	                if (this.edges[i].isLeft(pt) < 0){  // P right of  edge
 	                     --wn;            // have  a valid down intersect
+	                }
+	            }
 	        }
 	    }
 
 	    return wn > 0;
+	};
+
+	this.in_containing_circle = function(pt, tolerance){
+		tolerance = tolerance === undefined ? 0 : tolerance;
+		return dist(pt.x, pt.y, this.position.x, this.position.y) < (this.radius + tolerance);
 	}
 
+	this.closest_edge = function(pt){
+		var min_dist = Number.MAX_SAFE_INTEGER;
+		var closest = null;
+		for(var i = 0; i < this.edges.length; ++i){
+			var dist = this.edges[i].distance_from(pt);
+			if(dist < min_dist){
+				closest = this.edges[i];
+				min_dist = dist;
+			}
+		}
+		return closest;
+	};
 
 	this.draw = function(){
 		beginShape();
@@ -137,6 +166,18 @@ var NGon = function(sides){
 			});
 		}
 		return out;
+	};
+
+	this.calculate_centroid = function(){
+		
+		var x_total, y_total = 0;
+
+		for(var i = 0; i < this.edges.length; ++i){
+			x_total += this.edges[i][0].x;
+			y_total += this.edges[i][0].y;
+		}
+
+		return {x:x_total/sides, y:y_total/sides};
 	};
 
 

@@ -2,20 +2,7 @@
 	"mouse":{
 		
 		"click":{
-			"left" :  "left_click",
-			"right":  "right_click",
-			"middle": "middle_click",
-			"any": "any_click"
-		},
-
-		"press":{
-			"left":  "left_press",
-			"any": "any_press"
-		},
-
-		"release":{
-			"right": "right_release",
-			"any": "any_release"
+			"left" :  "place_polygon"
 		},
 
 		"move":"mouse_move"
@@ -24,17 +11,18 @@
 	"keyboard":{
 		
 		"press":{
-			"shift+space": "press_space",
-			"a+b": "press_a_b",
-			"e": "press_e",
-			"Q+*": "press_shift_q_8",
-			"any": "press_a_button"
+			"3": "change_current_poly",
+			"4": "change_current_poly",
+			"5": "change_current_poly",
+			"6": "change_current_poly",
+			"7": "change_current_poly",
+			"8": "change_current_poly",
+			"9": "change_current_poly"
 		},
 
 		"release":{
 			"delete": "delete_released",
 			"q": "q_released",
-			"any": "release_any"
 		}
 	}
 

@@ -2,20 +2,27 @@
 
 var InteractiveLine = function(pt1, pt2){ 
 
-	this[0] = pt1;
-	this[1] = pt2;
+	this[1] = pt1;
+	this[0] = pt2;
 
-	this.distance_from = function(pt){
+	function sqr(x) { return x * x }
+	function dist2(v, w) { return sqr(v.x - w.x) + sqr(v.y - w.y) }
+	
+	this.distToSegmentSquared = function(p) {
+	  var l2 = dist2(this[0], this[1]);
+	  if (l2 == 0) return dist2(p, this[0]);
+	  var t = ((p.x - this[0].x) * (this[1].x - this[0].x) + (p.y - this[0].y) * (this[1].y - this[0].y)) / l2;
+	  t = Math.max(0, Math.min(1, t));
+	  return dist2(p, { x: this[0].x + t * (this[1].x - this[0].x),
+	                    y: this[0].y + t * (this[1].y - this[0].y) });
+	}
 
-		var enume = (this[1].y-this[0].y)*pt.x - (this[1].x-this[0].x)*pt.y + this[1].x*this[0].y - this[0].x*this[1].y; 
-		enume = abs(enume);
-		var denom = this[0].dist(this[1]);
+	this.distance_from = function(p) { return Math.sqrt(this.distToSegmentSquared(p)); }
 
-		return enume/denom;
-	};
-
-	this.angle = function(){
-		return atan2(this[1].y - this[0].y, this[1].x - this[0].x);
+	this.angle = function(reverse){
+		var one = reverse ? this[0] : this[1];
+		var two = reverse ? this[1] : this[0];
+		return atan2(one.y - two.y, one.x - two.x);
 	};
 
 	this.length = function(){
@@ -36,6 +43,6 @@ var InteractiveLine = function(pt1, pt2){
 	this.isLeft = function(pt)
 	{
 	    return ( (this[1].x - this[0].x) * (pt.y - this[0].y) - (pt.x -  this[0].x) * (this[1].y - this[0].y) );
-	}
+	};
 
 };

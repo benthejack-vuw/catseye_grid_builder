@@ -23,6 +23,20 @@ function global_to_local(context, event){
 
 }
 
+function fetchJSONFile(path, callback) {
+    var httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = function() {
+        if (httpRequest.readyState === 4) {
+            if (httpRequest.status === 200) {
+                var data = JSON.parse(httpRequest.responseText);
+                if (callback){callback(data);}
+            }
+        }
+    };
+    httpRequest.open('GET', path);
+    httpRequest.send(); 
+}
+
 var InteractionManager = function(callback_object, dom_listener_element, interaction_definitions_file){
 
 	var interactionManager = this;
@@ -54,6 +68,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 	this.checkAnyKeyBinding = function(event_type, button){
 		var any_key_binding = interactionManager.interactions.keyboard[event_type].any;
 		if(any_key_binding){
+			console.log(any_key_binding);
 			interactionManager.callback_object[any_key_binding](button, interactionManager.pressed_keys);
 		}
 	};
@@ -69,6 +84,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		 
 		 for(var i = 0; i < interaction_keys.length; ++i){
 		 	
+		 	var current_key_combo = interaction_keys[i];
 		 	var key_combo = interaction_keys[i].split("+");
 		 	var activated = true;
 
@@ -78,7 +94,8 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		 		}
 		 	}
 		 	if(activated){
-		 		interactionManager.callback_object[interactionManager.interactions.keyboard.press[interaction_keys[i]]](pressed, interactionManager.pressed_keys);
+		 		var pressed = interactionManager.interactions.keyboard.press[interaction_keys[i]];
+		 		interactionManager.callback_object[pressed](current_key_combo, interactionManager.pressed_keys);
 		 	}
 		 }
 	};
@@ -104,12 +121,10 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		}
 	};
 
-	this.keyPressed = function(e){
-		
+	this.keyPressed = function(e){		
 		e.preventDefault();
 
 		e = e || event;
-
 		var pressed = interactionManager.keyNameFromEvent(e);
 		interactionManager.checkAnyKeyBinding("press", pressed);
 		
@@ -154,9 +169,11 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 			mouse_button = "any";
 		}
 
-		var callback = interactionManager.interactions.mouse[action][mouse_button];
-		if(callback){
-			interactionManager.callback_object[callback](interactionManager.mouse_data, mouse_button);
+		if(interactionManager.interactions.mouse[action]){
+			var callback = interactionManager.interactions.mouse[action][mouse_button];
+			if(callback){
+				interactionManager.callback_object[callback](mouse_button, interactionManager.mouse_data);
+			}
 		}
 	};
 
@@ -202,14 +219,34 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 
 	};
 
-
+	this.focus = function(){
+		interactionManager.dom_listener_element.focus();
+	}
 
 	//------------------------------------------------SETUP-------------------------------------------------------
+
+	this.start = function(){
+		fetchJSONFile(interaction_definitions_file, this.setupInteractions);
+	};
+
+	this.stop = function(){
+		dom_listener_element.removeEventListener( "keydown", interactionManager.keyDown,  false );
+		dom_listener_element.removeEventListener( "keypress", interactionManager.keyPressed,  false );
+		dom_listener_element.removeEventListener( "keyup"  , interactionManager.keyReleased, false );
+		dom_listener_element.removeEventListener( "mousedown", interactionManager.mousePressed,  false );
+		window.removeEventListener( "mouseup", interactionManager.mouseReleased,  false );
+		dom_listener_element.removeEventListener( "click"  , interactionManager.mouseClicked, false );
+		dom_listener_element.removeEventListener("contextmenu", interactionManager.stopContextMenu);
+		dom_listener_element.removeEventListener( "mousemove"  , interactionManager.mouseMoved );		
+	};
 
 	this.setupInteractions = function(JSON_data){
 		interactionManager.interactions = JSON_data;
 
 		if(interactionManager.interactions.keyboard){
+			dom_listener_element.setAttribute("tabindex", 1);//in case element is a canvas or other non-focusable object.
+			dom_listener_element.addEventListener( "mouseenter", interactionManager.focus,  false );
+
 			dom_listener_element.addEventListener( "keydown", interactionManager.keyDown,  false );
 			dom_listener_element.addEventListener( "keypress", interactionManager.keyPressed,  false );
 			dom_listener_element.addEventListener( "keyup"  , interactionManager.keyReleased, false );
@@ -226,7 +263,5 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 			}
 		}
 	};
-
-	loadJSON(interaction_definitions_file, this.setupInteractions);
 
 };
