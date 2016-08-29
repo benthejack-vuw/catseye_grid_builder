@@ -13,7 +13,10 @@
 
 		"release":{
 			"right": "right_release"
-		}
+		},
+
+		"move":"mouse_move",
+		"drag":"mouse_drag"
 	},
 
 	"keyboard":{

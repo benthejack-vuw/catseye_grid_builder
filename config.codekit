@@ -142,6 +142,17 @@
 		"outputPathIsSetByUser": 1,
 		"outputStyle": 1
 		},
+	"\/src\/Interaction\/example_interaction_definitions_file.json": {
+		"fileType": 524288,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Interaction\/example_interaction_definitions_file.json",
+		"orderOutput": 0,
+		"outputAbbreviatedPath": "\/src\/Interaction\/example_interaction_definitions_file-min.json",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1
+		},
 	"\/src\/Interaction\/InteractionManager.js": {
 		"fileType": 64,
 		"ignore": 1,
@@ -156,7 +167,7 @@
 	},
 "hooks": [
 	],
-"lastSavedByUser": "Ben Jack",
+"lastSavedByUser": "Ben",
 "manualImportLinks": {
 	},
 "projectAttributes": {
