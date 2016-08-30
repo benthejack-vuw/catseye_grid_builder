@@ -33,7 +33,7 @@ function fetchJSONFile(path, callback) {
             }
         }
     };
-    httpRequest.open('GET', path);
+    httpRequest.open('GET', path);  
     httpRequest.send(); 
 }
 
@@ -79,7 +79,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 	};
 
 	//checks for any completed key combos, and call their respective callbacks
-	this.checkKeyCombos = function(pressed){
+	this.checkKeyCombos = function(){
 		 var interaction_keys = Object.keys(interactionManager.interactions.keyboard.press);
 		 
 		 for(var i = 0; i < interaction_keys.length; ++i){
@@ -94,8 +94,8 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		 		}
 		 	}
 		 	if(activated){
-		 		var pressed = interactionManager.interactions.keyboard.press[interaction_keys[i]];
-		 		interactionManager.callback_object[pressed](current_key_combo, interactionManager.pressed_keys);
+		 		var callback = interactionManager.interactions.keyboard.press[interaction_keys[i]];
+		 		interactionManager.callback_object[callback](current_key_combo, interactionManager.pressed_keys);
 		 	}
 		 }
 	};
@@ -221,7 +221,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 
 	this.focus = function(){
 		interactionManager.dom_listener_element.focus();
-	}
+	};
 
 	//------------------------------------------------SETUP-------------------------------------------------------
 
@@ -237,7 +237,9 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		window.removeEventListener( "mouseup", interactionManager.mouseReleased,  false );
 		dom_listener_element.removeEventListener( "click"  , interactionManager.mouseClicked, false );
 		dom_listener_element.removeEventListener("contextmenu", interactionManager.stopContextMenu);
-		dom_listener_element.removeEventListener( "mousemove"  , interactionManager.mouseMoved );		
+		dom_listener_element.removeEventListener( "mousemove"  , interactionManager.mouseMoved );
+		dom_listener_element.removeEventListener( "mouseenter", interactionManager.focus,  false );
+		dom_listener_element.removeEventListener( "mousedown", interactionManager.focus,  false );		
 	};
 
 	this.setupInteractions = function(JSON_data){
@@ -246,6 +248,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		if(interactionManager.interactions.keyboard){
 			dom_listener_element.setAttribute("tabindex", 1);//in case element is a canvas or other non-focusable object.
 			dom_listener_element.addEventListener( "mouseenter", interactionManager.focus,  false );
+			dom_listener_element.addEventListener( "mousedown", interactionManager.focus,  false );
 
 			dom_listener_element.addEventListener( "keydown", interactionManager.keyDown,  false );
 			dom_listener_element.addEventListener( "keypress", interactionManager.keyPressed,  false );
@@ -262,6 +265,9 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 				dom_listener_element.addEventListener( "mousemove"  , interactionManager.mouseMoved );
 			}
 		}
+
+		interactionManager.focus();
+
 	};
 
 };

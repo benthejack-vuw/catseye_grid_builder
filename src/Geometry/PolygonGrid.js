@@ -13,20 +13,14 @@ var PolygonGrid = function(){
 		this.polygons.push(poly);
 	};
 
-	this.add_polygon_at_point = function(point, sides, snap_to_nearest_edge){
-		if(this.polygons.length === 0 || snap_to_nearest_edge === undefined){
-			var poly = new NGon(sides);
-			poly.initialize(point, 50);
-			this.polygons.push(poly);
-		}else{
-			var edge = this.closest_edge(point);
-			console.log(edge);
-			if(edge){
-				var poly = new NGon(sides);
-				poly.initialize_from_line(edge);
-				this.polygons.push(poly);
-			}
+	this.delete_poly_under_point = function(point){
+ 		var poly = this.polygon_under(point);
+ 		console.log(poly, point);
+ 		if(poly){
+			var index = this.polygons.indexOf(poly);
+			if(index > -1){this.polygons.splice(index, 1)};
 		}
+
 	};
 
 	this.closest_edge = function(pt, tolerance){
@@ -50,7 +44,7 @@ var PolygonGrid = function(){
 
 	this.polygon_under = function(pt){
 		for(var i = 0; i < this.polygons.length; ++i){
-			if(this.polygons[i].is_under(pt.x, pt.y)){
+			if(this.polygons[i].is_under(pt)){
 				return this.polygons[i];
 			}
 		}
@@ -61,6 +55,10 @@ var PolygonGrid = function(){
 		this.bounds = pts;
 	};
 
+	this.empty = function(){
+		return this.polygons.length <= 0;
+	}
+
 	this.draw = function(){
 		
 		stroke(0);
@@ -70,6 +68,12 @@ var PolygonGrid = function(){
 			this.polygons[i].draw();
 		}
 	};
+
+	this.generate_snap_points = function(){
+		for (var i = 0; i < this.polygons.length; ++i) {
+			this.polygons[i].
+		}
+	}
 
 	this.to_JSON = function(){
 

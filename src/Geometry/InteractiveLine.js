@@ -2,22 +2,22 @@
 
 var InteractiveLine = function(pt1, pt2){ 
 
-	this[1] = pt1;
-	this[0] = pt2;
+	this[0] = pt1;
+	this[1] = pt2;
 
-	function sqr(x) { return x * x }
-	function dist2(v, w) { return sqr(v.x - w.x) + sqr(v.y - w.y) }
+	function sqr(x) { return x * x; }
+	function dist2(v, w) { return sqr(v.x - w.x) + sqr(v.y - w.y); }
 	
 	this.distToSegmentSquared = function(p) {
 	  var l2 = dist2(this[0], this[1]);
-	  if (l2 == 0) return dist2(p, this[0]);
+	  if (l2 === 0){return dist2(p, this[0]);}
 	  var t = ((p.x - this[0].x) * (this[1].x - this[0].x) + (p.y - this[0].y) * (this[1].y - this[0].y)) / l2;
 	  t = Math.max(0, Math.min(1, t));
 	  return dist2(p, { x: this[0].x + t * (this[1].x - this[0].x),
 	                    y: this[0].y + t * (this[1].y - this[0].y) });
-	}
+	};
 
-	this.distance_from = function(p) { return Math.sqrt(this.distToSegmentSquared(p)); }
+	this.distance_from = function(p) { return Math.sqrt(this.distToSegmentSquared(p)); };
 
 	this.angle = function(reverse){
 		var one = reverse ? this[0] : this[1];

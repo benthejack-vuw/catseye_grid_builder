@@ -66,15 +66,6 @@
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1
 		},
-	"\/README.html": {
-		"fileType": 8192,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/README.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
 	"\/README.md": {
 		"criticStyle": 0,
 		"enableFootnotes": 1,
@@ -129,6 +120,17 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
+	"\/src\/Geometry\/min\/PolygonGrid-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Geometry\/min\/PolygonGrid-min.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/PolygonGrid-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
 	"\/src\/Geometry\/NGon.js": {
 		"fileType": 64,
 		"ignore": 1,
@@ -172,11 +174,33 @@
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Interaction\/min\/CatseyeController-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Interaction\/min\/CatseyeController-min.js",
+		"outputAbbreviatedPath": "\/src\/Interaction\/min\/min\/CatseyeController-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/min\/CatseyeController-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/min\/CatseyeController-min.js",
+		"outputAbbreviatedPath": "\/src\/min\/min\/CatseyeController-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
 		}
 	},
 "hooks": [
 	],
-"lastSavedByUser": "Ben Jack",
+"lastSavedByUser": "Ben",
 "manualImportLinks": {
 	},
 "projectAttributes": {
@@ -373,7 +397,7 @@
 	"javascriptCreateSourceMap": 1,
 	"javascriptOutputStyle": 1,
 	"javascriptSyntaxCheckerStyle": 1,
-	"jsCheckerReservedNamesString": "mouseX, mouseY, PI, fill, stroke, sin, cos, abs, createVector, background, strokeWeight, color, createCanvas, atan2, line, beginShape, vertex, endShape, CLOSE",
+	"jsCheckerReservedNamesString": "mouseX, mouseY, PI, fill, stroke, sin, cos, abs, createVector, background, strokeWeight, color, createCanvas, atan2, line, beginShape, vertex, endShape, CLOSE, dist",
 	"jsHintFlags2": {
 		"asi": {
 			"active": 0,

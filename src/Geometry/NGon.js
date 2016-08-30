@@ -66,18 +66,18 @@ var NGon = function(sides){
 		this.empty();
 
 		var half_inner_poly_angle = (((this.sides-2)*PI)/this.sides)/2.0;
-		var angle_to_centre_point = half_inner_poly_angle + interactive_line.angle(false);
+		var angle_to_centre_point = half_inner_poly_angle + interactive_line.angle(true);
 		this.radius = (interactive_line.length()/2.0)/sin(this.theta/2);
 
-		var centre_point_x = interactive_line[0].x + cos(angle_to_centre_point)*this.radius;
-		var centre_point_y = interactive_line[0].y + sin(angle_to_centre_point)*this.radius;
+		var centre_point_x = interactive_line[1].x + cos(angle_to_centre_point)*this.radius;
+		var centre_point_y = interactive_line[1].y + sin(angle_to_centre_point)*this.radius;
 
 		this.position = {x:centre_point_x, y:centre_point_y};
 
 		//vertex function to be passed into create_edges
 		var verts_from_line = function(ngon, i){
-			var x = centre_point_x + cos(ngon.theta*i + ngon.theta/2.0 - PI/2.0 + interactive_line.angle()) * ngon.radius;
-			var y = centre_point_y + sin(ngon.theta*i + ngon.theta/2.0 - PI/2.0 + interactive_line.angle()) * ngon.radius;
+			var x = centre_point_x + cos(ngon.theta*i + ngon.theta/2.0 - PI/2.0 + interactive_line.angle(true)) * ngon.radius;
+			var y = centre_point_y + sin(ngon.theta*i + ngon.theta/2.0 - PI/2.0 + interactive_line.angle(true)) * ngon.radius;
 			return createVector(x, y);
 		};
 
@@ -132,7 +132,7 @@ var NGon = function(sides){
 	this.in_containing_circle = function(pt, tolerance){
 		tolerance = tolerance === undefined ? 0 : tolerance;
 		return dist(pt.x, pt.y, this.position.x, this.position.y) < (this.radius + tolerance);
-	}
+	};
 
 	this.closest_edge = function(pt){
 		var min_dist = Number.MAX_SAFE_INTEGER;

@@ -10,13 +10,13 @@ var CatseyeController = function(canvas){
 	this.polygon_ghost = new NGon(this.next_poly_sides);
 	this.polygon_ghost.initialize({x:400, y:400}, 60);
 
-	var mouseData = null;
+	this.mouseData = null;
 
 	this.draw = function(){
 		
 		this.grid.draw();
 
-		if(this.edge_highlight){
+		if(this.edge_highlight && !this.grid.empty()){
 			strokeWeight(2);
 			this.edge_highlight.draw(color(0,255,0));
 		}
@@ -28,15 +28,18 @@ var CatseyeController = function(canvas){
 	};
 
 	this.mouse_move = function(i_mouseData){
-		mouseData = i_mouseData;
+		this.mouseData = i_mouseData;
 
-		var new_edge = this.grid.closest_edge(mouseData.position, 15);
-		if(new_edge === null && this.grid.polygons.length>0){
-			this.polygon_ghost.empty();
-		}
-		else if(this.edge_highlight !== new_edge){
-			this.edge_highlight = new_edge;
-			this.polygon_ghost.initialize_from_line(this.edge_highlight);
+		var new_edge = this.grid.closest_edge(this.mouseData.position, 15);
+		
+		if(!this.grid.empty()){
+			if(new_edge === null){
+				this.polygon_ghost.empty();
+			}
+			else if(this.edge_highlight !== new_edge){
+				this.edge_highlight = new_edge;
+				this.polygon_ghost.initialize_from_line(this.edge_highlight);
+			}
 		}
 	};
 
@@ -50,10 +53,18 @@ var CatseyeController = function(canvas){
 		this.polygon_ghost = new NGon(this.next_poly_sides);
 		if(this.edge_highlight){
 			this.polygon_ghost.initialize_from_line(this.edge_highlight);
-		}else if(this.grid.polygons.length==0){
+		}else if(this.grid.empty()){
 			this.polygon_ghost.initialize({x:400, y:400}, 60);
 		}
-	}
+	};
+
+	this.delete_poly = function(){
+		this.grid.delete_poly_under_point(this.mouseData.position);
+		if(this.grid.empty()){
+			this.polygon_ghost.initialize({x:400, y:400}, 60);
+		}
+
+	};
 
 
 };

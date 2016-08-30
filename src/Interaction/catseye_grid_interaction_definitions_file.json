@@ -21,7 +21,8 @@
 		},
 
 		"release":{
-			"delete": "delete_released",
+			"delete": "delete_poly",
+			"backspace": "delete_poly",
 			"q": "q_released",
 		}
 	}
