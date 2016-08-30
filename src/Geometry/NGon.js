@@ -168,16 +168,35 @@ var NGon = function(sides){
 		return out;
 	};
 
+	this.generate_inner_grid = function(resolution){
+		
+		var center = this.calculate_centroid();
+		var pts = [center];
+		pts = pts.concat(this.vertices);
+
+		for (var i = 0; i < this.vertices.length; i++) {
+			var curr = this.vertices[i];
+			var next = this.vertices[(i+1)%this.vertices.length];
+			for (var j = 1; j < resolution; j++) {
+				var t = j*(1/(resolution));
+				pts.push({x:lerp(curr.x, center.x, t), y:lerp(curr.y, center.y, t)});
+				pts.push({x:lerp(curr.x, next.x, t), y:lerp(curr.y, next.y, t)});
+			}	
+		}
+		return pts;
+	};
+
 	this.calculate_centroid = function(){
 		
-		var x_total, y_total = 0;
+		var x_total = 0;
+		var y_total = 0;
 
-		for(var i = 0; i < this.edges.length; ++i){
-			x_total += this.edges[i][0].x;
-			y_total += this.edges[i][0].y;
+		for(var i = 0; i < this.vertices.length; ++i){
+			x_total += this.vertices[i].x;
+			y_total += this.vertices[i].y;
 		}
 
-		return {x:x_total/sides, y:y_total/sides};
+		return {x:x_total/this.sides, y:y_total/this.sides};
 	};
 
 

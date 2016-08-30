@@ -72,10 +72,13 @@ var PolygonGrid = function(){
 		}
 	};
 
-	this.generate_snap_points = function(){
+	this.generate_snap_grid = function(resolution){
+		var snap_points = [];
 		for (var i = 0; i < this.polygons.length; ++i) {
-	//		this.polygons[i].
+			var poly_pts = this.polygons[i].generate_inner_grid(resolution);
+			snap_points = snap_points.concat(poly_pts);			
 		}
+		return new snap_grid(snap_points);
 	};
 
 	this.to_JSON = function(){

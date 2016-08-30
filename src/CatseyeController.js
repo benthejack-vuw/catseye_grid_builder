@@ -42,6 +42,13 @@ var CatseyeController = function(canvas){
 				fill(255,50);
 				this.polygon_ghost.draw();
 			}
+
+			if(this.snapGrid){
+				for (var i = 0; i < this.snapGrid.length; i++) {
+					fill(255,0,0);
+					ellipse(this.snapGrid[i].x, this.snapGrid[i].y, 5, 5);
+				}
+			}
 		pop();
 	};
 
@@ -62,6 +69,12 @@ var CatseyeController = function(canvas){
 			}
 		}
 	};
+
+	this.generate_snap_grid = function(){
+		this.snapGrid = this.grid.generate_snap_grid(2);
+//		console.log(this.snapGrid);
+
+	}
 
 	this.transform_point = function(pt){
 		var point = {x:pt.x, y:pt.y};
@@ -98,6 +111,7 @@ var CatseyeController = function(canvas){
 
 	this.change_current_poly = function(last_pressed, keyboard_data){		
 		this.next_poly_sides = parseInt(last_pressed);
+		console.log("boip");
 		this.rotation_slider.elt.setAttribute("step", TWO_PI/(this.next_poly_sides*2));
 
 		this.polygon_ghost = new NGon(this.next_poly_sides);

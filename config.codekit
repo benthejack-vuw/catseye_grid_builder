@@ -153,6 +153,17 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
+	"\/src\/Geometry\/min\/SnapGrid-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Geometry\/min\/SnapGrid-min.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/SnapGrid-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
 	"\/src\/Geometry\/NGon.js": {
 		"fileType": 64,
 		"ignore": 1,
@@ -170,6 +181,17 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/src\/Geometry\/PolygonGrid.js",
 		"outputAbbreviatedPath": "\/src\/Geometry\/min\/PolygonGrid-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Geometry\/SnapGrid.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Geometry\/SnapGrid.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/SnapGrid-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,

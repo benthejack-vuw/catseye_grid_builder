@@ -17,13 +17,13 @@
 			"6": "change_current_poly",
 			"7": "change_current_poly",
 			"8": "change_current_poly",
-			"9": "change_current_poly"
+			"9": "change_current_poly",
+			"s": "generate_snap_grid"
 		},
 
 		"release":{
 			"delete": "delete_poly",
-			"backspace": "delete_poly",
-			"q": "q_released",
+			"backspace": "delete_poly"
 		}
 	}
 
