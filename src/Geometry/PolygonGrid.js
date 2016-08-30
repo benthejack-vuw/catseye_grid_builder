@@ -15,12 +15,15 @@ var PolygonGrid = function(){
 
 	this.delete_poly_under_point = function(point){
  		var poly = this.polygon_under(point);
- 		console.log(poly, point);
  		if(poly){
 			var index = this.polygons.indexOf(poly);
-			if(index > -1){this.polygons.splice(index, 1)};
+			if(index > -1){this.polygons.splice(index, 1);}
 		}
 
+	};
+
+	this.first = function(){
+		return this.polygons[0];
 	};
 
 	this.closest_edge = function(pt, tolerance){
@@ -57,7 +60,7 @@ var PolygonGrid = function(){
 
 	this.empty = function(){
 		return this.polygons.length <= 0;
-	}
+	};
 
 	this.draw = function(){
 		
@@ -71,9 +74,9 @@ var PolygonGrid = function(){
 
 	this.generate_snap_points = function(){
 		for (var i = 0; i < this.polygons.length; ++i) {
-			this.polygons[i].
+	//		this.polygons[i].
 		}
-	}
+	};
 
 	this.to_JSON = function(){
 

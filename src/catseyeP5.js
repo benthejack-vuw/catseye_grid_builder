@@ -1,8 +1,7 @@
-
 var controller = null;
 
 function setup() {
-	var renderer = createCanvas(800, 800);
+	var renderer = createCanvas(window.innerWidth/2, window.innerHeight/2);
 	controller = new CatseyeController(renderer.canvas);
 }
 

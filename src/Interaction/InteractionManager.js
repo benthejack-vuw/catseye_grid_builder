@@ -159,7 +159,7 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 
 	this.mouseButtonAction = function(action, e, any){
 
-		e.preventDefault();
+		if(action === "release"){interactionManager.focus();}
 
 		interactionManager.set_local_mouse_position(e);
 		var mouse_button = mouse_map[e.which];
