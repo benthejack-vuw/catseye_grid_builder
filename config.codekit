@@ -109,9 +109,20 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
+	"\/src\/Geometry\/BoundingBox.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Geometry\/BoundingBox.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/BoundingBox-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
 	"\/src\/Geometry\/DragablePolygon.js": {
 		"fileType": 64,
-		"ignore": 0,
+		"ignore": 1,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/src\/Geometry\/DragablePolygon.js",
 		"outputAbbreviatedPath": "\/src\/Geometry\/min\/DragablePolygon-min.js",
@@ -126,6 +137,17 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/src\/Geometry\/InteractiveLine.js",
 		"outputAbbreviatedPath": "\/src\/Geometry\/min\/InteractiveLine-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Geometry\/min\/BoundngBox-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Geometry\/min\/BoundngBox-min.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/BoundngBox-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -188,7 +210,7 @@
 		},
 	"\/src\/Geometry\/SnapGrid.js": {
 		"fileType": 64,
-		"ignore": 0,
+		"ignore": 1,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/src\/Geometry\/SnapGrid.js",
 		"outputAbbreviatedPath": "\/src\/Geometry\/min\/SnapGrid-min.js",
@@ -441,7 +463,7 @@
 	"javascriptCreateSourceMap": 1,
 	"javascriptOutputStyle": 1,
 	"javascriptSyntaxCheckerStyle": 1,
-	"jsCheckerReservedNamesString": "mouseX, mouseY, PI, fill, stroke, sin, cos, abs, createVector, background, strokeWeight, color, createCanvas, atan2, line, beginShape, vertex, endShape, CLOSE, dist",
+	"jsCheckerReservedNamesString": "mouseX, mouseY, PI, fill, stroke, sin, cos, abs, createVector, background, strokeWeight, color, createCanvas, atan2, line, beginShape, vertex, endShape, CLOSE, dist, lerp, TWO_PI, width, height, push, pop, rotate, translate, scale, createSlider, ellipse, max, min",
 	"jsHintFlags2": {
 		"asi": {
 			"active": 0,

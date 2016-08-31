@@ -1,5 +1,7 @@
 var CatseyeController = function(canvas){
 
+	var controller = this;
+
 	this.interaction_manager = new InteractionManager(this, canvas, "min/catseye_grid_interaction_definitions_file-min.json");
 	this.interaction_manager.start();
 
@@ -44,18 +46,24 @@ var CatseyeController = function(canvas){
 			}
 
 			if(this.snapGrid){
-				for (var i = 0; i < this.snapGrid.length; i++) {
-					fill(255,0,0);
-					ellipse(this.snapGrid[i].x, this.snapGrid[i].y, 5, 5);
-				}
+				this.snapGrid.draw();
+			}
+
+			if(this.grid_repeat_selector){
+				this.grid_repeat_selector.draw();
 			}
 		pop();
 	};
 
-	this.mouse_move = function(i_mouseData){
 
+	this.set_mouse_data = function(i_mouseData){
 		this.mouseData = i_mouseData;
 		this.mouseData.position = this.transform_point(i_mouseData.position);
+	};
+
+	this.mouse_move = function(i_mouseData){
+
+		this.set_mouse_data(i_mouseData);
 
 		var new_edge = this.grid.closest_edge(this.mouseData.position, 15);
 		
@@ -70,18 +78,32 @@ var CatseyeController = function(canvas){
 		}
 	};
 
+	this.mouse_drag = function(i_mouseData){
+		this.set_mouse_data(i_mouseData);
+		if(this.grid_repeat_selector){
+			this.grid_repeat_selector.drag(this.mouseData.position);
+		}
+	};
+
+	this.mouse_down = function(i_mouse_button, i_mouseData){
+		this.set_mouse_data(i_mouseData);
+		if(this.grid_repeat_selector){
+			this.grid_repeat_selector.select_corner(this.mouseData.position);
+		}
+	};
+
 	this.generate_snap_grid = function(){
 		this.snapGrid = this.grid.generate_snap_grid(2);
+		this.grid_repeat_selector = new DragablePolygon(this.snapGrid.bounding_box(), this.snapGrid);
 //		console.log(this.snapGrid);
-
-	}
+	};
 
 	this.transform_point = function(pt){
 		var point = {x:pt.x, y:pt.y};
 		point = this.rotate_point(point);
 		point =  this.scale_point(point);
 		return point;
-	}
+	};
 
 	this.rotate_point = function(pt){
 		var point = {x:pt.x, y:pt.y};
@@ -94,7 +116,7 @@ var CatseyeController = function(canvas){
 		point.y = height/2 + sin(theta) * d;
 
 		return point;
-	}
+	};
 
 	this.scale_point = function(pt){
 		var point = {x:pt.x, y:pt.y};		
@@ -102,14 +124,16 @@ var CatseyeController = function(canvas){
 		point.x = (point.x * 1.0/this.scale) - ((width/2)*(1.0/this.scale)) + (width/2);
 		point.y = (point.y * 1.0/this.scale) - ((height/2)*(1.0/this.scale)) + (height/2);
 		return point;
-	}
-
-	this.place_polygon = function(i_mouseButton, i_mouseData){
-		this.grid.add_polygon(this.polygon_ghost);
-		this.polygon_ghost = new NGon(this.next_poly_sides);
 	};
 
-	this.change_current_poly = function(last_pressed, keyboard_data){		
+	this.place_polygon = function(){
+		if(this.grid_repeat_selector === null || this.grid_repeat_selector === undefined){
+			this.grid.add_polygon(this.polygon_ghost);
+			this.polygon_ghost = new NGon(this.next_poly_sides);
+		}
+	};
+
+	this.change_current_poly = function(last_pressed){		
 		this.next_poly_sides = parseInt(last_pressed);
 		console.log("boip");
 		this.rotation_slider.elt.setAttribute("step", TWO_PI/(this.next_poly_sides*2));
@@ -130,5 +154,17 @@ var CatseyeController = function(canvas){
 
 	};
 
+	this.generateJSON = function(){
+		controller.grid.normalize(controller.grid_repeat_selector.bounding_box());
+		var dataStr = "data:text/json;charset=utf-8," + controller.grid.to_JSON();
+		var dlAnchorElem = document.getElementById('downloadAnchorElem');
+		dlAnchorElem.setAttribute("href",     dataStr     );
+		dlAnchorElem.setAttribute("download", "scene.json");
+		dlAnchorElem.click();
+	};
+
+	this.button = createButton('generateJSON');
+  	this.button.position(10, 40);
+  	this.button.mousePressed(this.generateJSON);
 
 };

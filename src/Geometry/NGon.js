@@ -161,8 +161,8 @@ var NGon = function(sides){
 		var out = [];
 		for(var i = 0; i < this.vertices.length; ++i){
 			out.push({
-				x: this.vertices[i].x,
-				y: this.vertices[i].y
+				x: +this.vertices[i].x.toFixed(3),
+				y: +this.vertices[i].y.toFixed(3)
 			});
 		}
 		return out;
@@ -199,5 +199,40 @@ var NGon = function(sides){
 		return {x:x_total/this.sides, y:y_total/this.sides};
 	};
 
+	this.inside = function(bounding_box){
+		for (var i = 0; i < this.vertices.length; i++) {
+			if(bounding_box.contains_point(this.vertices[i])){
+				return true;
+			}
+		}
+		return false;
+	};
+
+	this.normalized_points = function(bounding_box){
+		var pts = [];
+		for (var i = 0; i < this.vertices.length; i++) {
+			
+			var x_out = +((this.vertices[i].x - bounding_box[0].x)/bounding_box.width()).toFixed(6);
+			var y_out = +((this.vertices[i].y - bounding_box[0].y)/bounding_box.width()).toFixed(6);
+
+			// x_out = +map(x_out, 0, width, 0, bounding_box.width()).toFixed(3);
+			// y_out = +map(y_out, 0, width, 0, bounding_box.width()).toFixed(3);
+
+			pts.push({x:x_out, 
+					  y:y_out
+					 });
+		}
+		return pts;
+	};
+
+	this.completely_inside = function(bounding_box){
+		var contains = false;
+		for (var i = 0; i < this.vertices.length; i++) {
+			if(!bounding_box.contains_point(this.vertices[i])){
+				return false;
+			};
+		}
+		return true;
+	}
 
 };

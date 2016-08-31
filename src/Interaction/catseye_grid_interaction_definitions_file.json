@@ -5,7 +5,12 @@
 			"left" :  "place_polygon"
 		},
 
-		"move":"mouse_move"
+		"press":{
+			"left" : "mouse_down"
+		},
+
+		"move":"mouse_move",
+		"drag":"mouse_drag"
 	},
 
 	"keyboard":{

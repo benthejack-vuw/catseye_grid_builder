@@ -2,6 +2,8 @@ var PolygonGrid = function(){
 
 	this.polygons = [];
 	this.bounds = [];
+	this.normalized_polygons = [];
+	this.normalized_bounds = [];
 
 	this.add_polygon = function(poly){
 		this.polygons.push(poly);
@@ -78,19 +80,40 @@ var PolygonGrid = function(){
 			var poly_pts = this.polygons[i].generate_inner_grid(resolution);
 			snap_points = snap_points.concat(poly_pts);			
 		}
-		return new snap_grid(snap_points);
+		return new SnapGrid(snap_points);
 	};
+
+	this.normalize = function(bounding_box){
+		
+		this.bounds = new BoundingBox();
+		this.bounds.from_points(bounding_box);
+		this.normalized_bounds = this.bounds.normalized();
+
+		this.normalized_polygons = [];
+		for(var i = 0; i < this.polygons.length; ++i){
+			if(this.polygons[i].inside(this.bounds)){
+				this.normalized_polygons.push(this.polygons[i].normalized_points(this.bounds));
+			}
+		}
+
+
+	}
 
 	this.to_JSON = function(){
 
 		var polygons_out = [];
 		for(var i = 0; i < this.polygons.length; ++i){
-			polygons_out.push(this.polygons[i].to_vertex_position_array);
+			polygons_out.push(this.polygons[i].to_vertex_position_array());
+		}
+
+		var norm_polygons_out = [];
+		for(i = 0; i < this.normalized_polygons.length; ++i){
+			norm_polygons_out.push(this.normalized_polygons[i]);
 		}
 
 		var out = {
-			boundary: this.bounds,
-			polygons: polygons_out
+			boundary: this.normalized_bounds,
+			polygons: norm_polygons_out,
 		};
 
 		return JSON.stringify(out);
