@@ -9,12 +9,6 @@ var PolygonGrid = function(){
 		this.polygons.push(poly);
 	};
 
-	this.new_polygon_on_edge = function(edge, sides){
-		var poly = new NGon(sides);
-		poly.initialize_from_line(edge);
-		this.polygons.push(poly);
-	};
-
 	this.delete_poly_under_point = function(point){
  		var poly = this.polygon_under(point);
  		if(poly){
@@ -95,9 +89,7 @@ var PolygonGrid = function(){
 				this.normalized_polygons.push(this.polygons[i].normalized_points(this.bounds));
 			}
 		}
-
-
-	}
+	};
 
 	this.to_JSON = function(){
 

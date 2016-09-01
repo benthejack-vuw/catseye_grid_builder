@@ -106,8 +106,10 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 			interactionManager.pressed_keys = {};
 		}
 		else{
-			var key_name = interactionManager.keyNameFromEvent(e).toLowerCase();
+			var key_name = interactionManager.keyNameFromEvent(e);
 			if(key_name){
+				interactionManager.pressed_keys[key_name] = false;
+				key_name = key_name.toLowerCase();
 				interactionManager.pressed_keys[key_name] = false;
 			}
 		}

@@ -17,8 +17,8 @@ var CatseyeController = function(canvas){
 	this.edge_highlight = null;
 	
 	this.next_poly_sides = 6;
-	this.polygon_ghost = new NGon(this.next_poly_sides);
-	this.polygon_ghost.initialize({x:width/2, y:height/2}, 60);
+	this.polygon_ghost = new RegularPolygon();
+	this.polygon_ghost.initialize_regular_polygon(this.next_poly_sides ,{x:width/2, y:height/2}, 60);
 
 	this.scale = 1.0;
 	this.rotation = 0;
@@ -73,7 +73,7 @@ var CatseyeController = function(canvas){
 			}
 			else if(this.edge_highlight !== new_edge){
 				this.edge_highlight = new_edge;
-				this.polygon_ghost.initialize_from_line(this.edge_highlight);
+				this.polygon_ghost.initialize_from_line(this.next_poly_sides, this.edge_highlight);
 			}
 		}
 	};
@@ -129,7 +129,7 @@ var CatseyeController = function(canvas){
 	this.place_polygon = function(){
 		if(this.grid_repeat_selector === null || this.grid_repeat_selector === undefined){
 			this.grid.add_polygon(this.polygon_ghost);
-			this.polygon_ghost = new NGon(this.next_poly_sides);
+			this.polygon_ghost = new RegularPolygon(this.next_poly_sides);
 		}
 	};
 
@@ -138,18 +138,18 @@ var CatseyeController = function(canvas){
 		console.log("boip");
 		this.rotation_slider.elt.setAttribute("step", TWO_PI/(this.next_poly_sides*2));
 
-		this.polygon_ghost = new NGon(this.next_poly_sides);
+		this.polygon_ghost = new RegularPolygon();
 		if(this.edge_highlight){
-			this.polygon_ghost.initialize_from_line(this.edge_highlight);
+			this.polygon_ghost.initialize_from_line(this.next_poly_sides, this.edge_highlight);
 		}else if(this.grid.empty()){
-			this.polygon_ghost.initialize({x:width/2, y:height/2}, 60);
+			this.polygon_ghost.initialize_regular_polygon(this.next_poly_sides, {x:width/2, y:height/2}, 60);
 		}
 	};
 
 	this.delete_poly = function(){
 		this.grid.delete_poly_under_point(this.mouseData.position);
 		if(this.grid.empty()){
-			this.polygon_ghost.initialize({x:width/2, y:height/2}, 60);
+			this.polygon_ghost.initialize_regular_polygon(this.next_poly_sides, {x:width/2, y:height/2}, 60);
 		}
 
 	};
