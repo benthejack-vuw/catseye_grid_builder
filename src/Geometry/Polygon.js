@@ -2,30 +2,29 @@ function Polygon(vertex_array){
 	if(vertex_array !== undefined){
 		this.initialize_from_array(vertex_array);
 	}
+
+	this.vertex_count = 0,
+	this.vertices = [],
+	this.edges = [];
+	this.centroid_position = null;
 }
 
-Polygon.prototype = {
-	vertex_count: 0,
-	vertices: [],
-	edges: [],
-	centroid_position: null
-};
 
 Polygon.prototype.initialize_from_array = function(points){
 	this.empty();
 
 	//vertex function to be passed into create_edges
 	var verts_from_array = function(ngon, i){
-		var x = points[i].x;
-		var y = points[i].y;
-		return createVector(x, y);
+		var x_pos = points[i].x;
+		var y_pos = points[i].y;
+		return {x:x_pos, y:y_pos};
 	};
 
 	this.vertex_count = points.length;
 	this.create_edges(verts_from_array);
 
 	this.centroid_position = this.calculate_centroid();
-	this.radius = dist(points[0].x, points[0].y, this.centroid_position.x, this.centroid_position.y);
+	this.radius = Math.dist(points[0].x, points[0].y, this.centroid_position.x, this.centroid_position.y);
 };
 
 //---------------------------HELPER FUNCTIONS------------------------------------------------
@@ -89,7 +88,7 @@ Polygon.prototype.is_under = function(pt)
 
 Polygon.prototype.contains_point = function(pt, tolerance){
 	tolerance = tolerance === undefined ? 0 : tolerance;
-	return dist(pt.x, pt.y, this.centroid_position.x, this.centroid_position.y) < (this.radius + tolerance);
+	return Math.dist(pt.x, pt.y, this.centroid_position.x, this.centroid_position.y) < (this.radius + tolerance);
 };
 
 Polygon.prototype.closest_edge = function(pt){
@@ -105,13 +104,26 @@ Polygon.prototype.closest_edge = function(pt){
 	return closest;
 };
 
-Polygon.prototype.draw = function(){
-	beginShape();
-	for(var i = 0; i < this.edges.length; ++i){
-		var pt = this.edges[i][0];
-		vertex(pt.x, pt.y);
+Polygon.prototype.draw = function(context, close){
+
+	var verts = this.vertices.length;
+	
+	if(close){
+		context.beginPath();
 	}
-	endShape(CLOSE);
+	
+	context.moveTo(this.vertices[0].x, this.vertices[0].y);
+	for(var i = 1; i <= verts; ++i){
+		context.lineTo(this.vertices[i%verts].x, this.vertices[i%verts].y);
+	}
+
+	if(close){
+		context.closePath();
+		context.fill();
+		context.stroke();
+
+	}
+
 };
 
 //this strips out all the p5JS Vector data and returns an array of objects with x and y properties
@@ -137,8 +149,8 @@ Polygon.prototype.generate_inner_grid = function(resolution){
 		var next = this.vertices[(i+1)%this.vertices.length];
 		for (var j = 1; j < resolution; j++) {
 			var t = j*(1/(resolution));
-			pts.push({x:lerp(curr.x, center.x, t), y:lerp(curr.y, center.y, t)});
-			pts.push({x:lerp(curr.x, next.x, t), y:lerp(curr.y, next.y, t)});
+			pts.push({x:Math.lerp(curr.x, center.x, t), y:Math.lerp(curr.y, center.y, t)});
+			pts.push({x:Math.lerp(curr.x, next.x, t), y:Math.lerp(curr.y, next.y, t)});
 		}	
 	}
 	return pts;
@@ -172,9 +184,6 @@ Polygon.prototype.normalized_points = function(bounding_box){
 		
 		var x_out = +((this.vertices[i].x - bounding_box[0].x)/bounding_box.width()).toFixed(6);
 		var y_out = +((this.vertices[i].y - bounding_box[0].y)/bounding_box.width()).toFixed(6);
-
-		// x_out = +map(x_out, 0, width, 0, bounding_box.width()).toFixed(3);
-		// y_out = +map(y_out, 0, width, 0, bounding_box.width()).toFixed(3);
 
 		pts.push({x:x_out, 
 				  y:y_out

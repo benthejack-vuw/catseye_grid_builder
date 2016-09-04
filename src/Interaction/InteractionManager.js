@@ -156,7 +156,11 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 
 
 	this.set_local_mouse_position = function(e){
-		interactionManager.mouse_data.position = global_to_local(interactionManager.dom_listener_element, e);
+		var pt = global_to_local(interactionManager.dom_listener_element, e);
+		if(this.transformMatrix){
+			pt = this.transformMatrix.transformPoint(pt);
+		}
+		interactionManager.mouse_data.position = pt;
 	};
 
 	this.mouseButtonAction = function(action, e, any){
@@ -220,6 +224,10 @@ var InteractionManager = function(callback_object, dom_listener_element, interac
 		}
 
 	};
+
+	this.setTransformMatrix = function(transform){
+		this.transformMatrix = transform;
+	}
 
 	this.focus = function(){
 		interactionManager.dom_listener_element.focus();

@@ -1,0 +1,9 @@
+#controls{
+	position:fixed;
+	left:20px;
+	top:20px;
+	background-color: #FFF;
+	opacity: 0.5;
+	width:150px;
+	height:300px;
+}
