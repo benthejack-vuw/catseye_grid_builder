@@ -39,7 +39,6 @@ var CatseyeController = function(canvas){
 		context.restore();
 	}
 
-
 	this.generateJSON = function(){
 		polyGridBuilder.grid.normalize(polyGridBuilder.grid_repeat_selector.bounding_box());
 		var dataStr = "data:text/json;charset=utf-8," + polyGridBuilder.grid.to_JSON();
@@ -62,8 +61,18 @@ var CatseyeController = function(canvas){
 		document.getElementById("controls").appendChild(newSlider);
 	}
 
+	this.addButton = function(text, callback, id){
+		var newSlider = document.createElement("button");
+		newSlider.setAttribute("id", id);
+		newSlider.setAttribute("type", "button");
+		newSlider.innerHTML = text;
+		newSlider.addEventListener("click", callback);
+		document.getElementById("controls").appendChild(newSlider);
+	}
+
 	this.addSlider(0.2, 2.0, 1.0, 0.1, this.setScale, "scale_slider");
 	this.addSlider(0, Math.TWO_PI, 0, Math.TWO_PI/12.0, this.setRotation, "rotate_slider");
+	this.addButton("save grid JSON", this.generateJSON, "save_json");
 	this.setTransforms();
 
 };

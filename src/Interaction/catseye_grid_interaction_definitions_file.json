@@ -23,7 +23,8 @@
 			"7": "change_current_poly",
 			"8": "change_current_poly",
 			"9": "change_current_poly",
-			"s": "generate_snap_grid"
+			"s": "generate_snap_grid",
+			"j": "save_JSON"
 		},
 
 		"release":{
