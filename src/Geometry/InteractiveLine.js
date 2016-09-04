@@ -22,16 +22,17 @@ var InteractiveLine = function(pt1, pt2){
 	this.angle = function(reverse){
 		var one = reverse ? this[0] : this[1];
 		var two = reverse ? this[1] : this[0];
-		return atan2(one.y - two.y, one.x - two.x);
+		return Math.atan2(one.y - two.y, one.x - two.x);
 	};
 
 	this.length = function(){
-		return this[0].dist(this[1]);
+		return Math.dist(this[1].x, this[1].y, this[0].x, this[0].y);
 	};
 
-	this.draw = function(strokeColour){
-		stroke(strokeColour === undefined ? 0 : strokeColour);
-		line(this[0].x, this[0].y, this[1].x, this[1].y);
+	this.draw = function(context, close){
+		if(close){context.beginPath();}
+		context.lineTo(this[0].x, this[0].y, this[1].x, this[1].y);
+		if(close){context.ctx.stroke();}
 	};
 
 	// isLeft(): tests if a point is Left|On|Right of an infinite line.
@@ -40,8 +41,7 @@ var InteractiveLine = function(pt1, pt2){
 	//            =0 for P2  on the line
 	//            <0 for P2  right of the line
 	//   taken from http://geomalgorithms.com/a03-_inclusion.html
-	this.isLeft = function(pt)
-	{
+	this.isLeft = function(pt){
 	    return ( (this[1].x - this[0].x) * (pt.y - this[0].y) - (pt.x -  this[0].x) * (this[1].y - this[0].y) );
 	};
 

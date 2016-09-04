@@ -13,6 +13,15 @@
 		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
+	"\/css\/catseye_gridbuilder.css": {
+		"fileType": 16,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/css\/catseye_gridbuilder.css",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
 	"\/index.html": {
 		"fileType": 8192,
 		"ignore": 0,
@@ -21,28 +30,6 @@
 		"outputAbbreviatedPath": "No Output Path",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
-		},
-	"\/lib\/p5.dom.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/lib\/p5.dom.js",
-		"outputAbbreviatedPath": "\/lib\/min\/p5.dom-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/lib\/p5.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/lib\/p5.js",
-		"outputAbbreviatedPath": "\/lib\/min\/p5-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
 		},
 	"\/min\/catseye-master-min.js": {
 		"fileType": 64,
@@ -65,6 +52,15 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1
+		},
+	"\/README.html": {
+		"fileType": 8192,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/README.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
 		},
 	"\/README.md": {
 		"criticStyle": 0,
@@ -109,28 +105,6 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/Geometry\/BoundingBox.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/BoundingBox.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/BoundingBox-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/Geometry\/DragablePolygon.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/DragablePolygon.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/DragablePolygon-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
 	"\/src\/Geometry\/InteractiveLine.js": {
 		"fileType": 64,
 		"ignore": 1,
@@ -142,56 +116,45 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/Geometry\/min\/BoundngBox-min.js": {
+	"\/src\/Geometry\/min\/InteractivePolygonGrid-min.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/min\/BoundngBox-min.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/BoundngBox-min-min.js",
+		"inputAbbreviatedPath": "\/src\/Geometry\/min\/InteractivePolygonGrid-min.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/InteractivePolygonGrid-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/Geometry\/min\/DragablePolygon-min.js": {
+	"\/src\/Geometry\/min\/PolyGridBuilder-min.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/min\/DragablePolygon-min.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/DragablePolygon-min-min.js",
+		"inputAbbreviatedPath": "\/src\/Geometry\/min\/PolyGridBuilder-min.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/PolyGridBuilder-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/Geometry\/min\/PolygonGrid-min.js": {
+	"\/src\/Geometry\/min\/RegularPolygon-min.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/min\/PolygonGrid-min.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/PolygonGrid-min-min.js",
+		"inputAbbreviatedPath": "\/src\/Geometry\/min\/RegularPolygon-min.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/RegularPolygon-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/Geometry\/min\/SnapGrid-min.js": {
+	"\/src\/Geometry\/Polygon.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/min\/SnapGrid-min.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/min\/SnapGrid-min-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/Geometry\/NGon.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/NGon.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/NGon-min.js",
+		"inputAbbreviatedPath": "\/src\/Geometry\/Polygon.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/Polygon-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -208,12 +171,23 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/Geometry\/SnapGrid.js": {
+	"\/src\/Geometry\/PolyGridBuilder.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Geometry\/SnapGrid.js",
-		"outputAbbreviatedPath": "\/src\/Geometry\/min\/SnapGrid-min.js",
+		"inputAbbreviatedPath": "\/src\/Geometry\/PolyGridBuilder.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/PolyGridBuilder-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Geometry\/RegularPolygon.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Geometry\/RegularPolygon.js",
+		"outputAbbreviatedPath": "\/src\/Geometry\/min\/RegularPolygon-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -241,23 +215,89 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/Interaction\/min\/CatseyeController-min.js": {
+	"\/src\/Interaction\/min\/UIController-min.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/Interaction\/min\/CatseyeController-min.js",
-		"outputAbbreviatedPath": "\/src\/Interaction\/min\/min\/CatseyeController-min-min.js",
+		"inputAbbreviatedPath": "\/src\/Interaction\/min\/UIController-min.js",
+		"outputAbbreviatedPath": "\/src\/Interaction\/min\/min\/UIController-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/min\/CatseyeController-min.js": {
+	"\/src\/Interaction\/UIController.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Interaction\/UIController.js",
+		"outputAbbreviatedPath": "\/src\/Interaction\/min\/UIController-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Utils\/DomUtils.js": {
 		"fileType": 64,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/min\/CatseyeController-min.js",
-		"outputAbbreviatedPath": "\/src\/min\/min\/CatseyeController-min-min.js",
+		"inputAbbreviatedPath": "\/src\/Utils\/DomUtils.js",
+		"outputAbbreviatedPath": "\/src\/Utils\/min\/DomUtils-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Utils\/DrawingUtils.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Utils\/DrawingUtils.js",
+		"outputAbbreviatedPath": "\/src\/Utils\/min\/DrawingUtils-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Utils\/MathUtils.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Utils\/MathUtils.js",
+		"outputAbbreviatedPath": "\/src\/Utils\/min\/MathUtils-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Utils\/min\/DomUtils-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Utils\/min\/DomUtils-min.js",
+		"outputAbbreviatedPath": "\/src\/Utils\/min\/min\/DomUtils-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Utils\/min\/MathUtils-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Utils\/min\/MathUtils-min.js",
+		"outputAbbreviatedPath": "\/src\/Utils\/min\/min\/MathUtils-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/Utils\/Transform.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/Utils\/Transform.js",
+		"outputAbbreviatedPath": "\/src\/Utils\/min\/Transform-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -266,7 +306,7 @@
 	},
 "hooks": [
 	],
-"lastSavedByUser": "Ben",
+"lastSavedByUser": "Ben Jack",
 "manualImportLinks": {
 	},
 "projectAttributes": {
@@ -463,7 +503,7 @@
 	"javascriptCreateSourceMap": 1,
 	"javascriptOutputStyle": 1,
 	"javascriptSyntaxCheckerStyle": 1,
-	"jsCheckerReservedNamesString": "mouseX, mouseY, PI, fill, stroke, sin, cos, abs, createVector, background, strokeWeight, color, createCanvas, atan2, line, beginShape, vertex, endShape, CLOSE, dist, lerp, TWO_PI, width, height, push, pop, rotate, translate, scale, createSlider, ellipse, max, min",
+	"jsCheckerReservedNamesString": "mouseX, mouseY, fill, stroke, background, strokeWeight, color, createCanvas, line, beginShape, vertex, endShape, CLOSE, width, height, push, pop, rotate, translate, scale, createSlider, ellipse",
 	"jsHintFlags2": {
 		"asi": {
 			"active": 0,
