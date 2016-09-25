@@ -1,3 +1,4 @@
+
 import Point from "./point"
 import Rectangle from "./rectangle"
 import "../util/MathUtils"
@@ -13,7 +14,7 @@ export default class BoundingBox extends Rectangle{
 		}
 	}
 	
-	public encompass(points: Array<Point>){
+	public calculateBounds(points: Array<Point>){
 		var left = Number.MAX_SAFE_INTEGER;
 		var right = -Number.MAX_SAFE_INTEGER;
 		var top = Number.MAX_SAFE_INTEGER;

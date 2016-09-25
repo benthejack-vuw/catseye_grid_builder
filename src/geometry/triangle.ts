@@ -25,12 +25,6 @@ export default class Triangle {
             Point.fromData(data[2]))
     }
 
-    public *[Symbol.iterator](): Iterator<Point> {
-        yield this[0];
-        yield this[1];
-        yield this[2];
-    }
-
     // Create a copy of this triangle.
     public copy(): Triangle {
         return new Triangle(this[0], this[1], this[2]);
@@ -89,11 +83,17 @@ export default class Triangle {
     }
 
     // Convert this triangle to a JSON string.
-    public toData(): string {
-        return `[${this[0].toData()},${this[1].toData()},${this[2].toData()}]`;
+    public toJSON(): string {
+        return `[${this[0].toJSON()},${this[1].toJSON()},${this[2].toJSON()}]`;
     }
 
     public toString(): string {
         return `Triangle[${this[0]}, ${this[1]}, ${this[2]}]`;
+    }
+
+    public *[Symbol.iterator](): Iterator<Point> {
+        yield this[0];
+        yield this[1];
+        yield this[2];
     }
 }

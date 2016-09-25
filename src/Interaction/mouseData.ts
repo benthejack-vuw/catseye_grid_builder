@@ -1,0 +1,50 @@
+import Point from "../Geometry/point";
+
+export enum MouseButton{
+	left = 0,
+	middle,
+	right
+}
+
+export class MouseData{
+
+	protected _position:Point;
+	protected _lastPosition:Point;
+	protected _buttons:Object;
+
+	constructor(){
+		this._buttons = {};
+	}
+
+	public get position(){
+		return this._position;
+	}
+
+	public get lastPosition(){
+		return this._lastPosition;
+	}
+
+	public isPressed(button:MouseButton):boolean{
+		return this._buttons[button];
+	}
+}
+
+export class MutableMouseData extends MouseData{
+
+	constructor(){ super(); }
+
+	public update(position:Point){
+		if(this._position !== undefined) {
+			this._lastPosition = this.position;
+		}
+		this._position = position.copy();
+	}
+
+	public setButton(button:MouseButton, value:boolean):void{
+		this._buttons[button] = value;
+	}
+
+	public locked():MouseData{
+		return this as MouseData;
+	}
+}
