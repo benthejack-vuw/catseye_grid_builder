@@ -8,7 +8,7 @@ export default class BoundingBox extends Rectangle{
 	constructor(points?: Array<Point>){
 		if(points){
 			super(0,0,0,0);
-			this.encompass(points);
+			this.calculateBounds(points);
 		}else{
 			super(0,0,1,1);
 		}
