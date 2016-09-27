@@ -1,4 +1,4 @@
-export default class InteractionHandler{
+export class InteractionHandler{
 
 	protected _callbackObject:any;
 	protected _domListenerElement:any;
@@ -7,4 +7,10 @@ export default class InteractionHandler{
 		this._callbackObject = callbackObject;
 		this._domListenerElement = domListenerElement;
 	}
+}
+
+export enum InteractionEventType{
+	press = 0,
+	release,
+	click
 }

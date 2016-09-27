@@ -1,7 +1,7 @@
-import InteractionHandler from "./interactionHandler"
+import {InteractionHandler} from "./interactionHandler"
+import {InteractionEventType} from "./interactionHandler"
 
-
-var interaction_key_bindings = {	
+var interaction_key_bindings:any = {	
 	"8" :"backspace",
 	"13":"return",
 	"16":"shift",
@@ -13,16 +13,11 @@ var interaction_key_bindings = {
 	"93":"meta"
 };
 
-enum KeyEventType{
-	press = 0,
-	release
-}
-
 export default class KeyboardInteractionHandler extends InteractionHandler{
 
-	private _pressedKeys:Object;
-	private _pressCombos:Array<KeyComboBinding>;
-	private _releaseCombos:Array<KeyComboBinding>;
+	private _pressedKeys:any;
+	private _pressCombos:Array<KeyComboBinding> = [];
+	private _releaseCombos:Array<KeyComboBinding> = [];
 
 	constructor(callbackObject:any, domListenerElement:HTMLElement, interactions:Object){
 		super(callbackObject, domListenerElement);
@@ -31,7 +26,6 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 	}
 
 	public start(){
-
 		//in case element is a canvas or other non-focusable object.
 		this._domListenerElement.setAttribute("tabindex", 1);
 	
@@ -58,30 +52,34 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 
 	private createKeyComboBindings(interactions:any):void{
 
-		var generateBindings = (type:KeyEventType) => {
+		var generateBindings = (type:InteractionEventType) => {
 			
-			var typeString = type == KeyEventType.press ? "press" : "release";
+			var typeString = InteractionEventType[type];
 
 			if(interactions[typeString]){
 				var keys = Object.keys(interactions[typeString]);
-				for (var combo in keys) {
-					let keyCombo = new KeyComboBinding(combo, interactions.press[combo], this._callbackObject);
+				for (var i = 0; i < keys.length; ++i) {
+					let combo:string = keys[i];
+					let keyCombo = new KeyComboBinding(combo, interactions[typeString][combo], this._callbackObject);
 					this.addKeyCodeBinding(keyCombo, type);
 				}
 			}
 		}
 
-		generateBindings(KeyEventType.press);
-		generateBindings(KeyEventType.release);
+		generateBindings(InteractionEventType.press);
+		generateBindings(InteractionEventType.release);
+
+		this.stop();
+		this.start();
 	}
 
-	private comboArray(keyEventType:KeyEventType):Array<KeyComboBinding>{
-		return keyEventType === KeyEventType.press ? this._pressCombos : this._releaseCombos;
+	private comboArray(iet:InteractionEventType):Array<KeyComboBinding>{
+		return iet === InteractionEventType.press ? this._pressCombos : this._releaseCombos;
 	}
 
-	//add new keycode binding, keyEventType should be KeyEventType.press or KeyEventType.release
-	private addKeyCodeBinding(binding:KeyComboBinding, keyEventType:KeyEventType):void{
-		this.comboArray(keyEventType).push(binding);
+	//add new keycode binding, InteractionEventType should be InteractionEventType.press or InteractionEventType.release
+	private addKeyCodeBinding(binding:KeyComboBinding, iet:InteractionEventType):void{
+		this.comboArray(iet).push(binding);
 	}
 
 	//returns the json key name from an event
@@ -94,8 +92,8 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 	}
 
 	//checks for any completed key combos, and call their respective callbacks
-	private checkCombos(key:string, keyEventType:KeyEventType):void{
-		var combos:Array<KeyComboBinding> = this.comboArray(keyEventType);
+	private checkCombos(key:string, iet:InteractionEventType):void{
+		var combos:Array<KeyComboBinding> = this.comboArray(iet);
 		
 		for (var i = 0; i < combos.length; ++i){
 			combos[i].runIfActivated(key, this._pressedKeys);
@@ -120,9 +118,11 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 	//detects special key presses (control, alt, meta, shift etc..)
 	private keyDown = (e:KeyboardEvent):void => {
 		var pressed = interaction_key_bindings[e.keyCode];
+		console.log(pressed);
+
 		if(pressed){
 			this._pressedKeys[pressed] = true;
-			this.checkCombos(pressed, KeyEventType.press);
+			this.checkCombos(pressed, InteractionEventType.press);
 		}
 	}
 
@@ -130,12 +130,12 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 	private keyPressed = (e:KeyboardEvent):void => {		
 		e.preventDefault();
 
-		e = e || event;
+		//e = e || event;
 		var pressed = this.keyNameFromCode(e.keyCode || e.charCode);
 		
 		if(pressed){
 			this._pressedKeys[pressed] = true;
-			this.checkCombos(pressed, KeyEventType.press);
+			this.checkCombos(pressed, InteractionEventType.press);
 		}
 	}
 
@@ -145,7 +145,7 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 
 		var released = this.keyNameFromCode(e.keyCode || e.charCode);
 		this.unsetKey(e);
-		this.checkCombos(released, KeyEventType.release);
+		this.checkCombos(released, InteractionEventType.release);
 	}
 
 	private focus = (e?:MouseEvent):void => {
@@ -157,7 +157,7 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 
 class KeyComboBinding{
 
-	private _callback:(string?, any?)=>void;
+	private _callback:(s?:string, a?:any)=>void;
 	private _combo:Array<string>; 
 
 	constructor(comboString:string, callbackFunctionName:string, callbackObject:any){
@@ -166,16 +166,17 @@ class KeyComboBinding{
 	}
 
 	//this method runs the callback if the combo is contained within lastKey and pressedKeys
-	public runIfActivated(lastKey:string, pressedKeys:Object):void{
+	public runIfActivated(lastKey:string, pressedKeys:any):void{
 
 		if(this._combo[0] !== "any"){//if this key combo is any it skips the check and runs the callback
-	
 			//run through the combo keys and check if they are activated
 			//if they are not, then this combo is not complete so return;
-			for (var key in this._combo) {
-				if(!(key === lastKey || pressedKeys[key]){return;}
+			for (var i = 0; i < this._combo.length; ++i) {
+				if(!(lastKey == this._combo[i] || pressedKeys[this._combo[i]])){return;}
 			}
 		}
+
+		
 
 		this._callback(lastKey, pressedKeys);
 	}

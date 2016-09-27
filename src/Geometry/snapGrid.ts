@@ -1,6 +1,6 @@
 import Point from "./Point";
 import BoundingBox from "./boundingBox";
-import "../util/DrawingUtils";
+import * as DrawingUtils from "../util/DrawingUtils";
 
 export default class SnapGrid{
 	
@@ -11,7 +11,7 @@ export default class SnapGrid{
 	}
 
 	public closest(pt:Point):Point{
-		var closest = null;
+		var closest:Point = null;
 		var min_dist = Number.MAX_SAFE_INTEGER;
 
 		for (var i = 0; i < this._points.length; i++) {

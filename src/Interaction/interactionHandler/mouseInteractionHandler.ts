@@ -1,25 +1,72 @@
 import Point from "../../Geometry/point"
-import InteractionHandler from "./interactionHandler"
+import {InteractionHandler} from "./interactionHandler"
+import {InteractionEventType} from "./interactionHandler"
 import {MutableMouseData} from "../mouseData"
 import Transform from "../../util/Transform"
-
-var mouse_map = ["none", "left", "middle", "right"];
+import {MouseButton} from "../mouseData"
+import {MouseButtonConverter} from "../mouseData"
+import {MouseData} from "../mouseData"
 
 export default class MouseInteractionHandler extends InteractionHandler{
 
 	private _mouseData:MutableMouseData;
 	private _transformMatrix:Transform;
 	private _interactions:any;
+	private _pressCombos:Array<MouseButtonBinding> = [];
+	private _releaseCombos:Array<MouseButtonBinding> = [];
+	private _clickCombos:Array<MouseButtonBinding> = [];
 
 	constructor(callbackObject:any, domListenerElement:HTMLElement, interactions:any){
 		super(callbackObject, domListenerElement);
-		this._interactions = interactions;
 		this._transformMatrix = new Transform();
+		this._mouseData = new MutableMouseData();
 		this.createMouseBindings(interactions);
 	}
 
-	private createMouseBindings(interactions:Object):void{
+	private createMouseBindings(interactions:any):void{
 
+		this._interactions = interactions;
+		
+		var generateBindings = (type:InteractionEventType) => {	
+			var typeString = InteractionEventType[type];
+
+			if(interactions[typeString]){
+				var keys = Object.keys(interactions[typeString]);
+				for (var i = 0; i < keys.length; ++i) {
+					console.log("MAKING BINDING", type, keys[i]);
+					var btn:MouseButton = MouseButtonConverter.fromString(keys[i]);
+					let keyCombo = new MouseButtonBinding(btn, interactions[InteractionEventType[type]][keys[i]], this._callbackObject);
+					this.addMouseButtonBinding(keyCombo, type);
+				}
+			}
+		}
+
+		generateBindings(InteractionEventType.press);
+		generateBindings(InteractionEventType.release);
+		generateBindings(InteractionEventType.click);
+
+
+
+		this.stop();
+		this.start();
+	}
+
+	private comboArray(iet:InteractionEventType):Array<MouseButtonBinding>{
+		switch (iet) {
+			case InteractionEventType.click:
+				return this._clickCombos;
+			case InteractionEventType.press:
+				return this._pressCombos;
+			case InteractionEventType.release:
+				return this._releaseCombos;
+			default:
+				return null;
+		}
+	}
+
+	//add new keycode binding, InteractionEventType should be InteractionEventType.press or InteractionEventType.release
+	private addMouseButtonBinding(binding:MouseButtonBinding, iet:InteractionEventType):void{
+		this.comboArray(iet).push(binding);
 	}
 
 	public start(){
@@ -28,7 +75,7 @@ export default class MouseInteractionHandler extends InteractionHandler{
 		this._domListenerElement.addEventListener( "click"  , this.mouseClicked, false );
 		this._domListenerElement.addEventListener("contextmenu", this.stopContextMenu);
 		
-		if(this._interactions.mouse.drag || this._interactions.mouse.move){
+		if(this._interactions.drag || this._interactions.move){
 			this._domListenerElement.addEventListener( "mousemove"  , this.mouseMoved );
 		}
 	}
@@ -38,94 +85,104 @@ export default class MouseInteractionHandler extends InteractionHandler{
 		window.removeEventListener( "mouseup", this.mouseReleased,  false );
 		this._domListenerElement.removeEventListener( "click"  , this.mouseClicked, false );
 		this._domListenerElement.removeEventListener("contextmenu", this.stopContextMenu);
-		if(this._interactions.mouse.drag || this._interactions.mouse.move){
+		if(this._interactions.drag || this._interactions.move){
 			this._domListenerElement.removeEventListener( "mousemove"  , this.mouseMoved );
 		}
 	}
 
 	private set_local_mouse_position(e:MouseEvent):void{
-		var pt = global_to_local(this._domListenerElement, e);
+		var pt = this.global_to_local(this._domListenerElement, e);
+
 		if(this._transformMatrix){
 			pt = this._transformMatrix.transformPoint(pt);
 		}
+
 		this._mouseData.update(pt); 
 	}
 
-	private mouseButtonAction(action, e, any){
+	private mouseButtonAction(action:InteractionEventType, e:MouseEvent):void{
 
-		if(action === "release"){this.focus();}
+		if(action === InteractionEventType.release){this._domListenerElement.focus();}
 
+		var button:MouseButton = MouseButtonConverter.fromString(MouseButton[e.which]);
 		this.set_local_mouse_position(e);
-		var mouse_button = mouse_map[e.which];
-		this._mouseData[mouse_button] = (action === "click" || action ===  "release" ? false : true);
+		this._mouseData.buttons[e.which] = action === InteractionEventType.click || action ===  InteractionEventType.release ? false : true;
 
-		if(any !== undefined){
-			mouse_button = "any";
+		var bindings: Array<MouseButtonBinding> = this.comboArray(action);
+		for (var i = 0; i < bindings.length; ++i) {
+			bindings[i].runIfActivated(button, this._mouseData);
 		}
+	}
 
-		if(this._interactions.mouse[action]){
-			var callback = this._interactions.mouse[action][mouse_button];
-			if(callback){
-				this.callback_object[callback](mouse_button, this._mouseData);
-			}
-		}
-	};
+	private mouseClicked = (e:MouseEvent):void =>{
+		this.mouseButtonAction(InteractionEventType.click, e);
+	}
 
-	this.mouseClicked = function(e){
-		this.mouseButtonAction("click", e); //check regular bindings
-		this.mouseButtonAction("click", e, true); //check for "any" mouseclick binding
-	};
+	private mousePressed = (e:MouseEvent):void =>{
+		this.mouseButtonAction(InteractionEventType.press, e);
+	}
 
-	this.mousePressed = function(e){
-		this.mouseButtonAction("press", e); //check regular bindings
-		this.mouseButtonAction("press", e, true); //check for "any" mousepress binding
-	};
+	private mouseReleased = (e:MouseEvent):void =>{
+		this.mouseButtonAction(InteractionEventType.release, e); 
+	}
 
-	this.mouseReleased = function(e){
-		this.mouseButtonAction("release", e); //check regular bindings
-		this.mouseButtonAction("release", e, true); //check for "any" mouserelease binding
-	};
-
-	this.stopContextMenu = function(e){
+	private stopContextMenu = (e:MouseEvent):boolean =>{
 		e.preventDefault();
 		return false;
-	};
+	}
 
-	this.isAnyMouseButtonPressed = function(){
-		return this._mouseData.left || this._mouseData.middle || this._mouseData.right;
-	};
+	private isAnyMouseButtonPressed():boolean{
+		return this._mouseData.buttons[MouseButton.left] || this._mouseData.buttons[MouseButton.middle] || this._mouseData.buttons[MouseButton.right];
+	}
 
-	this.mouseMoved = function(e){
-
+	private mouseMoved = (e:MouseEvent):void =>{
 		this.set_local_mouse_position(e);
 		
-		var drag_callback = this.interactions.mouse.drag;
-		var move_callback = this.interactions.mouse.move;
+		var drag_callback = this._interactions.drag;
+		var move_callback = this._interactions.move;
 
 		if(move_callback || drag_callback){
 			if(drag_callback && this.isAnyMouseButtonPressed()){
-				this.callback_object[drag_callback](this._mouseData);
+				this._callbackObject[drag_callback](this._mouseData);
 			}
 			else if(move_callback){
-				this.callback_object[move_callback](this._mouseData);
+				this._callbackObject[move_callback](this._mouseData);
 			}
 		}
 
-	};
+	}
 
-	this.setTransformMatrix = function(transform){
-		this.transformMatrix = transform;
+	public setTransformMatrix(transform:Transform){
+		this._transformMatrix = transform;
 	}
 
 	// Return the X/Y in a local context.
-	function global_to_local(context, event):Point{
+	private global_to_local(context:HTMLElement, event:MouseEvent):Point{
 	    var rect = context.getBoundingClientRect();
 
 	    return new Point(
 	     event.clientX - rect.left,
 	     event.clientY - rect.top
 	    );
-
 	}
 }
 
+class MouseButtonBinding{
+
+	private _callback:(mb?:MouseButton, a?:any)=>void;
+	private _button:MouseButton; 
+
+	constructor(button:MouseButton, callbackFunctionName:string, callbackObject:any){
+		this._button = button;
+		this._callback = callbackObject[callbackFunctionName];
+	}
+
+	//this method runs the callback if the combo is contained within lastKey and pressedKeys
+	public runIfActivated(button:MouseButton, mouseData:MouseData):void{
+		
+		if(this._button == MouseButton.any || button == this._button){
+			this._callback(button, mouseData);
+		}
+	}
+
+}

@@ -1,19 +1,42 @@
 import Point from "../Geometry/point";
 
 export enum MouseButton{
-	left = 0,
-	middle,
-	right
+	"none" = 0,
+	"left",
+	"middle",
+	"right",
+	"any"
+}
+
+export namespace MouseButtonConverter {
+    export function fromString(buttonString:string):MouseButton {
+        switch (buttonString) {
+            case "left":
+            	return MouseButton.left;
+            case "middle":
+            	return MouseButton.middle;
+            case "right":
+            	return MouseButton.right;
+            case "any":
+            	return MouseButton.any;
+            default:
+                return MouseButton.none;
+        }
+    }
 }
 
 export class MouseData{
 
 	protected _position:Point;
 	protected _lastPosition:Point;
-	protected _buttons:Object;
+	protected _buttons:any;
 
 	constructor(){
 		this._buttons = {};
+	}
+
+	public get buttons(){
+		return this._buttons;
 	}
 
 	public get position(){

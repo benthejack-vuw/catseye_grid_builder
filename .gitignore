@@ -1,3 +1,6 @@
 /*/min
 /min
 *-min.js
+./node_modules
+./codekit-cache
+npm-debug.log

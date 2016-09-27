@@ -1,4 +1,4 @@
-import "../util/DrawingUtils"
+import * as DrawingUtils from "../util/DrawingUtils"
 import Point from "./point"
 import Polygon from "./polygon";
 import BoundingBox from "./boundingBox";
@@ -8,9 +8,9 @@ import Line from "./line";
 export default class PolygonGrid{
 	
 	public _polygons:Array<Polygon>;
-	public _clipRect:BoundingBox;
-	public _normalizedPolygons:Array<Polygon>;
-	public _normalizedClipRect:BoundingBox;
+	public _clipRect:Rectangle;
+	public _normalizedPolygons:Array<Array<Point>>;
+	public _normalizedClipRect:Rectangle;
 
 	constructor(){
 		this._polygons = [];
@@ -42,7 +42,7 @@ export default class PolygonGrid{
 	}
 
 	public closestEdge(pt:Point):Line{
-		var closest = null;
+		var closest:Line = null;
 		var min_dist = Number.MAX_SAFE_INTEGER;
 		for(var i = 0; i < this._polygons.length; ++i){
 			var edge = this._polygons[i].closest_edge(pt);
@@ -99,21 +99,11 @@ export default class PolygonGrid{
 
 	public toJSON():string{
 
-		var polygons_out = [];
-		for(var i = 0; i < this._polygons.length; ++i){
-			polygons_out.push(this._polygons[i].to_vertex_position_array());
-		}
-
-		var norm_polygons_out = [];
-		for(i = 0; i < this._normalizedPolygons.length; ++i){
-			norm_polygons_out.push(this._normalizedPolygons[i]);
-		}
-
 		var out = {
-			polygons: polygons_out,
-			bounds: this._clipRect,
-			normalized_clipRect: this._normalizedClipRect,
-			normalized_polygons: norm_polygons_out
+			polygons: JSON.stringify(this._polygons),
+			bounds: JSON.stringify(this._clipRect),
+			normalized_clipRect: JSON.stringify(this._normalizedClipRect),
+			normalized_polygons: JSON.stringify(this._normalizedPolygons)
 		};
 
 		return JSON.stringify(out);

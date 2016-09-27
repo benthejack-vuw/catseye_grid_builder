@@ -70,6 +70,7 @@ export default class Transform{
   }
 
   public rotate(rad: number): void {
+
     let c = Math.cos(rad);
     let s = Math.sin(rad);
     let m11 = this.m[0] * c + this.m[2] * s;
@@ -99,6 +100,7 @@ export default class Transform{
     let ty = pt.y;
     let px = tx * this.m[0] + ty * this.m[2] + this.m[4];
     let py = tx * this.m[1] + ty * this.m[3] + this.m[5];
+
     return new Point(px, py);
   }
 

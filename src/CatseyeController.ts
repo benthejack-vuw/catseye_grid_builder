@@ -1,10 +1,13 @@
-import Point from "./geometry/point";
+import PolyGridBuilder from "./geometry/polyGridBuilder"
+import Transform from "./util/Transform"
+import InteractionManager from "./interaction/interactionHandler/interactionManager"
+import Point from "./geometry/point"
 
 
 export default class CatseyeController{
 
 	protected _drawing_context: CanvasRenderingContext2D;
-	protected _polyGridBuilder: _PolyGridBuilder;
+	protected _polyGridBuilder: PolyGridBuilder;
 	protected _transformMatrix: Transform;
 	protected _interaction_manager: InteractionManager;
 
@@ -16,10 +19,9 @@ export default class CatseyeController{
 	constructor(protected canvas: HTMLCanvasElement){
 	
 		this._drawing_context = canvas.getContext("2d");
-		this._polyGridBuilder = new _PolyGridBuilder({x:0, y:0}, 60);
+		this._polyGridBuilder = new PolyGridBuilder(60);
 		this._transformMatrix = new Transform();
-		this._interaction_manager = new InteractionManager(this._polyGridBuilder, canvas, "min/catseye_grid_interaction_definitions_file-min.json");
-		this._interaction_manager.start();
+		this._interaction_manager = new InteractionManager(this._polyGridBuilder, canvas, "catseye_grid_interaction_definitions_file.json");
 
 		this._scale = 1.0;
 		this._rotation = 0;
@@ -33,11 +35,11 @@ export default class CatseyeController{
 
 	public updateTransforms(): void{
 		this._transformMatrix.reset();
-		this._transformMatrix.translate(this.position.x, this.position.y);
-		this._transformMatrix.scale(this.scale, this.scale);
-		this._transformMatrix.rotate(this.rotation);
+		this._transformMatrix.translate(this._position.x, this._position.y);
+		this._transformMatrix.scale(this._scale, this._scale);
+		this._transformMatrix.rotate(this._rotation);
 		this._transformMatrix.invert();
-		this._interaction_manager.set_TransformMatrix(this._transformMatrix);
+		this._interaction_manager.setTransformMatrix(this._transformMatrix);
 	}
 
 	public set scale(i_scale: number){
@@ -59,16 +61,16 @@ export default class CatseyeController{
 		this._drawing_context.restore();
 	}
 
-	public downloadJSON(): void{
+	/*public downloadJSON(): void{
 		this._polyGridBuilder.grid.normalize(this._polyGridBuilder.grid_repeat_selector.bounding_box());
 		let dataStr = "data:text/json;charset=utf-8," + this._polyGridBuilder.grid.to_JSON();
 		let dlAnchorElem = document.getElementById('downloadAnchorElem');
 		dlAnchorElem.setAttribute("href",     dataStr     );
 		dlAnchorElem.setAttribute("download", "scene.json");
 		dlAnchorElem.click();
-	}
+	}*/
 
-	protected addSlider(min: number, max: number, value: number, step: number, callback:(Event)=>void, id: string): void{
+	protected addSlider(min: number, max: number, value: number, step: number, callback:(event:Event)=>void, id: string): void{
 		let newSlider = document.createElement("INPUT");
 		newSlider.setAttribute("id", id);
 		newSlider.setAttribute("type", "range");
@@ -81,7 +83,7 @@ export default class CatseyeController{
 		document.getElementById("controls").appendChild(newSlider);
 	}
 
-	protected addButton(text:string, callback:(Event)=>void, id:string): void{
+	protected addButton(text:string, callback:(event:Event)=>void, id:string): void{
 		let newSlider = document.createElement("button");
 		newSlider.setAttribute("id", id);
 		newSlider.setAttribute("type", "button");

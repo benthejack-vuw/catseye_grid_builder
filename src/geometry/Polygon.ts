@@ -1,6 +1,6 @@
 import Point from "./point";
 import Line from "./line";
-import BoundingBox from "./boundingBox";
+import Rectangle from "./rectangle";
 import "../util/MathUtils";
 
 
@@ -8,24 +8,21 @@ export default class Polygon{
 
 	protected _vertices: Array<Point>;
 	protected _edges: Array<Line>;
-	protected _centroid: Point;
-	protected _length: number;
 	protected _radius: number;
 
-	constructor(vertex_array){
+	constructor(vertex_array?:Array<Point>){
 		
 		this._vertices = [];
 		this._edges = [];
-		this._centroid = null;
 		this._radius = 0;
 
-		if(vertex_array !== undefined){
+		if(vertex_array){
 			this.initialize_from_array(vertex_array);
 		}
 	}
 
 	public get length(){
-		return this._length;
+		return this._vertices.length;
 	}
 
 	public get radius(){
@@ -43,40 +40,37 @@ export default class Polygon{
 			return new Point(x_pos, y_pos);
 		};
 
-		this._length = points.length;
-		this.create_edges(verts_from_array);
-
-		this._centroid = this.calculate_centroid();
-		this._radius = Math.dist(points[0].x, points[0].y, this._centroid.x, this._centroid.y);
+		this.create_edges(verts_from_array, points.length);
+		this._radius = Math.dist(points[0].x, points[0].y, this.centroid.x, this.centroid.y);
 	}
 
 	//---------------------------HELPER FUNCTIONS------------------------------------------------
 	public empty(): void{
 		this._vertices = [];
 		this._edges = [];
-		this._centroid = null;
 	}
 
 	//vertex_from_index takes the index of the point (zero indexed) 
 	//it returns the P5js Vector at that index or creates it if it doesn't yet exist
-	public vertex_at_index(i: number, vertex_function: (i:number)=>Point): Point{
-		if(this._vertices[i%this.length]){
-			return this._vertices[i%this.length];
+	public vertex_at_index(i: number, totalVerts:number, vertex_function: (i:number)=>Point): Point{
+		if(this._vertices[i%totalVerts]){
+			return this._vertices[i%totalVerts];
 		}
 		else{
 			let pt = vertex_function(i);
-			this._vertices[i%this.length] = pt;
+			this._vertices[i%totalVerts] = pt;
 			return pt;
 		}
 	}
 
 	//function that creates the edges, it takes a vertex function as an argument
 	//the vertex function should take an index and return a point by calling vertex_at_index(i, x, y)
-	protected create_edges(vertex_function: (i:number)=>Point):void{
+	protected create_edges(vertex_function: (i:number)=>Point, vertices:number):void{
 
-		for(let i = 0; i < this.length; ++i){
-			let pt1 = this.vertex_at_index(i, vertex_function);
-			let pt2 = this.vertex_at_index(i+1, vertex_function);
+		for(let i = 0; i < vertices; ++i){
+			let pt1 = this.vertex_at_index(i, vertices, vertex_function);
+			let pt2 = this.vertex_at_index(i+1, vertices, vertex_function);
+
 			this._edges[i] = new Line(pt1, pt2);
 		}
 		
@@ -110,9 +104,9 @@ export default class Polygon{
 
 	public closest_edge(pt: Point) : Line{
 		let min_dist = Number.MAX_SAFE_INTEGER;
-		let closest = null;
+		let closest:Line = null;
 		for(let i = 0; i < this._edges.length; ++i){
-			let dist = this._edges[i].distance_from(pt);
+			let dist = this._edges[i].distanceToPoint(pt);
 			if(dist < min_dist){
 				closest = this._edges[i];
 				min_dist = dist;
@@ -181,30 +175,30 @@ export default class Polygon{
 		return new Point(x_total/this.length, y_total/this.length);
 	}
 
-	public inside(bounding_box:BoundingBox):boolean{
+	public inside(bounding_box:Rectangle):boolean{
 		for (let i = 0; i < this._vertices.length; i++) {
-			if(bounding_box.contains_point(this._vertices[i])){
+			if(bounding_box.contains(this._vertices[i])){
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public normalizedPointArray(bounding_box):Array<Point>{
-		let pts = [];
+	public normalizedPointArray(bounding_box:Rectangle):Array<Point>{
+		let pts:Array<Point> = [];
 		for (let i = 0; i < this._vertices.length; i++) {
 			
-			let x_out = +((this._vertices[i].x - bounding_box[0].x)/bounding_box.width()).toFixed(6);
-			let y_out = +((this._vertices[i].y - bounding_box[0].y)/bounding_box.width()).toFixed(6);
+			let x_out = +((this._vertices[i].x - bounding_box.x)/bounding_box.width);
+			let y_out = +((this._vertices[i].y - bounding_box.y)/bounding_box.width);
 
 			pts.push(new Point(x_out, y_out));
 		}
 		return pts;
 	}
 
-	public completely_inside(bounding_box):boolean{
+	public completely_inside(bounding_box:Rectangle):boolean{
 		for (let i = 0; i < this._vertices.length; i++) {
-			if(!bounding_box.contains_point(this._vertices[i])){
+			if(!bounding_box.contains(this._vertices[i])){
 				return false;
 			}
 		}

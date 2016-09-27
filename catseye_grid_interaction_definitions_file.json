@@ -2,7 +2,7 @@
 	"mouse":{
 		
 		"click":{
-			"left" :  "place_polygon"
+			"left" : "place_polygon"
 		},
 
 		"press":{
@@ -24,7 +24,9 @@
 			"8": "change_current_poly",
 			"9": "change_current_poly",
 			"s": "generate_snap_grid",
-			"j": "save_JSON"
+			"j": "save_JSON",
+			"g+k": "g_k",
+			"control+f+p": "ctl_f_p"
 		},
 
 		"release":{

@@ -1,25 +1,39 @@
 import Point from "./point"
+import Line from "./line"
 import PolygonGrid from "./PolygonGrid"
-import MouseData from "../Interaction/mouseData";
-
+import Polygon from "./Polygon"
+import RegularPolygon from "./regularPolygon"
+import SnapGrid from "./snapGrid"
+import {MouseData} from "../Interaction/mouseData";
+import {MouseButton} from "../Interaction/mouseData";
+import * as DrawingUtils from "../util/drawingUtils"
 
 export default class PolyGridBuilder{
 
-	constructor(centre:Point, radius:number){
+	private _grid:PolygonGrid;
+	private _selected_edge:Line;
+	private _mouseData:MouseData;
+	private _start_radius:number;
+	private _next_poly_sides:number;
+	private _polygon_ghost:RegularPolygon;
+	private _polygons:Array<Polygon>
+	private _snapGrid:SnapGrid;
+	//private _bounds_selector:DragablePolygon;
+
+	constructor(radius:number){
 		this._grid = new PolygonGrid();
-		this.selected_edge = null;
-		this.mouseData = null;
-		this.centre_point = centre_point;
-		this.starting_radius = starting_radius;
-		this.next_poly_sides = 6;
-		this.polygon_ghost = new RegularPolygon();
-		this.polygon_ghost.initialize_regular_polygon(this.next_poly_sides, centre_point, starting_radius);
+		this._selected_edge = null;
+		this._mouseData = null;
+		this._start_radius = radius;
+		this._next_poly_sides = 6;
+		this._polygon_ghost = new RegularPolygon();
+		this._polygon_ghost.initialize_regular_polygon(this._next_poly_sides, new Point(0,0), this._start_radius);
 	}
 
 	public generate_snap_grid(resolution:number):SnapGrid{
-		var snap_points = [];
-		for (var i = 0; i < this.polygons.length; ++i) {
-			var poly_pts = this.polygons[i].generate_inner_grid(resolution);
+		var snap_points:Array<Point> = [];
+		for (var i = 0; i < this._polygons.length; ++i) {
+			var poly_pts = this._polygons[i].generate_inner_grid(resolution);
 			snap_points = snap_points.concat(poly_pts);			
 		}
 		return new SnapGrid(snap_points);
@@ -29,86 +43,87 @@ export default class PolyGridBuilder{
 
 		this._grid.draw(context);
 
-		if(this.polygon_ghost){
+		if(this._polygon_ghost){
 			context.strokeStyle = DrawingUtils.grey(200);
 			context.fillStyle = DrawingUtils.rgba(255, 255, 255, 50);
-			this.polygon_ghost.draw(context, true);
+			this._polygon_ghost.draw(context, true);
 		}
 
-		if(this.snapGrid){
-			this.snapGrid.draw();
+		if(this._snapGrid){
+			this._snapGrid.draw(context);
 		}
 
-		if(this._grid_repeat_selector){
-			this._grid_repeat_selector.draw();
-		}
+	/*	if(this._bounds_selector){
+			this._bounds_selector.draw();
+		} */
 	}
 
-	public mouse_move(i_mouseData:MouseData){
+	public mouse_move = (i_mouseData:MouseData) => {
 
-		this.mouseData = i_mouseData;
+		this._mouseData = i_mouseData;
 		
-		var new_edge = this._grid.closest_edge(this.mouseData.position);
+		var new_edge = this._grid.closestEdge(this._mouseData.position);
 		
-		if(!this._grid.empty()){
+		if(!this._grid.isEmpty()){
 			if(new_edge === null){
-				this.polygon_ghost.empty();
+				this._polygon_ghost.empty();
 			}
-			else if(this.selected_edge !== new_edge){
-				this.selected_edge = new_edge;
-				this.polygon_ghost.initialize_from_line(this.next_poly_sides, this.selected_edge);
+			else if(this._selected_edge !== new_edge){
+				this._selected_edge = new_edge;
+				this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
 			}
 		}
 	}
 
-	public mouse_drag(i_mouseData){
-		this.mouseData = i_mouseData;
-		if(this._grid_repeat_selector){
-			this._grid_repeat_selector.drag(this.mouseData.position);
-		}
+	public mouse_drag = (i_mouseData:MouseData):void =>{
+		this._mouseData = i_mouseData;
+		/*if(this._bounds_selector){
+			this._bounds_selector.drag(this.mouseData.position);
+		}*/
 	}
 
-	public mouse_down(i_mouse_button, i_mouseData){
-		this.mouseData = i_mouseData;
-		if(this._grid_repeat_selector){
-			this._grid_repeat_selector.select_corner(this.mouseData.position);
-		}
+	public mouse_down = (i_mouse_button:MouseButton, i_mouseData:MouseData):void =>{
+		this._mouseData = i_mouseData;
+		/*if(this._bounds_selector){
+			this._bounds_selector.select_corner(this.mouseData.position);
+		}*/
 	}
 
-	public generate_snap_grid(){
-		this.snapGrid = this._grid.generate_snap_grid(2);
-		this._grid_repeat_selector = new DragablePolygon(this.snapGrid.bounding_box(), this.snapGrid);
-	}
+	// public generate_snap_grid(){
+	// 	this._snapGrid = this._grid.generate_snap_grid(2);
+	// 	this._bounds_selector = new DragablePolygon(this._snapGrid.bounding_box(), this._snapGrid);
+	// }
 
-	public place_polygon(){
+	public place_polygon = () =>{
 		
-		if(this._grid_repeat_selector === null || this._grid_repeat_selector === undefined){
-			this._grid.add_polygon(this.polygon_ghost);
-			this.polygon_ghost = new RegularPolygon(this.next_poly_sides);
-			this.selected_edge = this._grid.closest_edge(this.mouseData.position);
-			this.polygon_ghost.initialize_from_line(this.next_poly_sides, this.selected_edge);
-		}
+		//if(this._bounds_selector === null || this._bounds_selector === undefined){
+			this._grid.addPolygon(this._polygon_ghost);
+			this._polygon_ghost = new RegularPolygon();
+			this._selected_edge = this._grid.closestEdge(this._mouseData.position);
+			this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
 
-		if(this._grid.size() == 1){
-			DomUtils.editDomElementAttr("rotate_slider", "step", Math.TWO_PI/(this._grid.first().vertex_count*2));
+		//}
+
+		// if(this._grid.size() == 1){
+		// 	DomUtils.editDomElementAttr("rotate_slider", "step", Math.TWO_PI/(this._grid.first().vertex_count*2));
+		// }
+	}
+
+	public change_current_poly = (last_pressed:string) =>{		
+		this._next_poly_sides = parseInt(last_pressed);
+
+		this._polygon_ghost = new RegularPolygon();
+		if(this._grid.isEmpty()){
+			this._polygon_ghost.initialize_regular_polygon(this._next_poly_sides, new Point(0,0), this._start_radius);
+		}else if(this._selected_edge){
+			this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
 		}
 	}
 
-	public change_current_poly(last_pressed){		
-		this.next_poly_sides = parseInt(last_pressed);
-
-		this.polygon_ghost = new RegularPolygon();
-		if(this._grid.empty()){
-			this.polygon_ghost.initialize_regular_polygon(this.next_poly_sides, this.centre_point, this.starting_radius);
-		}else if(this.selected_edge){
-			this.polygon_ghost.initialize_from_line(this.next_poly_sides, this.selected_edge);
-		}
-	}
-
-	public delete_poly(){
-		this._grid.delete_poly_under_point(this.mouseData.position);
-		if(this._grid.empty()){
-			this.polygon_ghost.initialize_regular_polygon(this.next_poly_sides, this.centre_point, this.starting_radius);
+	public delete_poly = ()=>{
+		this._grid.deletePolyUnderPoint(this._mouseData.position);
+		if(this._grid.isEmpty()){
+			this._polygon_ghost.initialize_regular_polygon(this._next_poly_sides, new Point(0,0), this._start_radius);
 		}
 	}
 

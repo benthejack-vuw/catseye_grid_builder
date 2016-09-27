@@ -1,3 +1,4 @@
+import Transform from "../../util/transform"
 import KeyboardInteractionHandler from "./keyboardInteractionHandler"
 import MouseInteractionHandler from "./mouseInteractionHandler"
 
@@ -22,19 +23,21 @@ export default class InteractionManager{
 	private _domListenerElement:HTMLElement;
 	private _callbackObject:any;
 
- 	contructor(callbackObject:any, domListenerElement:HTMLElement, interactionDefinitionsURL:string){
+ 	constructor(callbackObject:any, domListenerElement:HTMLElement, interactionDefinitionsURL:string){
 		this._domListenerElement = domListenerElement;
 		this._callbackObject = callbackObject;
-		fetchJSONFile(interactionDefinitionsURL, this.setupInteractions);
+		this.fetchJSONFile(interactionDefinitionsURL, this.setupInteractions);
 	}
 	
 	private setupInteractions = (JSON_data:any) => {
+		console.log(JSON_data);
 		if(JSON_data.keyboard){
 			this._keyboardManager = new KeyboardInteractionHandler(this._callbackObject, this._domListenerElement, JSON_data.keyboard);
 		}
 		if(JSON_data.mouse){
 			this._mouseManager = new MouseInteractionHandler(this._callbackObject, this._domListenerElement, JSON_data.mouse);
 		}
+		this.stop();
 		this.start();
 	};
 
@@ -50,8 +53,11 @@ export default class InteractionManager{
 		if(this._mouseManager){this._mouseManager.stop();}
 	}
 
+	public setTransformMatrix(transform:Transform):void{
+		this._mouseManager.setTransformMatrix(transform);
+	}
 
-	function fetchJSONFile(path, callback) {
+	private fetchJSONFile(path:string, callback:Function) {
 	    var httpRequest = new XMLHttpRequest();
 	    httpRequest.onreadystatechange = function() {
 	        if (httpRequest.readyState === 4) {
@@ -61,7 +67,7 @@ export default class InteractionManager{
 	            }
 	        }
 	    };
-	    httpRequest.open('GET', path);  
+	    httpRequest.open('GET', path, false);  
 	    httpRequest.send(); 
 	}
 

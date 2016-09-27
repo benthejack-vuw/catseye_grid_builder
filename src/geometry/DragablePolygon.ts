@@ -1,3 +1,5 @@
+
+/*
 var DragablePolygon = function(starting_points, snap_grid, point_generation_data){
 
 	this.selector_radius = 15;
@@ -85,4 +87,4 @@ var DragablePolygon = function(starting_points, snap_grid, point_generation_data
 		}
 	};
 
-};
+};*/
