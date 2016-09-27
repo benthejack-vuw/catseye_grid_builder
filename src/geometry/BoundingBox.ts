@@ -1,7 +1,7 @@
 
 import Point from "./point"
 import Rectangle from "./rectangle"
-import "../util/MathUtils"
+import "../util/mathUtils"
 
 export default class BoundingBox extends Rectangle{
 

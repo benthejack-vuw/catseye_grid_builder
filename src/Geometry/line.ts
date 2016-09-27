@@ -1,5 +1,5 @@
 import Point from "./point";
-import "../util/MathUtils"
+import "../util/mathUtils"
 
 //InteractiveLine is a line geometry class that has some helpful math functions included
 

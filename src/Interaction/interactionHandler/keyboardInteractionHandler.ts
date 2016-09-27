@@ -118,7 +118,6 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 	//detects special key presses (control, alt, meta, shift etc..)
 	private keyDown = (e:KeyboardEvent):void => {
 		var pressed = interaction_key_bindings[e.keyCode];
-		console.log(pressed);
 
 		if(pressed){
 			this._pressedKeys[pressed] = true;

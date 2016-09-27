@@ -1,4 +1,4 @@
-import Point from "./Point";
+import Point from "./point";
 import BoundingBox from "./boundingBox";
 import * as DrawingUtils from "../util/DrawingUtils";
 

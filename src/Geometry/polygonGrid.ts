@@ -1,4 +1,4 @@
-import * as DrawingUtils from "../util/DrawingUtils"
+import * as DrawingUtils from "../util/drawingUtils"
 import Point from "./point"
 import Polygon from "./polygon";
 import BoundingBox from "./boundingBox";

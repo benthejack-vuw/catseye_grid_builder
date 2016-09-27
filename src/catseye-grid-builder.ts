@@ -1,5 +1,5 @@
 import CatseyeController from "./CatseyeController";
-import * as DrawingUtils from "./util/DrawingUtils";
+import * as DrawingUtils from "./util/drawingUtils";
 
 addEventListener("load", (): void => {
 

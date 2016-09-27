@@ -1,5 +1,5 @@
 import PolyGridBuilder from "./geometry/polyGridBuilder"
-import Transform from "./util/Transform"
+import Transform from "./util/transform"
 import InteractionManager from "./interaction/interactionHandler/interactionManager"
 import Point from "./geometry/point"
 
