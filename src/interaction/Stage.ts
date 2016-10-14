@@ -5,8 +5,6 @@ import InteractiveDisplayObject from "./interactiveDisplayObject"
 export default class Stage extends InteractiveDisplayObject{
 
 	public static stageCanvas:HTMLCanvasElement;
-
-	private _dragging:boolean;
 	private _selectedChild:InteractiveDisplayObject;
 
 	constructor(parentID:string, size:Point){
@@ -60,7 +58,6 @@ export default class Stage extends InteractiveDisplayObject{
 			this._selectedChild = tempSel;
 			this._selectedChild.select();
 			this._selectedChild.mousePressed(mouseData);
-			this._dragging = true;
 		}
 	}
 
@@ -68,18 +65,19 @@ export default class Stage extends InteractiveDisplayObject{
 		if(this._selectedChild != null){
 			this._selectedChild.mouseReleased(mouseData);
 			this._selectedChild.deselect();
-			this._dragging = false;
 			this._selectedChild = null;
 		}
 	}
 
-	public stageUpdateMouse = (mouseData:MouseData) => {
-		if(this._selectedChild != null && this._dragging){
-			this._selectedChild.mouseDragged(mouseData);
-		}
-		
+	public stageMouseMove = (mouseData:MouseData) => {		
 		for(var i = 0; i < this._children.length; ++i){ 
 			this._children[i].updateMouse(mouseData);
+		}
+	}
+
+	public stageMouseDrag = (mouseData:MouseData) => {
+		if(this._selectedChild != null){
+			this._selectedChild.mouseDragged(mouseData);
 		}
 	}
 

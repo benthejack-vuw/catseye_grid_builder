@@ -27,8 +27,6 @@ export default class InteractiveDisplayObject{
 	protected _onlyRedrawIfActive:boolean;
 	protected _selected:boolean;
 
-
-
 	constructor(localPosition: Point, size: Point){
 		this._children = new Array<InteractiveDisplayObject>();
 		this._localPosition = localPosition;
@@ -191,7 +189,7 @@ export default class InteractiveDisplayObject{
 
 	public redraw():void{
 
-		var context:CanvasRenderingContext2D = this._parent == this.stage || this == this.stage ? Stage.drawingContext : this._parent.cachedContext;
+		var context:CanvasRenderingContext2D = this._parent === this.stage || this as InteractiveDisplayObject === this.stage ? Stage.drawingContext : this._parent.cachedContext;
 		var par:InteractiveDisplayObject = this._parent;
 		
 		while(!context){
@@ -219,7 +217,7 @@ export default class InteractiveDisplayObject{
 			}
 		}
 
-		if(this.contains(mouseData.position)){
+		if(this.contains(this.globalToLocal(mouseData.position))){
 			
 			if(!this._isMouseOver){
 				this.mouseEnter(mouseData);
