@@ -4,6 +4,7 @@ import Polygon from "./polygon";
 import BoundingBox from "./boundingBox";
 import Rectangle from "./rectangle";
 import Line from "./line";
+import SnapGrid from "./snapGrid"
 
 export default class PolygonGrid{
 	
@@ -56,6 +57,15 @@ export default class PolygonGrid{
 
 		}
 		return closest;
+	}
+
+	public generateSnapGrid(resolution:number):SnapGrid{
+		var snap_points:Array<Point> = [];
+		for (var i = 0; i < this._polygons.length; ++i) {
+			var poly_pts = this._polygons[i].generate_inner_grid(resolution);
+			snap_points = snap_points.concat(poly_pts);			
+		}
+		return new SnapGrid(snap_points);
 	}
 
 	public polygonUnder(pt:Point):Polygon{

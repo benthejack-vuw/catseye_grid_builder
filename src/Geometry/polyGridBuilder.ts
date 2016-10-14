@@ -4,8 +4,8 @@ import PolygonGrid from "./polygonGrid"
 import Polygon from "./polygon"
 import RegularPolygon from "./regularPolygon"
 import SnapGrid from "./snapGrid"
-import {MouseData} from "../Interaction/mouseData";
-import {MouseButton} from "../Interaction/mouseData";
+import {MouseData} from "../interaction/mouseData";
+import {MouseButton} from "../interaction/mouseData";
 import * as DrawingUtils from "../util/drawingUtils"
 
 export default class PolyGridBuilder{
@@ -16,7 +16,6 @@ export default class PolyGridBuilder{
 	private _start_radius:number;
 	private _next_poly_sides:number;
 	private _polygon_ghost:RegularPolygon;
-	private _polygons:Array<Polygon>
 	private _snapGrid:SnapGrid;
 	//private _bounds_selector:DragablePolygon;
 
@@ -28,15 +27,6 @@ export default class PolyGridBuilder{
 		this._next_poly_sides = 6;
 		this._polygon_ghost = new RegularPolygon();
 		this._polygon_ghost.initialize_regular_polygon(this._next_poly_sides, new Point(0,0), this._start_radius);
-	}
-
-	public generate_snap_grid(resolution:number):SnapGrid{
-		var snap_points:Array<Point> = [];
-		for (var i = 0; i < this._polygons.length; ++i) {
-			var poly_pts = this._polygons[i].generate_inner_grid(resolution);
-			snap_points = snap_points.concat(poly_pts);			
-		}
-		return new SnapGrid(snap_points);
 	}
 
 	public draw(context:CanvasRenderingContext2D):void{
@@ -89,11 +79,6 @@ export default class PolyGridBuilder{
 		}*/
 	}
 
-	// public generate_snap_grid(){
-	// 	this._snapGrid = this._grid.generate_snap_grid(2);
-	// 	this._bounds_selector = new DragablePolygon(this._snapGrid.bounding_box(), this._snapGrid);
-	// }
-
 	public place_polygon = () =>{
 		
 		//if(this._bounds_selector === null || this._bounds_selector === undefined){
@@ -118,6 +103,11 @@ export default class PolyGridBuilder{
 		}else if(this._selected_edge){
 			this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
 		}
+	}
+
+	public generate_snap_grid = ():void => {
+		this._snapGrid = this._grid.generateSnapGrid(2);
+		//this._bounds_selector = new DragablePolygon(this._snapGrid.bounding_box(), this._snapGrid);
 	}
 
 	public delete_poly = ()=>{

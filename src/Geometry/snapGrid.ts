@@ -1,6 +1,6 @@
 import Point from "./point";
 import BoundingBox from "./boundingBox";
-import * as DrawingUtils from "../util/DrawingUtils";
+import * as DrawingUtils from "../util/drawingUtils";
 
 export default class SnapGrid{
 	
@@ -26,10 +26,14 @@ export default class SnapGrid{
 	}
 
 	public draw(context:CanvasRenderingContext2D):void{
+		
 		for (var i = 0; i < this._points.length; i++) {
 			context.fillStyle = DrawingUtils.rgb(255,0,0);
+			context.beginPath();
 			context.arc(this._points[i].x, this._points[i].y, 5, 0, 2 * Math.PI);
+			context.fill();
 		}
+
 	};
 
 	public get boundingBox():BoundingBox{

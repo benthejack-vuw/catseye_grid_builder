@@ -24,9 +24,7 @@
 			"8": "change_current_poly",
 			"9": "change_current_poly",
 			"s": "generate_snap_grid",
-			"j": "save_JSON",
-			"g+k": "g_k",
-			"control+f+p": "ctl_f_p"
+			"j": "save_JSON"
 		},
 
 		"release":{

@@ -175,8 +175,6 @@ class KeyComboBinding{
 			}
 		}
 
-		
-
 		this._callback(lastKey, pressedKeys);
 	}
 

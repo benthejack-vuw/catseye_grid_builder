@@ -1,7 +1,7 @@
 import Point from "./point";
 import Line from "./line";
 import Rectangle from "./rectangle";
-import "../util/MathUtils";
+import "../util/mathUtils";
 
 
 export default class Polygon{

@@ -1,4 +1,4 @@
-import Point from "../../Geometry/point"
+import Point from "../../geometry/point"
 import {InteractionHandler} from "./interactionHandler"
 import {InteractionEventType} from "./interactionHandler"
 import {MutableMouseData} from "../mouseData"

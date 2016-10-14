@@ -1,24 +1,26 @@
 
-/*
-var DragablePolygon = function(starting_points, snap_grid, point_generation_data){
+export default class DragablePolygon{
 
-	this.selector_radius = 15;
-	this.snap_grid = snap_grid;
-	this.selected_corner = null;
+	constructor(starting_points, snap_grid, point_generation_data){
 
-	var i = 0;
-	if(starting_points){
-		this.length = starting_points.length;
-		for(i = 0; i < starting_points.length; ++i){
-			this[i] = starting_points[i];
-		}
-	}else if(point_generation_data){
-		this.length = point_generation_data.num_points;
-		var theta = TWO_PI/point_generation_data.num_points;
+		this.selector_radius = 15;
+		this.snap_grid = snap_grid;
+		this.selected_corner = null;
 
-		for(i = 0; i < point_generation_data.num_points; ++i){
-			this[i] = {x: point_generation_data.mid_point.x + cos(theta*i) * point_generation_data.radius,
-					   y: point_generation_data.mid_point.y + sin(theta*i) * point_generation_data.radius};
+		var i = 0;
+		if(starting_points){
+			this.length = starting_points.length;
+			for(i = 0; i < starting_points.length; ++i){
+				this[i] = starting_points[i];
+			}
+		}else if(point_generation_data){
+			this.length = point_generation_data.num_points;
+			var theta = TWO_PI/point_generation_data.num_points;
+
+			for(i = 0; i < point_generation_data.num_points; ++i){
+				this[i] = {x: point_generation_data.mid_point.x + cos(theta*i) * point_generation_data.radius,
+						   y: point_generation_data.mid_point.y + sin(theta*i) * point_generation_data.radius};
+			}
 		}
 	}
 
