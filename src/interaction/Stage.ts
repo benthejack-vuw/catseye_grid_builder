@@ -4,7 +4,7 @@ import InteractiveDisplayObject from "./interactiveDisplayObject"
 
 export default class Stage extends InteractiveDisplayObject{
 
-	public static stageCanvas:HTMLCanvasElement;
+	public stageCanvas:HTMLCanvasElement;
 	private _selectedChild:InteractiveDisplayObject;
 
 	constructor(parentID:string, size:Point){
@@ -13,18 +13,18 @@ export default class Stage extends InteractiveDisplayObject{
 		InteractiveDisplayObject.stage = this;
 
 		this.cacheAsCanvas = true;
-		Stage.stageCanvas = this._canvas;
+		this.stageCanvas = this._canvas;
 
-		var parentElement:HTMLElement = document.getElementById("parentID");
+		var parentElement:HTMLElement = document.getElementById(parentID);
 		parentElement.appendChild(this._canvas);
 
 		this._redraw = true;
 	}
 
-	public static get drawingContext():CanvasRenderingContext2D{
-		return Stage.stageCanvas.getContext("2d");
+	
+	public get drawingContext():CanvasRenderingContext2D{
+		return this.stageCanvas.getContext("2d");
 	}
-
 	public draw(){
 		var ctx:CanvasRenderingContext2D = this.cachedContext;
 		this.clear(ctx);
@@ -44,16 +44,15 @@ export default class Stage extends InteractiveDisplayObject{
 		return new Point(0,0);
 	}
 
-	public stageMouseClick = (mouseData:MouseData) => {
+	public stageMouseClick = (button:number, mouseData:MouseData) => {
 		var clicked:InteractiveDisplayObject = this.getChildAtPoint(mouseData.position);
-		
-		if(clicked != null && clicked != this)
+		if(clicked && clicked != this)
 			clicked.click(mouseData);
 	}
 
-	public stageMousePress = (mouseData:MouseData) => {
+	public stageMousePress = (button:number, mouseData:MouseData) => {
 		var tempSel:InteractiveDisplayObject = this.getChildAtPoint(mouseData.position);
-		
+
 		if(tempSel != null && tempSel != this){
 			this._selectedChild = tempSel;
 			this._selectedChild.select();

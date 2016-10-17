@@ -7,7 +7,7 @@ import * as DrawingUtils from "./util/drawingUtils";
 addEventListener("load", (): void => {
 
 	let stage:Stage = new Stage("canvas_container", new Point(window.innerWidth, window.innerHeight));
-	let interactionManager:InteractionManager = new InteractionManager(stage, Stage.stageCanvas, "stage_interactions.json");
+	let interactionManager:InteractionManager = new InteractionManager(stage, stage.stageCanvas, "stage_interactions.json");
 
 
 	setup();
@@ -25,8 +25,8 @@ addEventListener("load", (): void => {
 
 	function setup() {
 
-		var pos:Point = new Point(window.innerWidth/2, window.innerHeight/2);
-		var size:Point = new Point(window.innerWidth, window.innerHeight)
+		var pos:Point = new Point(window.innerWidth/2 - window.innerHeight/2, window.innerHeight/2 - window.innerHeight/2);
+		var size:Point = new Point(window.innerHeight, window.innerHeight);
 		var tree:DisplayTree = new DisplayTree(pos, size, window.innerHeight/2, 0);
 		stage.addChild(tree);
 

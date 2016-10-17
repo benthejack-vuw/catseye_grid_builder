@@ -33,7 +33,6 @@ export default class MouseInteractionHandler extends InteractionHandler{
 			if(interactions[typeString]){
 				var keys = Object.keys(interactions[typeString]);
 				for (var i = 0; i < keys.length; ++i) {
-					console.log("MAKING BINDING", type, keys[i]);
 					var btn:MouseButton = MouseButtonConverter.fromString(keys[i]);
 					let keyCombo = new MouseButtonBinding(btn, interactions[InteractionEventType[type]][keys[i]], this._callbackObject);
 					this.addMouseButtonBinding(keyCombo, type);
@@ -178,10 +177,10 @@ class MouseButtonBinding{
 	}
 
 	//this method runs the callback if the combo is contained within lastKey and pressedKeys
-	public runIfActivated(button:MouseButton, mouseData:MouseData):void{
+	public runIfActivated(button:MouseButton, mouseData:MutableMouseData):void{
 		
 		if(this._button == MouseButton.any || button == this._button){
-			this._callback(button, mouseData);
+			this._callback(button, mouseData.locked());
 		}
 	}
 

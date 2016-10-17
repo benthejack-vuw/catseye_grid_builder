@@ -67,7 +67,7 @@ export default class InteractiveDisplayObject{
 	public get isMouseOver():boolean{
 		return this._isMouseOver;
 	}
-
+  
 	private setParent(parent:InteractiveDisplayObject){
 		this._parent = parent;
 		this.localPosition = this._localPosition;
@@ -92,6 +92,7 @@ export default class InteractiveDisplayObject{
 		this.updateChildPositions();
 	}
 
+	
 	public set globalPosition(global:Point){
 		
 		this._localPosition = global.copy();
@@ -131,7 +132,6 @@ export default class InteractiveDisplayObject{
 			this._canvas.height = this._size.y;
 		}
 	}
-
 	public set onlyRedrawIfActive(redraw:boolean){
 		this._onlyRedrawIfActive = redraw;
 	}
@@ -174,27 +174,27 @@ export default class InteractiveDisplayObject{
 			this._children[i].updateChildPositions();
 		}
 	}
-	
+
 	public localToGlobal(local:Point):Point{
-		return new Point(local.x + this._globalPosition.x, local.y + this._globalPosition.y);
+		return new Point(local.x + this.globalPosition.x, local.y + this.globalPosition.y);
 	}
 	
 	public globalToLocal(global:Point):Point{
-			return new Point(global.x - this._globalPosition.x, global.y - this._globalPosition.y);
+		return new Point(global.x - this.globalPosition.x, global.y - this.globalPosition.y);
 	}
 
 	public needsRedraw():boolean{
 		return this._redraw && (!this._onlyRedrawIfActive || (this._onlyRedrawIfActive && this._isMouseOver));
 	}
-
 	public redraw():void{
 
-		var context:CanvasRenderingContext2D = this._parent === this.stage || this as InteractiveDisplayObject === this.stage ? Stage.drawingContext : this._parent.cachedContext;
+		var context:CanvasRenderingContext2D = this._parent === this.stage || typeof this === "Stage" ? InteractiveDisplayObject.stage.drawingContext : this._parent.cachedContext;
+		
 		var par:InteractiveDisplayObject = this._parent;
 		
 		while(!context){
 			par = par.parent;
-			context = par == this.stage ? Stage.drawingContext : this._parent.cachedContext;
+			context = par == this.stage ? InteractiveDisplayObject.stage.drawingContext : this._parent.cachedContext;
 		}		
 		
 		var currentContext = this.preDraw(context); 
@@ -202,13 +202,13 @@ export default class InteractiveDisplayObject{
 		this.drawChildren(context);
 		this.drawOverChildren(context);
 		this.postDraw(context);
-	}
+	}	
+
 	
 	public inBounds(point:Point):boolean{
 		var localPos = this.globalToLocal(point);
 		return localPos.x > 0 && localPos.x < this._size.x && localPos.y > 0 && localPos.y < this._size.y;
 	}
-	
 	public updateMouse(mouseData:MouseData):void{
 		
 		var updateChildren = () => {
@@ -218,25 +218,20 @@ export default class InteractiveDisplayObject{
 		}
 
 		if(this.contains(this.globalToLocal(mouseData.position))){
-			
 			if(!this._isMouseOver){
+				this._isMouseOver = true;
 				this.mouseEnter(mouseData);
 			}
-			
-			this._isMouseOver = true;
-
 		}else{
-			
 			if(this._isMouseOver){
 				this.mouseExit(mouseData);
-				updateChildren();
+				// updateChildren();
 			}
 			this._isMouseOver = false;
 		}
 		
-		if(this.insideInteractionBounds(mouseData.position)){
-			updateChildren();
-		}
+		updateChildren();
+		
 	}
 
 	protected clear(context:CanvasRenderingContext2D, transparent?:boolean){
@@ -246,7 +241,7 @@ export default class InteractiveDisplayObject{
 		}
 		else{
 			context.fillStyle = this._clearColor;
-			context.rect(0, 0, this._size.x, this._size.y);
+			context.fillRect(0, 0, this._size.x, this._size.y);
 		}
 	}
 	
@@ -269,7 +264,7 @@ export default class InteractiveDisplayObject{
 	}
 	
 	protected drawChildren(context:CanvasRenderingContext2D){
-				
+
 		for(var i = 0; i < this._children.length; ++i){
 			var child:InteractiveDisplayObject = this._children[i];
 			if(child.needsRedraw){
@@ -288,20 +283,18 @@ export default class InteractiveDisplayObject{
 	}
 	
 	protected getChildAtPoint(position:Point):InteractiveDisplayObject{
-		
-		if(this.insideInteractionBounds(position)){
+					
+		for(var i = this._children.length-1; i >= 0; --i){
 			
-			for(var i = this._children.length-1; i >= 0; --i){
-				
-					var selected:InteractiveDisplayObject = this._children[i].getChildAtPoint(position);
-				
-					if(selected != null)
-						return selected;	
-			}
+			let selected:InteractiveDisplayObject = this._children[i].getChildAtPoint(position);
+			
+			if(selected)
+				return selected;	
 		}
 		
-		if(this.contains(position))
+		if(this.contains(this.globalToLocal(position))){
 			return this;
+		}
 		
 		return null;
 	}
@@ -320,8 +313,7 @@ export default class InteractiveDisplayObject{
 	public contains(pt:Point):boolean{return false};
 	
 	public insideInteractionBounds(pt:Point):boolean{
-		var localPos:Point = this.globalToLocal(pt);
-		return localPos.x > 0 && localPos.x < this._size.x && localPos.y > 0 && localPos.y < this._size.y;
+		return pt.x > 0 && pt.x < this._size.x && pt.y > 0 && pt.y < this._size.y;
 	}
 	
 	public mouseEnter(mouseData:MouseData){};
@@ -338,5 +330,5 @@ export default class InteractiveDisplayObject{
 	
 	public keyPressed(lastButton:string){};
 	
-	//public actionHook(InteractiveDisplayObject child, int i_action){}	
+	//public actionHook(InteractiveDisplayObject child, int i_action){}	*/
 }

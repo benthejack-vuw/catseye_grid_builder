@@ -1,0 +1,20 @@
+{
+	"mouse":{
+		
+		"click":{
+			"left" : "stageMouseClick"
+		},
+
+		"press":{
+			"left" : "stageMousePress"
+		},
+
+		"release":{
+			"left" : "stageMouseRelease"
+		},
+
+		"move":"stageMouseMove",
+		"drag":"stageMouseDrag"
+	}
+
+}
