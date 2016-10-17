@@ -1,5 +1,5 @@
 import InteractionManager from "./interaction/interactionHandler/interactionManager"
-import DisplayTree from "./testObjects/displayTree"
+import PolyGridBuilder from "./polyGridBuilder"
 import Stage from "./interaction/stage";
 import Point from "./geometry/point"
 import * as DrawingUtils from "./util/drawingUtils";
@@ -13,27 +13,10 @@ addEventListener("load", (): void => {
 	setup();
 	window.requestAnimationFrame(draw);
 
-	// function createCanvas(width:number, height:number, canvas_id:string, parentID:string){
-	// 	var new_canvas = document.createElement("canvas");
-	// 	new_canvas.setAttribute("width", String(window.innerWidth) );
-	// 	new_canvas.setAttribute("height", String(window.innerHeight) );
-	// 	new_canvas.setAttribute("id", canvas_id);
-	// 	var parent_elem = document.getElementById(parentID);
-	// 	parent_elem.appendChild(new_canvas);
-	// 	return new_canvas;
-	// }
-
 	function setup() {
-
-		var pos:Point = new Point(window.innerWidth/2 - window.innerHeight/2, window.innerHeight/2 - window.innerHeight/2);
-		var size:Point = new Point(window.innerHeight, window.innerHeight);
-		var tree:DisplayTree = new DisplayTree(pos, size, window.innerHeight/2, 0);
-		stage.addChild(tree);
-
-
-		//canvas = createCanvas(window.innerWidth, window.innerHeight, "grid_builder", "canvas_container");
-		//context = canvas.getContext("2d");
-		//controller = new CatseyeController(canvas);
+		var grid_builder:PolyGridBuilder = new PolyGridBuilder(60);
+		stage.addChild(grid_builder);
+		
 	}
 
 	function draw() {

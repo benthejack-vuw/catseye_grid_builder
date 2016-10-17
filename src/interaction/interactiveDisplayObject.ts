@@ -3,6 +3,8 @@ import Point from "../geometry/point"
 import Transform from "../util/transform"
 import * as DrawingUtils from "../util/drawingUtils"
 import {MouseData} from "../interaction/mouseData"
+import {MutableMouseData} from "../interaction/mouseData"
+
 
 export default class InteractiveDisplayObject{
 	
@@ -14,8 +16,10 @@ export default class InteractiveDisplayObject{
 	protected _cacheAsCanvas: boolean;
 	protected _canvas: HTMLCanvasElement;
 	protected _clearColor: string = DrawingUtils.grey(255);
+	protected _clears:boolean;
 
 	protected _matrix: Transform;
+	private   _modifiedMatrix:boolean;
 	protected _localPosition: Point;
 	protected _globalPosition: Point;
 	protected _localTransformReferencePoint:Point;
@@ -38,6 +42,8 @@ export default class InteractiveDisplayObject{
 		this._onlyRedrawIfActive = false;
 		this._cacheAsCanvas = false;
 		this._selected = false;
+		this._modifiedMatrix = false;
+		this._clears = false;
 	}
 
 	public get size():Point{
@@ -115,6 +121,10 @@ export default class InteractiveDisplayObject{
 		}
 	}
 
+	public set clearsEachFrame(clears:boolean){
+		this._clears = clears;
+	}
+
 	public clearColor(r:number, g?:number, b?:number){
 		if(b === undefined || g == undefined){
 			this._clearColor = DrawingUtils.grey(r);
@@ -134,6 +144,26 @@ export default class InteractiveDisplayObject{
 	}
 	public set onlyRedrawIfActive(redraw:boolean){
 		this._onlyRedrawIfActive = redraw;
+	}
+
+	public resetMatrix(){
+		this._modifiedMatrix = false;
+		this._matrix.reset();
+	}
+
+	public translate(x:number, y:number){
+		this._modifiedMatrix = true;
+		this._matrix.translate(x, y);
+	}
+
+	public rotate(rad:number){
+		this._modifiedMatrix = true;
+		this._matrix.rotate(rad);
+	}
+
+	public scale(sx:number, sy:number){
+		this._modifiedMatrix = true;
+		this._matrix.scale(sx, sy);
 	}
 
 	public select():void{
@@ -176,11 +206,23 @@ export default class InteractiveDisplayObject{
 	}
 
 	public localToGlobal(local:Point):Point{
+		if(this._modifiedMatrix){
+			local = this._matrix.transformPoint(local);
+		}
 		return new Point(local.x + this.globalPosition.x, local.y + this.globalPosition.y);
 	}
 	
 	public globalToLocal(global:Point):Point{
-		return new Point(global.x - this.globalPosition.x, global.y - this.globalPosition.y);
+		
+		var localPoint:Point = new Point(global.x - this.globalPosition.x, global.y - this.globalPosition.y);
+		
+		if(this._modifiedMatrix){
+			var inverted:Transform = this._matrix.copy();
+			inverted.invert();
+			localPoint = inverted.transformPoint(localPoint);
+		}
+
+		return localPoint;
 	}
 
 	public needsRedraw():boolean{
@@ -217,25 +259,34 @@ export default class InteractiveDisplayObject{
 			}
 		}
 
-		if(this.contains(this.globalToLocal(mouseData.position))){
+		var localLastPosition:Point = this.globalToLocal(mouseData.lastPosition);
+		var localPosition:Point = this.globalToLocal(mouseData.position);
+
+		var localMouseData:MutableMouseData = mouseData.mutableCopy();
+		localMouseData.update(localLastPosition);
+		localMouseData.update(localPosition);
+
+		if(this.contains(localPosition)){
 			if(!this._isMouseOver){
 				this._isMouseOver = true;
-				this.mouseEnter(mouseData);
+				this.mouseEnter(localMouseData);
 			}
 		}else{
 			if(this._isMouseOver){
-				this.mouseExit(mouseData);
+				this.mouseExit(localMouseData);
 				// updateChildren();
 			}
 			this._isMouseOver = false;
 		}
 		
+		if(this._isMouseOver)
+			this.mouseMoved(localMouseData);
+
 		updateChildren();
 		
 	}
 
 	protected clear(context:CanvasRenderingContext2D, transparent?:boolean){
-		
 		if(transparent){
 			context.clearRect(0,0,this._size.x, this._size.y);
 		}
@@ -249,10 +300,16 @@ export default class InteractiveDisplayObject{
 		var currContext:CanvasRenderingContext2D = this._cacheAsCanvas ? this._canvas.getContext("2d") : context;
 		
 		currContext.save();
-		
+
 		if(!this._cacheAsCanvas){
 			currContext.translate(this._localPosition.x, this._localPosition.y);
 		}
+
+		if(this._clears)
+			this.clear(context);
+
+		this._matrix.apply(currContext);
+
 		
 		return currContext;
 	}
@@ -283,7 +340,10 @@ export default class InteractiveDisplayObject{
 	}
 	
 	protected getChildAtPoint(position:Point):InteractiveDisplayObject{
-					
+		
+		console.log(this.globalToLocal(position));
+		console.log(this.contains(this.globalToLocal(position)));
+
 		for(var i = this._children.length-1; i >= 0; --i){
 			
 			let selected:InteractiveDisplayObject = this._children[i].getChildAtPoint(position);
@@ -320,11 +380,13 @@ export default class InteractiveDisplayObject{
 	
 	public mouseExit(mouseData:MouseData){};
 	
-	public click(mouseData:MouseData){};
+	public mouseClicked(mouseData:MouseData){};
 
 	public mousePressed(mouseData:MouseData){};
 
 	public mouseReleased(mouseData:MouseData){};
+
+	public mouseMoved(mouseData:MouseData){};
 
 	public mouseDragged(mouseData:MouseData){};
 	

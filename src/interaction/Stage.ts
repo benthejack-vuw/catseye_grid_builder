@@ -47,7 +47,7 @@ export default class Stage extends InteractiveDisplayObject{
 	public stageMouseClick = (button:number, mouseData:MouseData) => {
 		var clicked:InteractiveDisplayObject = this.getChildAtPoint(mouseData.position);
 		if(clicked && clicked != this)
-			clicked.click(mouseData);
+			clicked.mouseClicked(mouseData);
 	}
 
 	public stageMousePress = (button:number, mouseData:MouseData) => {

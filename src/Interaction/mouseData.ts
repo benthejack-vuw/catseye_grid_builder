@@ -50,6 +50,14 @@ export class MouseData{
 	public isPressed(button:MouseButton):boolean{
 		return this._buttons[button];
 	}
+
+	public mutableCopy():MutableMouseData{
+		var mutable:MutableMouseData = new MutableMouseData();
+		mutable.update(this.lastPosition);
+		mutable.update(this.position);
+		mutable.buttonObject = this._buttons;
+		return mutable;
+	}
 }
 
 export class MutableMouseData extends MouseData{
@@ -69,5 +77,9 @@ export class MutableMouseData extends MouseData{
 
 	public locked():MouseData{
 		return this as MouseData;
+	}
+
+	public set buttonObject(buttons:any){
+		this._buttons = buttons;
 	}
 }

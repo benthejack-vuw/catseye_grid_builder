@@ -96,7 +96,12 @@ export default class MouseInteractionHandler extends InteractionHandler{
 			pt = this._transformMatrix.transformPoint(pt);
 		}
 
-		this._mouseData.update(pt); 
+		this._mouseData.update(pt);
+		
+		//if last position doesnt exist yet update again
+		//so that lastposition contains the current position as well
+		if(!this._mouseData.lastPosition)
+			this._mouseData.update(pt);
 	}
 
 	private mouseButtonAction(action:InteractionEventType, e:MouseEvent):void{

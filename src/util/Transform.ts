@@ -31,6 +31,16 @@ export default class Transform{
     this.reset();
   }
 
+  public set(arr:Array<number>):void{
+    this.m = [].concat(arr);
+  }
+
+  public copy():Transform{
+    var cpy:Transform = new Transform();
+    cpy.set(this.m);
+    return cpy;
+  }
+
   public reset() {
     this.m = [1,0,0,1,0,0];
   }
@@ -102,6 +112,10 @@ export default class Transform{
     let py = tx * this.m[1] + ty * this.m[3] + this.m[5];
 
     return new Point(px, py);
+  }
+
+  public apply(context:CanvasRenderingContext2D):void{
+    context.setTransform(this.m[0], this.m[1], this.m[2], this.m[3], this.m[4], this.m[5])
   }
 
 }
