@@ -1,0 +1,21 @@
+{
+	"keyboard":{
+		
+		"press":{
+			"3": "change_current_poly",
+			"4": "change_current_poly",
+			"5": "change_current_poly",
+			"6": "change_current_poly",
+			"7": "change_current_poly",
+			"8": "change_current_poly",
+			"9": "change_current_poly",
+			"s": "generate_snap_grid",
+			"j": "save_JSON"
+		},
+
+		"release":{
+			"delete": "delete_poly",
+			"backspace": "delete_poly"
+		}
+	}
+}
