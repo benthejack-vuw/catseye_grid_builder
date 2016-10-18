@@ -18,6 +18,10 @@ export default class Point {
         return new Point(this.x, this.y);
     }
 
+    public offsetCopy(x:number, y:number):Point{
+        return new Point(this.x + x, this.y + y);
+    }
+
     // Translate the position of this point in both directions by an amount.
     public move(amount: number): void {
         this.translate(amount, amount);
