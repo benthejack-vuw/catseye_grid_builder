@@ -103,8 +103,11 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 	}
 
 	public generate_snap_grid = ():void => {
-		this.addChild(this._grid.generateSnapGrid(2));
+		this._snapGrid = this._grid.generateSnapGrid(2)
+		this.addChild(this._snapGrid);
 		var box:BoundingBox = this._snapGrid.boundingBox;
+		//this.addChild(new DragableRect(new Point(200, 200), new Point(400, 400)));
+		console.log("box", box.x, box.y);
 		this.addChild(new DragableRect(new Point(box.x, box.y), new Point(box.width, box.height)));
 	}
 

@@ -1,4 +1,4 @@
-import DataError from "../error/data"
+import DataError from "../../error/data"
 import Point from "../point"
 import SnapGrid from "../snapGrid"
 import Circle from "../circle"
@@ -7,7 +7,7 @@ import "../../util/mathUtils"
 import * as DrawingUtils from "../../util/drawingUtils"
 import InteractiveDisplayObject from "../../interaction/interactiveDisplayObject"
 
-const DEFAULT_POINT_SIZE:number = 20;	
+const DEFAULT_POINT_SIZE:number = 10;	
 
 export default class DragablePoint extends InteractiveDisplayObject{
 
@@ -17,8 +17,8 @@ export default class DragablePoint extends InteractiveDisplayObject{
 
 	constructor(position:Point, radius:number){
 		super(position, new Point(radius*2, radius*2));
+		this._constraints = [];
 		this._radius = radius;
-		this.clearsEachFrame = true;
 	}
 
     public static fromData(data: any): DragablePoint {
@@ -31,12 +31,12 @@ export default class DragablePoint extends InteractiveDisplayObject{
 
 	public draw(context:CanvasRenderingContext2D):void{
 		if(this._isMouseOver)
-			context.fillStyle = DrawingUtils.rgb(255, 0, 0);
-		else
 			context.fillStyle = DrawingUtils.rgb(0, 255, 0);
+		else
+			context.fillStyle = DrawingUtils.rgb(255, 0, 0);
 
 		context.beginPath();
-		context.arc(this._radius, this._radius, this._radius, 0, 2*Math.PI);
+		context.arc(0, 0, this._radius, 0, 2*Math.PI);
 		context.fill();
 	}
 
@@ -45,7 +45,7 @@ export default class DragablePoint extends InteractiveDisplayObject{
 	}
 
 	public contains(pt:Point):boolean{
-		return Math.dist(pt.x, pt.y, this._radius, this._radius) < this._radius;
+		return Math.dist(pt.x, pt.y, 0, 0) < this._radius;
 	}
 
 	public mouseDragged(data:MouseData):void{
@@ -57,11 +57,11 @@ export default class DragablePoint extends InteractiveDisplayObject{
 	}
 
 	public moveTo(pt:Point):void{
-		if(this._snapGrid){
-			this.globalPosition = this._snapGrid.closest(this.localToGlobal(pt));
-		}else{
-			this.localPosition = pt;
-		}
+		//if(this._snapGrid){
+			//this.globalPosition = this._snapGrid.closest(this.localToGlobal(pt));
+		//}else{
+			this.globalPosition = pt;
+		//}
 	}
 
 	public snapToGrid(snap:SnapGrid):void{

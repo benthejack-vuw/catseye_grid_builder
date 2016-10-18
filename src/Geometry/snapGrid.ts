@@ -11,7 +11,6 @@ export default class SnapGrid extends InteractiveDisplayObject{
 		super(new Point(0, 0), new Point(0,0));
 		
 		this._points = local_to_parent_points;
-		var bounds:BoundingBox = this.boundingBox;
 	}
 
 	public addedToStage():void{

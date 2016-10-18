@@ -9,7 +9,7 @@ import {MutableMouseData} from "../interaction/mouseData"
 export default class InteractiveDisplayObject{
 	
 	public static stage:Stage;
-	
+
 	protected _parent: InteractiveDisplayObject;
 	protected _children: Array<InteractiveDisplayObject>;
 
@@ -90,8 +90,16 @@ export default class InteractiveDisplayObject{
 	public set localPosition(local:Point){
 
 		this._localPosition = local.copy();
-		this._globalPosition = local.copy(); //global position gets translated below
 		
+		// if(this._modifiedMatrix){
+		// 	var inv:Transform = this._matrix;
+		// 	inv.invert();
+		// 	this._localPosition = inv.transformPoint(this._localPosition);
+		// }
+
+		this._globalPosition = local.copy(); //global position gets translated below
+
+
 		if(this.parent)
 			this._globalPosition.translate(this._parent.globalPosition.x, this._parent.globalPosition.y);
 		
@@ -107,6 +115,10 @@ export default class InteractiveDisplayObject{
 		if(parent)
 			this._localPosition.translate(-this._parent.globalPosition.x, -this._parent.globalPosition.y);
 		
+		// if(this._modifiedMatrix){
+		// 	this._localPosition = this._matrix.transformPoint(this._localPosition);
+		// }
+
 		this.updateChildPositions();
 	}
 
@@ -147,23 +159,43 @@ export default class InteractiveDisplayObject{
 	}
 
 	public resetMatrix(){
+
+		var inv:Transform = this._matrix.copy();
+		inv.invert();
+
+		for(var i = 0; i < this._children.length; ++i)	
+			this._children[i].multiplyMatrix(inv);
+
 		this._modifiedMatrix = false;
 		this._matrix.reset();
+	}
+
+	public multiplyMatrix(matrix:Transform){
+		this._modifiedMatrix = true;
+		this._matrix.multiply(matrix);
+		for(var i = 0; i < this._children.length; ++i)	
+			this._children[i].multiplyMatrix(matrix);
 	}
 
 	public translate(x:number, y:number){
 		this._modifiedMatrix = true;
 		this._matrix.translate(x, y);
+		for(var i = 0; i < this._children.length; ++i)	
+			this._children[i].translate(x, y);
 	}
 
 	public rotate(rad:number){
 		this._modifiedMatrix = true;
 		this._matrix.rotate(rad);
+		for(var i = 0; i < this._children.length; ++i)	
+			this._children[i].rotate(rad);
 	}
 
 	public scale(sx:number, sy:number){
 		this._modifiedMatrix = true;
 		this._matrix.scale(sx, sy);
+		for(var i = 0; i < this._children.length; ++i)	
+			this._children[i].scale(sx, sy);
 	}
 
 	public select():void{
@@ -182,6 +214,7 @@ export default class InteractiveDisplayObject{
 	public addChild(child:InteractiveDisplayObject):void{
 		this._children.push(child);
 		child.setParent(this);
+		child.multiplyMatrix(this._matrix);
 		child.addedToStage();
 	}
 	
@@ -215,7 +248,7 @@ export default class InteractiveDisplayObject{
 	public globalToLocal(global:Point):Point{
 		
 		var localPoint:Point = new Point(global.x - this.globalPosition.x, global.y - this.globalPosition.y);
-		
+
 		if(this._modifiedMatrix){
 			var inverted:Transform = this._matrix.copy();
 			inverted.invert();
@@ -308,8 +341,10 @@ export default class InteractiveDisplayObject{
 		if(this._clears)
 			this.clear(context);
 
-		this._matrix.apply(currContext);
-
+		if(this._modifiedMatrix){
+			this._matrix.apply(currContext);
+			currContext.translate(this.localPosition.x, this.localPosition.y);
+		}
 		
 		return currContext;
 	}
@@ -340,10 +375,6 @@ export default class InteractiveDisplayObject{
 	}
 	
 	protected getChildAtPoint(position:Point):InteractiveDisplayObject{
-		
-		console.log(this.globalToLocal(position));
-		console.log(this.contains(this.globalToLocal(position)));
-
 		for(var i = this._children.length-1; i >= 0; --i){
 			
 			let selected:InteractiveDisplayObject = this._children[i].getChildAtPoint(position);

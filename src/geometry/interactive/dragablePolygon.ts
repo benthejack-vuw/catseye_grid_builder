@@ -21,6 +21,17 @@ export class DragablePolygon extends InteractiveDisplayObject{
 		}
 	}
 
+	public draw(context:CanvasRenderingContext2D):void{		
+		
+		context.beginPath();
+		context.strokeStyle = "#000000";
+		context.moveTo(this._points[0].localPosition.x, this._points[0].localPosition.y);
+		for(var i = 1; i <= this._points.length; ++i){
+			context.lineTo(this._points[i%this._points.length].localPosition.x, this._points[i%this._points.length].localPosition.y);
+		}
+		context.stroke();
+	}
+
 	public addCorner(pt:DragablePoint):void{
 		if(this._snapGrid)
 			pt.snapToGrid(this._snapGrid)
@@ -38,13 +49,19 @@ export class DragablePolygon extends InteractiveDisplayObject{
 		}
 	}
 
+	public contains():boolean{
+		return true;
+	}
+
+
+
 };
 
 
 export class DragableRect extends DragablePolygon{
 
 	constructor(position:Point, size:Point){
-		super(position, size);
+		super(new Point(0,0), new Point(0,0));
 
 		var tl:DragablePoint = DragablePoint.fromData(position.copy());
 		var tr:DragablePoint = DragablePoint.fromData(position.offsetCopy(size.x, 0));
