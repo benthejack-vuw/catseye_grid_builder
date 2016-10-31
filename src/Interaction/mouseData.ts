@@ -1,4 +1,4 @@
-import Point from "../Geometry/point";
+import Point from "../geometry/point";
 
 export enum MouseButton{
 	"none" = 0,

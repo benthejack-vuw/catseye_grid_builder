@@ -8,14 +8,52 @@
 			"6": "change_current_poly",
 			"7": "change_current_poly",
 			"8": "change_current_poly",
-			"9": "change_current_poly",
-			"s": "generate_snap_grid",
-			"j": "save_JSON"
+			"9": "change_current_poly"
 		},
 
 		"release":{
 			"delete": "delete_poly",
 			"backspace": "delete_poly"
+		}
+	},
+
+	"gui":{
+		
+		"rotationSlider":{
+			"attributes":{
+				"min":0,
+				"max":3,
+				"step":0.1
+			},
+
+			"callbacks":{
+				"input":"changeRotation"
+			}
+		},
+
+		"scaleSlider":{
+			
+			"attributes":{
+				"min":0.2,
+				"max":2.0,
+				"step":0.1
+			},
+
+			"callbacks":{
+				"input":"changeScale"
+			}
+		},
+
+		"toggleMode":{
+			"callbacks":{
+				"click":"toggleMode"
+			}
+		},
+
+		"saveTile":{
+			"callbacks":{
+				"click":"saveTile"
+			}	
 		}
 	}
 }

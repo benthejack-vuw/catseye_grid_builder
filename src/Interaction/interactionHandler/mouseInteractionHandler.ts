@@ -93,7 +93,9 @@ export default class MouseInteractionHandler extends InteractionHandler{
 		var pt = this.global_to_local(this._domListenerElement, e);
 
 		if(this._transformMatrix){
-			pt = this._transformMatrix.transformPoint(pt);
+			var inv:Transform = this._transformMatrix.copy();
+			inv.invert();
+			pt = inv.transformPoint(pt);
 		}
 
 		this._mouseData.update(pt);

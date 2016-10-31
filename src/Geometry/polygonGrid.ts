@@ -24,7 +24,7 @@ export default class PolygonGrid{
 		this._polygons.push(polygon);
 	}
 
-	public get size(){
+	public get size():number{
 		return this._polygons.length;
 	}
 

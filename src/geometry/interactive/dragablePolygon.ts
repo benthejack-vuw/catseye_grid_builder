@@ -16,6 +16,8 @@ export class DragablePolygon extends InteractiveDisplayObject{
 	};
 
 	protected addedToStage():void{
+		
+		this.localPosition = new Point(0,0);
 		for(var i = 0; i < this._points.length; ++i){
 			this.addChild(this._points[i]);
 		}
@@ -68,17 +70,17 @@ export class DragableRect extends DragablePolygon{
 		var br:DragablePoint = DragablePoint.fromData(position.offsetCopy(size.x, size.y));
 		var bl:DragablePoint = DragablePoint.fromData(position.offsetCopy(0, size.y));
 		
-		tl.addConstraint(tr, Direction.y);
-		tl.addConstraint(bl, Direction.x);
+		// tl.addConstraint(tr, Direction.y);
+		// tl.addConstraint(bl, Direction.x);
 
-		tr.addConstraint(tl, Direction.y);
-		tr.addConstraint(br, Direction.x);
+		// tr.addConstraint(tl, Direction.y);
+		// tr.addConstraint(br, Direction.x);
 
-		bl.addConstraint(br, Direction.y);
-		bl.addConstraint(tl, Direction.x);
+		// bl.addConstraint(br, Direction.y);
+		// bl.addConstraint(tl, Direction.x);
 
-		br.addConstraint(bl, Direction.y);
-		br.addConstraint(tr, Direction.x);
+		// br.addConstraint(bl, Direction.y);
+		// br.addConstraint(tr, Direction.x);
 
 		this.addCorner(tl);
 		this.addCorner(tr);

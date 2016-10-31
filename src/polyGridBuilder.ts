@@ -1,4 +1,4 @@
-import InteractiveDisplayObject from "./interaction/InteractiveDisplayObject"
+import InteractiveDisplayObject from "./interaction/interactiveDisplayObject"
 import Point from "./geometry/point"
 import Line from "./geometry/line"
 import PolygonGrid from "./geometry/polygonGrid"
@@ -8,8 +8,14 @@ import SnapGrid from "./geometry/snapGrid"
 import {MouseData} from "./interaction/mouseData"
 import {MouseButton} from "./interaction/mouseData"
 import * as DrawingUtils from "./util/drawingUtils"
+import * as DomUtils from "./util/domUtils"
 import {DragableRect} from "./geometry/interactive/dragablePolygon"
-import BoundingBox from "./geometry/BoundingBox"
+import BoundingBox from "./geometry/boundingBox"
+
+enum GridMode{
+	create,
+	tile
+}
 
 export default class PolyGridBuilder extends InteractiveDisplayObject{
 
@@ -20,6 +26,11 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 	private _next_poly_sides:number;
 	private _polygon_ghost:RegularPolygon;
 	private _snapGrid:SnapGrid;
+	private _mode:GridMode;
+
+	private _translate:Point;
+	private _rotate:number;
+	private _scale:number;
 	//private _bounds_selector:DragablePolygon;
 
 	constructor(radius:number){
@@ -32,8 +43,15 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 		this._polygon_ghost = new RegularPolygon();
 		this._polygon_ghost.initialize_regular_polygon(this._next_poly_sides, new Point(0,0), this._start_radius);
 		this.clearColor(180);
-		this.translate(this._size.x/2, this.size.y/2);
 		this.clearsEachFrame = true;
+		this._mode = GridMode.create;
+		this._translate = new Point(window.innerWidth/2, window.innerHeight/2);
+		this._rotate = 0;
+		this._scale = 1;
+	}
+
+	public addedToStage():void{
+		this.applyTransformations();
 	}
 
 	public contains(pt:Point):boolean{
@@ -85,10 +103,22 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 			this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
 
 		//}
+		if(this._grid.size <= 1){
+			this.setRotationSlider();
+		}
 
-		// if(this._grid.size() == 1){
-		// 	DomUtils.editDomElementAttr("rotate_slider", "step", Math.TWO_PI/(this._grid.first().vertex_count*2));
-		// }
+	}
+
+	public setRotationSlider(){
+	 	DomUtils.editDomElementAttr("rotationSlider", "max", Math.TWO_PI);
+	 	DomUtils.editDomElementAttr("rotationSlider", "step", Math.TWO_PI/(this._grid.first.length*2));
+	}
+
+	public applyTransformations(){
+		this.parent.stage.resetMatrix();
+		this.parent.stage.translate(this._translate.x, this._translate.y);
+		this.parent.stage.rotate(this._rotate);
+		this.parent.stage.scale(this._scale, this._scale);
 	}
 
 	public change_current_poly = (last_pressed:string) =>{		
@@ -100,21 +130,51 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 		}else if(this._selected_edge){
 			this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
 		}
+
+		if(this._grid.size <= 1){
+			this.setRotationSlider();
+		}
 	}
 
 	public generate_snap_grid = ():void => {
 		this._snapGrid = this._grid.generateSnapGrid(2)
 		this.addChild(this._snapGrid);
 		var box:BoundingBox = this._snapGrid.boundingBox;
-		//this.addChild(new DragableRect(new Point(200, 200), new Point(400, 400)));
-		console.log("box", box.x, box.y);
-		this.addChild(new DragableRect(new Point(box.x, box.y), new Point(box.width, box.height)));
+		var dragRect:DragableRect = new DragableRect(new Point(box.x, box.y), new Point(box.width, box.height));
+		dragRect.snapToGrid(this._snapGrid);
+		this._snapGrid.addChild(dragRect);
 	}
 
 	public delete_poly = ()=>{
 		this._grid.deletePolyUnderPoint(this._mouseData.position);
 		if(this._grid.isEmpty()){
 			this._polygon_ghost.initialize_regular_polygon(this._next_poly_sides, new Point(0,0), this._start_radius);
+		}
+	}
+
+	public changeRotation = (value:number)=>{
+		this._rotate = value;
+		this.applyTransformations();
+	}
+
+	public changeScale = (value:number)=>{
+		this._scale = value;
+		this.applyTransformations();
+	}
+
+	public toggleMode = (value:number)=>{
+		if(this._mode == GridMode.create){
+			this.generate_snap_grid();
+			this._mode = GridMode.tile;
+		}else if(this._mode = GridMode.tile){
+			this._mode = GridMode.create;
+			this.removeChild(this._snapGrid);
+		}
+	}
+
+	public saveTile = (value:number)=>{
+		if(this._mode == GridMode.create){
+			//SAVE AND DOWNLOAD DATA HERE
 		}
 	}
 

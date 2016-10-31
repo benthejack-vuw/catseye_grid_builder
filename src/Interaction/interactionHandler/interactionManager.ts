@@ -1,4 +1,5 @@
 import Transform from "../../util/transform"
+import GUIInteractionHandler from "./guiInteractionHandler"
 import KeyboardInteractionHandler from "./keyboardInteractionHandler"
 import MouseInteractionHandler from "./mouseInteractionHandler"
 
@@ -20,23 +21,31 @@ export default class InteractionManager{
  	
  	private _keyboardManager:KeyboardInteractionHandler;
 	private _mouseManager:MouseInteractionHandler;
+	private _guiManager:GUIInteractionHandler;
 	private _domListenerElement:HTMLElement;
 	private _callbackObject:any;
 
- 	constructor(callbackObject:any, domListenerElement:HTMLElement, interactionDefinitionsURL:string){
+ 	constructor(callbackObject:any, domListenerElement:HTMLElement, interactionDefinitions:any){
 		this._domListenerElement = domListenerElement;
 		this._callbackObject = callbackObject;
-		this.fetchJSONFile(interactionDefinitionsURL, this.setupInteractions);
+
+		if(typeof(interactionDefinitions) === "string")
+			this.fetchJSONFile(interactionDefinitions, this.setupInteractions);
+		else
+			this.setupInteractions(interactionDefinitions);
 	}
 	
 	private setupInteractions = (JSON_data:any) => {
-		console.log(JSON_data);
 		if(JSON_data.keyboard){
 			this._keyboardManager = new KeyboardInteractionHandler(this._callbackObject, this._domListenerElement, JSON_data.keyboard);
 		}
 		if(JSON_data.mouse){
 			this._mouseManager = new MouseInteractionHandler(this._callbackObject, this._domListenerElement, JSON_data.mouse);
 		}
+		if(JSON_data.gui){
+			this._guiManager = new GUIInteractionHandler(this._callbackObject, JSON_data.gui);
+		}
+
 		this.stop();
 		this.start();
 	};
@@ -46,11 +55,13 @@ export default class InteractionManager{
 	public start(){
 		if(this._keyboardManager){this._keyboardManager.start();}
 		if(this._mouseManager){this._mouseManager.start();}
+		if(this._guiManager){this._guiManager.start();}
 	}
 
 	public stop(){
 		if(this._keyboardManager){this._keyboardManager.stop();}
 		if(this._mouseManager){this._mouseManager.stop();}
+		if(this._guiManager){this._guiManager.stop();}
 	}
 
 	public setTransformMatrix(transform:Transform):void{

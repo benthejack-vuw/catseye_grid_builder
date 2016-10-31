@@ -50,18 +50,22 @@ export default class DragablePoint extends InteractiveDisplayObject{
 
 	public mouseDragged(data:MouseData):void{
 		this.moveTo(data.position);
-
 		for(var i = 0; i < this._constraints.length; ++i){
 			this._constraints[i].apply();
 		}
 	}
 
 	public moveTo(pt:Point):void{
-		//if(this._snapGrid){
-			//this.globalPosition = this._snapGrid.closest(this.localToGlobal(pt));
-		//}else{
-			this.globalPosition = pt;
-		//}
+		if(this._snapGrid){
+			this.globalPosition = this._snapGrid.closest(pt);
+		}else{
+			this.globalPosition = pt;	
+			console.log(this.localPosition);
+		}
+	}
+
+	public set(pt:Point):void{
+		this.globalPosition = pt;	
 	}
 
 	public snapToGrid(snap:SnapGrid):void{
@@ -90,9 +94,9 @@ class PointLink{
 
 	public apply(){
 		if(this._direction == Direction.x)
-			this._slave.moveTo(new Point(this._master.localPosition.x, this._slave.localPosition.y));
+			this._slave.set(new Point(this._master.localPosition.x, this._slave.localPosition.y));
 		else
-			this._slave.moveTo(new Point(this._slave.localPosition.x, this._master.localPosition.y));
+			this._slave.set(new Point(this._slave.localPosition.x, this._master.localPosition.y));
 	}
 
 }

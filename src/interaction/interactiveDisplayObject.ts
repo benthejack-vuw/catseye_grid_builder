@@ -18,8 +18,6 @@ export default class InteractiveDisplayObject{
 	protected _clearColor: string = DrawingUtils.grey(255);
 	protected _clears:boolean;
 
-	protected _matrix: Transform;
-	private   _modifiedMatrix:boolean;
 	protected _localPosition: Point;
 	protected _globalPosition: Point;
 	protected _localTransformReferencePoint:Point;
@@ -36,13 +34,11 @@ export default class InteractiveDisplayObject{
 		this._localPosition = localPosition;
 		this._size = size;
 		this._sizeIsProportional = size.x < 1 || size.y < 1;
-		this._matrix = new Transform();
 		this._redraw = true;
 		this._isMouseOver = false;
 		this._onlyRedrawIfActive = false;
 		this._cacheAsCanvas = false;
 		this._selected = false;
-		this._modifiedMatrix = false;
 		this._clears = false;
 	}
 
@@ -90,19 +86,11 @@ export default class InteractiveDisplayObject{
 	public set localPosition(local:Point){
 
 		this._localPosition = local.copy();
-		
-		// if(this._modifiedMatrix){
-		// 	var inv:Transform = this._matrix;
-		// 	inv.invert();
-		// 	this._localPosition = inv.transformPoint(this._localPosition);
-		// }
-
 		this._globalPosition = local.copy(); //global position gets translated below
 
-
-		if(this.parent)
+		if(this._parent)
 			this._globalPosition.translate(this._parent.globalPosition.x, this._parent.globalPosition.y);
-		
+
 		this.updateChildPositions();
 	}
 
@@ -112,12 +100,9 @@ export default class InteractiveDisplayObject{
 		this._localPosition = global.copy();
 		this._globalPosition = global.copy();
 		
-		if(parent)
+		if(this._parent){
 			this._localPosition.translate(-this._parent.globalPosition.x, -this._parent.globalPosition.y);
-		
-		// if(this._modifiedMatrix){
-		// 	this._localPosition = this._matrix.transformPoint(this._localPosition);
-		// }
+		}
 
 		this.updateChildPositions();
 	}
@@ -158,46 +143,6 @@ export default class InteractiveDisplayObject{
 		this._onlyRedrawIfActive = redraw;
 	}
 
-	public resetMatrix(){
-
-		var inv:Transform = this._matrix.copy();
-		inv.invert();
-
-		for(var i = 0; i < this._children.length; ++i)	
-			this._children[i].multiplyMatrix(inv);
-
-		this._modifiedMatrix = false;
-		this._matrix.reset();
-	}
-
-	public multiplyMatrix(matrix:Transform){
-		this._modifiedMatrix = true;
-		this._matrix.multiply(matrix);
-		for(var i = 0; i < this._children.length; ++i)	
-			this._children[i].multiplyMatrix(matrix);
-	}
-
-	public translate(x:number, y:number){
-		this._modifiedMatrix = true;
-		this._matrix.translate(x, y);
-		for(var i = 0; i < this._children.length; ++i)	
-			this._children[i].translate(x, y);
-	}
-
-	public rotate(rad:number){
-		this._modifiedMatrix = true;
-		this._matrix.rotate(rad);
-		for(var i = 0; i < this._children.length; ++i)	
-			this._children[i].rotate(rad);
-	}
-
-	public scale(sx:number, sy:number){
-		this._modifiedMatrix = true;
-		this._matrix.scale(sx, sy);
-		for(var i = 0; i < this._children.length; ++i)	
-			this._children[i].scale(sx, sy);
-	}
-
 	public select():void{
 		this._selected = true;
 	}
@@ -214,7 +159,6 @@ export default class InteractiveDisplayObject{
 	public addChild(child:InteractiveDisplayObject):void{
 		this._children.push(child);
 		child.setParent(this);
-		child.multiplyMatrix(this._matrix);
 		child.addedToStage();
 	}
 	
@@ -239,28 +183,18 @@ export default class InteractiveDisplayObject{
 	}
 
 	public localToGlobal(local:Point):Point{
-		if(this._modifiedMatrix){
-			local = this._matrix.transformPoint(local);
-		}
 		return new Point(local.x + this.globalPosition.x, local.y + this.globalPosition.y);
 	}
 	
 	public globalToLocal(global:Point):Point{
-		
-		var localPoint:Point = new Point(global.x - this.globalPosition.x, global.y - this.globalPosition.y);
-
-		if(this._modifiedMatrix){
-			var inverted:Transform = this._matrix.copy();
-			inverted.invert();
-			localPoint = inverted.transformPoint(localPoint);
-		}
-
+		let localPoint:Point = new Point(global.x - this.globalPosition.x, global.y - this.globalPosition.y);
 		return localPoint;
 	}
 
 	public needsRedraw():boolean{
 		return this._redraw && (!this._onlyRedrawIfActive || (this._onlyRedrawIfActive && this._isMouseOver));
 	}
+
 	public redraw():void{
 
 		var context:CanvasRenderingContext2D = this._parent === this.stage || typeof this === "Stage" ? InteractiveDisplayObject.stage.drawingContext : this._parent.cachedContext;
@@ -329,7 +263,7 @@ export default class InteractiveDisplayObject{
 		}
 	}
 	
-	private preDraw(context:CanvasRenderingContext2D):CanvasRenderingContext2D{		
+	protected preDraw(context:CanvasRenderingContext2D):CanvasRenderingContext2D{		
 		var currContext:CanvasRenderingContext2D = this._cacheAsCanvas ? this._canvas.getContext("2d") : context;
 		
 		currContext.save();
@@ -340,17 +274,12 @@ export default class InteractiveDisplayObject{
 
 		if(this._clears)
 			this.clear(context);
-
-		if(this._modifiedMatrix){
-			this._matrix.apply(currContext);
-			currContext.translate(this.localPosition.x, this.localPosition.y);
-		}
 		
 		return currContext;
 	}
 
 	
-	private postDraw(context:CanvasRenderingContext2D):void{
+	protected postDraw(context:CanvasRenderingContext2D):void{
 		this.drawChildren(context);
 		context.restore();		
 	}

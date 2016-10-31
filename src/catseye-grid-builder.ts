@@ -7,7 +7,8 @@ import * as DrawingUtils from "./util/drawingUtils";
 addEventListener("load", (): void => {
 
 	let stage:Stage = new Stage("canvas_container", new Point(window.innerWidth, window.innerHeight));
-	let stageInteractionManager:InteractionManager = new InteractionManager(stage, stage.stageCanvas, "stage_interactions.json");
+	stage.clearColor(180);
+
 	let gridbuilderInteractions:InteractionManager;
 
 	setup();
