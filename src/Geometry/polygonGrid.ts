@@ -1,3 +1,4 @@
+import OrderError from "../error/order"
 import * as DrawingUtils from "../util/drawingUtils"
 import Point from "./point"
 import Polygon from "./polygon";
@@ -5,6 +6,7 @@ import BoundingBox from "./boundingBox";
 import Rectangle from "./rectangle";
 import Line from "./line";
 import SnapGrid from "./snapGrid"
+import Transform from "../util/transform"
 
 export default class PolygonGrid{
 	
@@ -95,27 +97,33 @@ export default class PolygonGrid{
 		
 	}
 
-	public normalize(newBounds: Rectangle):void{
-		this._clipRect = newBounds;
-		this._normalizedClipRect = this._clipRect.normalize();
+	public normalize(newBounds: Polygon, rotate?:number):void{
+		var boundaryTestRect = new BoundingBox(newBounds.copy().points);
+		newBounds.rotate(rotate);
+		this._clipRect = new BoundingBox(newBounds.points);
+		this._normalizedClipRect = this._clipRect.copy().normalize();
 
 		this._normalizedPolygons = [];
 		for(var i = 0; i < this._polygons.length; ++i){
-			if(this._polygons[i].inside(this._clipRect)){
-				this._normalizedPolygons.push(this._polygons[i].normalizedPointArray(this._clipRect));
+			if(this._polygons[i].inside(boundaryTestRect)){
+				this._normalizedPolygons.push(this._polygons[i].normalizedPointArray(this._clipRect, rotate));
 			}
 		}
 	}
 
-	public toJSON():string{
+	public toJSON():any{
+
+		if(!this._normalizedPolygons || !this._normalizedClipRect){
+			throw(new OrderError("PolygonGrid", "toJSON", "normalize"));
+		}
 
 		var out = {
-			polygons: JSON.stringify(this._polygons),
-			bounds: JSON.stringify(this._clipRect),
-			normalized_clipRect: JSON.stringify(this._normalizedClipRect),
-			normalized_polygons: JSON.stringify(this._normalizedPolygons)
+			polygons: this._polygons,
+			bounds: this._clipRect,
+			normalized_clipRect: this._normalizedClipRect,
+			normalized_polygons: this._normalizedPolygons
 		};
 
-		return JSON.stringify(out);
+		return out;
 	}
 }

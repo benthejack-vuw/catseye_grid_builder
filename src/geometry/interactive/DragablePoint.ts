@@ -72,7 +72,6 @@ export default class DragablePoint extends InteractiveDisplayObject{
 		this._snapGrid = snap;
 	}
 	
-
 }
 
 export enum Direction{

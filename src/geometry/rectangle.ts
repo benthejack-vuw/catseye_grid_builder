@@ -84,9 +84,13 @@ export default class Rectangle {
     };
 
     // Convert this rectangle to a JSON string.
-    public toJSON(): string {
-        return `{"x":${this.x},"y":${this.y}` +
-            `"width":${this.width},"height":${this.height}}`;
+    public toJSON(): any {
+        return {
+            "x":this.x,
+            "y":this.y,
+            "width":this.width,
+            "height":this.height
+        };
     }
 
     public toString(): string {

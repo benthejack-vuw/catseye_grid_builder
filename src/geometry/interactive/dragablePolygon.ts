@@ -1,4 +1,5 @@
 import Point from "../point"
+import Polygon from "../polygon"
 import SnapGrid from "../snapGrid"
 import DragablePoint from "./dragablePoint"
 import {Direction} from "./dragablePoint"
@@ -13,7 +14,17 @@ export class DragablePolygon extends InteractiveDisplayObject{
 	constructor(position:Point, size:Point){
 		super(position, size);
 		this._points = [];
-	};
+	}
+
+	public get points():Array<Point>{
+		var pts:Array<Point> = [];
+		
+		for (var i = this._points.length - 1; i >= 0; i--) {
+			pts.push(this._points[i].localPosition);
+		}
+
+		return pts;
+	}
 
 	protected addedToStage():void{
 		
@@ -55,7 +66,9 @@ export class DragablePolygon extends InteractiveDisplayObject{
 		return true;
 	}
 
-
+	public toPolygon():Polygon{
+		return new Polygon(this.points);
+	}
 
 };
 

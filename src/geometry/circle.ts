@@ -40,8 +40,8 @@ export default class Circle extends Point {
     }
 
     // Convert this circle to a JSON string.
-    public toJSON(): string {
-        return `{"x":${this.x},"y":${this.y},"radius":${this.radius}}`;
+    public toJSON(): any {
+        return {"x":this.x,"y":this.y,"radius":this.radius};
     }
 
     public toString(): string {

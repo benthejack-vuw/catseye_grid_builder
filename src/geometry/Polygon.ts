@@ -1,6 +1,7 @@
 import Point from "./point";
 import Line from "./line";
 import Rectangle from "./rectangle";
+import Transform from "../util/transform"
 import "../util/mathUtils";
 
 
@@ -10,7 +11,7 @@ export default class Polygon{
 	protected _edges: Array<Line>;
 	protected _radius: number;
 
-	constructor(vertex_array?:Array<Point>){
+	constructor(vertex_array?:Array<any>){
 		
 		this._vertices = [];
 		this._edges = [];
@@ -21,16 +22,24 @@ export default class Polygon{
 		}
 	}
 
-	public get length(){
+	public copy():Polygon{
+		return new Polygon(this._vertices);
+	}
+
+	public get length():number{
 		return this._vertices.length;
 	}
 
-	public get radius(){
+	public get radius():number{
 		return this._radius;
 	}
 
+	public get points():Array<Point>{
+		return this._vertices;
+	}
 
- 	public initialize_from_array(points: Array<Point>): void{
+
+ 	public initialize_from_array(points: Array<any>): void{
 		this.empty();
 
 		//vertex function to be passed into create_edges
@@ -77,6 +86,16 @@ export default class Polygon{
 	}
 
 	//-----------------------------------------------METHODS----------------------------------------------
+
+
+	public rotate(rotation:number){
+		var mat:Transform = new Transform();
+		mat.rotate(rotation);
+		for (var i = this._vertices.length - 1; i >= 0; i--) {
+			this._vertices[i] = mat.transformPoint(this._vertices[i]);
+		}
+	}
+
 
 	//windng number algorithm taken from http://geomalgorithms.com/a03-_inclusion.html
 	public contains(pt: Point) : boolean{
@@ -137,11 +156,11 @@ export default class Polygon{
 	};
 
 	public toJSON(){
-		let data = "[";
+		let data:Array<any> = [];
 		for(let i = 0; i < this._vertices.length; ++i){
-			data += this._vertices[i].toJSON() + ",";
+			data.push(this._vertices[i].toJSON());
 		}
-		return data + "]";
+		return data;
 	}
 
 	public generate_inner_grid(resolution:number): Array<Point>{
@@ -175,7 +194,7 @@ export default class Polygon{
 		return new Point(x_total/this.length, y_total/this.length);
 	}
 
-	public inside(bounding_box:Rectangle):boolean{
+	public inside(bounding_box:any):boolean{
 		for (let i = 0; i < this._vertices.length; i++) {
 			if(bounding_box.contains(this._vertices[i])){
 				return true;
@@ -184,19 +203,30 @@ export default class Polygon{
 		return false;
 	}
 
-	public normalizedPointArray(bounding_box:Rectangle):Array<Point>{
+	public normalizedPointArray(bounding_box:Rectangle, rotation?:number):Array<Point>{
 		let pts:Array<Point> = [];
+		let pt:Point = new Point(bounding_box.x, bounding_box.y);
+		let sz:Point = new Point(bounding_box.width, bounding_box.height);
+		var rotationMatrix:Transform = new Transform();
+		if(rotation){
+			rotationMatrix.rotate(rotation);
+		}
 		for (let i = 0; i < this._vertices.length; i++) {
 			
-			let x_out = +((this._vertices[i].x - bounding_box.x)/bounding_box.width);
-			let y_out = +((this._vertices[i].y - bounding_box.y)/bounding_box.width);
-
-			pts.push(new Point(x_out, y_out));
+			let v:Point = this._vertices[i];
+			if(rotation){
+				v = rotationMatrix.transformPoint(v);
+			}
+			let xOut = ((v.x - pt.x)/sz.x);
+			let yOut = ((v.y - pt.y)/sz.x);
+			let ptOut = new Point(xOut, yOut);
+			
+			pts.push(ptOut);
 		}
 		return pts;
 	}
 
-	public completely_inside(bounding_box:Rectangle):boolean{
+	public completely_inside(bounding_box:any):boolean{
 		for (let i = 0; i < this._vertices.length; i++) {
 			if(!bounding_box.contains(this._vertices[i])){
 				return false;

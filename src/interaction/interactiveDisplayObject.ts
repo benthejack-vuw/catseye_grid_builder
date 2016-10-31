@@ -1,3 +1,4 @@
+import OrderError from "../error/order"
 import Stage from "./stage"
 import Point from "../geometry/point"
 import Transform from "../util/transform"
@@ -69,6 +70,14 @@ export default class InteractiveDisplayObject{
 	public get isMouseOver():boolean{
 		return this._isMouseOver;
 	}
+
+	public get cacheAsCanvas():boolean{
+		return this._cacheAsCanvas;
+	}
+
+	public get cachedCanvas():HTMLCanvasElement{
+		return this._canvas;
+	}
   
 	private setParent(parent:InteractiveDisplayObject){
 		this._parent = parent;
@@ -130,7 +139,7 @@ export default class InteractiveDisplayObject{
 		}
 	}
 
-	public set cacheAsCanvas(cache:boolean){
+	public setCacheAsCanvas(cache:boolean){
 		this._cacheAsCanvas = cache;
 		
 		if(cache){
@@ -139,6 +148,7 @@ export default class InteractiveDisplayObject{
 			this._canvas.height = this._size.y;
 		}
 	}
+	
 	public set onlyRedrawIfActive(redraw:boolean){
 		this._onlyRedrawIfActive = redraw;
 	}
@@ -197,8 +207,15 @@ export default class InteractiveDisplayObject{
 
 	public redraw():void{
 
-		var context:CanvasRenderingContext2D = this._parent === this.stage || typeof this === "Stage" ? InteractiveDisplayObject.stage.drawingContext : this._parent.cachedContext;
-		
+		var context:CanvasRenderingContext2D;
+		if(this._cacheAsCanvas){
+			context = this.cachedContext;
+		}else if(this._parent){
+			context = this._parent === this.stage || typeof this === "Stage" ? InteractiveDisplayObject.stage.drawingContext : this._parent.cachedContext;
+		}else{
+			throw new OrderError("InteractiveDisplayObject", "redraw", "addChild on a parent interactive displayobject OR set setCacheAsCanvas(true)");
+		}
+
 		var par:InteractiveDisplayObject = this._parent;
 		
 		while(!context){
@@ -290,14 +307,14 @@ export default class InteractiveDisplayObject{
 			var child:InteractiveDisplayObject = this._children[i];
 			if(child.needsRedraw){
 				child.update();
-				var context:CanvasRenderingContext2D = child.preDraw(context);
-				child.draw(context);
-				child.drawOverChildren(context);
-				child.postDraw(context);
+				var childContext:CanvasRenderingContext2D = child.preDraw(context);
+				child.draw(childContext);
+				child.drawOverChildren(childContext);
+				child.postDraw(childContext);
 			}
 			
 			if(child.cacheAsCanvas){
-				context.drawImage(child.cachedContext.canvas, child.localPosition.x, child.localPosition.y);
+				context.drawImage(child.cachedCanvas, child.localPosition.x, child.localPosition.y);
 			}
 		}
 		

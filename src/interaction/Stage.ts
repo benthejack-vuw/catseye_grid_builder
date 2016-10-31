@@ -41,7 +41,7 @@ export default class Stage extends InteractiveDisplayObject{
 		super(new Point(0,0), size);
 
 		InteractiveDisplayObject.stage = this;
-		this.cacheAsCanvas = true;
+		this.setCacheAsCanvas(true);
 		this.stageCanvas = this._canvas;
 
 		var parentElement:HTMLElement = document.getElementById(parentID);

@@ -2,6 +2,7 @@ import Transform from "../../util/transform"
 import GUIInteractionHandler from "./guiInteractionHandler"
 import KeyboardInteractionHandler from "./keyboardInteractionHandler"
 import MouseInteractionHandler from "./mouseInteractionHandler"
+import * as DomUtils from "../../util/domutils"
 
 
 /*
@@ -30,7 +31,7 @@ export default class InteractionManager{
 		this._callbackObject = callbackObject;
 
 		if(typeof(interactionDefinitions) === "string")
-			this.fetchJSONFile(interactionDefinitions, this.setupInteractions);
+			DomUtils.fetchJSONFile(interactionDefinitions, this.setupInteractions);
 		else
 			this.setupInteractions(interactionDefinitions);
 	}
@@ -66,20 +67,6 @@ export default class InteractionManager{
 
 	public setTransformMatrix(transform:Transform):void{
 		this._mouseManager.setTransformMatrix(transform);
-	}
-
-	private fetchJSONFile(path:string, callback:Function) {
-	    var httpRequest = new XMLHttpRequest();
-	    httpRequest.onreadystatechange = function() {
-	        if (httpRequest.readyState === 4) {
-	            if (httpRequest.status === 200) {
-	                var data = JSON.parse(httpRequest.responseText);
-	                if (callback){callback(data);}
-	            }
-	        }
-	    };
-	    httpRequest.open('GET', path, false);  
-	    httpRequest.send(); 
 	}
 
 }

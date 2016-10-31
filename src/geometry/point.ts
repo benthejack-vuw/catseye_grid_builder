@@ -58,8 +58,8 @@ export default class Point {
     }
 
     // Convert this point to a JSON string.
-    public toJSON(): string {
-        return `{"x":${this.x},"y":${this.y}}`;
+    public toJSON(): any {
+        return {"x":this.x, "y":this.y};
     }
 
     public toString(): string {

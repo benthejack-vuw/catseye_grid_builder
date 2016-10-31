@@ -2,6 +2,7 @@ import InteractiveDisplayObject from "./interaction/interactiveDisplayObject"
 import Point from "./geometry/point"
 import Line from "./geometry/line"
 import PolygonGrid from "./geometry/polygonGrid"
+import PolygonTile from "./geometry/polygonTile"
 import Polygon from "./geometry/polygon"
 import RegularPolygon from "./geometry/regularPolygon"
 import SnapGrid from "./geometry/snapGrid"
@@ -27,10 +28,13 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 	private _polygon_ghost:RegularPolygon;
 	private _snapGrid:SnapGrid;
 	private _mode:GridMode;
+	private _tileSelector:DragableRect;
 
 	private _translate:Point;
 	private _rotate:number;
 	private _scale:number;
+
+	private _polyTile:PolygonTile;
 	//private _bounds_selector:DragablePolygon;
 
 	constructor(radius:number){
@@ -60,28 +64,41 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 
 	public draw(context:CanvasRenderingContext2D):void{
 
+		if(this._polyTile){
+			const pattern = context.createPattern(this._polyTile.cachedCanvas, "repeat");
+			const width = this._size.x;
+        	const height = this._size.y;
+        	context.rect(-width / 2, -height / 2, width, height);
+        	context.fillStyle = pattern;
+        	context.fill();
+		}
+
 		this._grid.draw(context);
 
-		if(this._polygon_ghost){
+		if(this._mode == GridMode.create && this._polygon_ghost){
 			context.strokeStyle = DrawingUtils.grey(200);
 			context.fillStyle = DrawingUtils.rgba(255, 255, 255, 50);
 			this._polygon_ghost.draw(context, true);
 		}
+
+
 	}
 
 	public mouseMoved(i_mouseData:MouseData){
 
-		this._mouseData = i_mouseData;
-		
-		var new_edge = this._grid.closestEdge(this._mouseData.position);
-		
-		if(!this._grid.isEmpty()){
-			if(new_edge === null){
-				this._polygon_ghost.empty();
-			}
-			else if(this._selected_edge !== new_edge){
-				this._selected_edge = new_edge;
-				this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
+		if(this._mode == GridMode.create){
+			this._mouseData = i_mouseData;
+			
+			var new_edge = this._grid.closestEdge(this._mouseData.position);
+			
+			if(!this._grid.isEmpty()){
+				if(new_edge === null){
+					this._polygon_ghost.empty();
+				}
+				else if(this._selected_edge !== new_edge){
+					this._selected_edge = new_edge;
+					this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
+				}
 			}
 		}
 	}
@@ -140,9 +157,9 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 		this._snapGrid = this._grid.generateSnapGrid(2)
 		this.addChild(this._snapGrid);
 		var box:BoundingBox = this._snapGrid.boundingBox;
-		var dragRect:DragableRect = new DragableRect(new Point(box.x, box.y), new Point(box.width, box.height));
-		dragRect.snapToGrid(this._snapGrid);
-		this._snapGrid.addChild(dragRect);
+		this._tileSelector = new DragableRect(new Point(box.x, box.y), new Point(box.width, box.height));
+		this._tileSelector.snapToGrid(this._snapGrid);
+		this._snapGrid.addChild(this._tileSelector);
 	}
 
 	public delete_poly = ()=>{
@@ -173,8 +190,12 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 	}
 
 	public saveTile = (value:number)=>{
-		if(this._mode == GridMode.create){
-			//SAVE AND DOWNLOAD DATA HERE
+		if(this._mode == GridMode.tile){
+			var bounds = this._tileSelector.toPolygon();	
+			this._grid.normalize(bounds, this._rotate);
+			this._polyTile = new PolygonTile(new Point(-window.innerWidth/2+100, window.innerHeight/2-300), new Point(300,300), this._grid.toJSON());
+			this._polyTile.redraw();			
+			//this.addChild(this._polyTile);
 		}
 	}
 

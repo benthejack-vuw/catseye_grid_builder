@@ -83,8 +83,8 @@ export default class Triangle {
     }
 
     // Convert this triangle to a JSON string.
-    public toJSON(): string {
-        return `[${this[0].toJSON()},${this[1].toJSON()},${this[2].toJSON()}]`;
+    public toJSON(): any {
+        return [this[0].toJSON(), this[1].toJSON(), this[2].toJSON()];
     }
 
     public toString(): string {
