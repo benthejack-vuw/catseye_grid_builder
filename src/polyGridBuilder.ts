@@ -12,6 +12,7 @@ import * as DrawingUtils from "./util/drawingUtils"
 import * as DomUtils from "./util/domUtils"
 import {DragableRect} from "./geometry/interactive/dragablePolygon"
 import BoundingBox from "./geometry/boundingBox"
+import Transform from "./util/transform"
 
 enum GridMode{
 	create,
@@ -54,6 +55,21 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 		this._scale = 1;
 	}
 
+	public loadFile = (val:any, obj:any)=>{
+	  	
+	  	this._mode = GridMode.create;
+	  	this.removeChild(this._snapGrid);
+
+	  	var reader = new FileReader();
+
+		reader.onload = (e) => {
+		  var tileObj = JSON.parse(reader.result);
+		  this._grid.setPolygonData(tileObj.polygons);
+		}
+
+		reader.readAsText(obj.files[0]);
+	}
+
 	public addedToStage():void{
 		this.applyTransformations();
 	}
@@ -68,9 +84,17 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 			const pattern = context.createPattern(this._polyTile.cachedCanvas, "repeat");
 			const width = this._size.x;
         	const height = this._size.y;
+        	context.save();
+        	context.rotate(-this._rotate);
+        	context.scale(1.0/this._scale, 1.0/this._scale);
         	context.rect(-width / 2, -height / 2, width, height);
         	context.fillStyle = pattern;
         	context.fill();
+        	
+        	context.rect(-width / 2, -height / 2, width, height);
+			context.fillStyle = DrawingUtils.greyA(0, 130);
+        	context.fill();
+        	context.restore();
 		}
 
 		this._grid.draw(context);
@@ -79,6 +103,21 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 			context.strokeStyle = DrawingUtils.grey(200);
 			context.fillStyle = DrawingUtils.rgba(255, 255, 255, 50);
 			this._polygon_ghost.draw(context, true);
+		}
+
+		if(this._tileSelector){
+			var pts:Array<Point> = []
+			var rotate:Transform = new Transform();
+			rotate.rotate(this._rotate);
+			for(let i = 0; i < this._tileSelector.points.length; ++i){
+				pts.push(rotate.transformPoint(this._tileSelector.points[i]));
+			}
+			var bounds = new BoundingBox(pts);
+			context.save();
+			context.rotate(-this._rotate);
+			context.strokeStyle = "#FF0000";
+			bounds.draw(context);
+			context.restore();
 		}
 
 
@@ -154,6 +193,7 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 	}
 
 	public generate_snap_grid = ():void => {
+		this.removeChild(this._snapGrid);
 		this._snapGrid = this._grid.generateSnapGrid(2)
 		this.addChild(this._snapGrid);
 		var box:BoundingBox = this._snapGrid.boundingBox;
@@ -189,14 +229,33 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 		}
 	}
 
-	public saveTile = (value:number)=>{
+	public generateTile(){
 		if(this._mode == GridMode.tile){
 			var bounds = this._tileSelector.toPolygon();	
 			this._grid.normalize(bounds, this._rotate);
-			this._polyTile = new PolygonTile(new Point(-window.innerWidth/2+100, window.innerHeight/2-300), new Point(300,300), this._grid.toJSON());
+			this._polyTile = new PolygonTile(new Point(-window.innerWidth/2+100, window.innerHeight/2-300), new Point(100,100), this._grid.toJSON());
 			this._polyTile.redraw();			
-			//this.addChild(this._polyTile);
 		}
 	}
+
+	public cropTiles = ()=>{
+		if(this._tileSelector){
+			var bounds = new BoundingBox(this._tileSelector.points);	
+			this._grid.crop(bounds);
+			this.generate_snap_grid();
+		}
+	}
+
+	public previewTile = ()=>{
+		this.generateTile();
+	}
+
+	public saveTile = ()=>{
+		var name:string = (document.getElementById("fileName") as HTMLInputElement).value;
+		name = name.length > 0 ? name+".json" : "tilegrid.json"
+		DomUtils.downloadTextAsFile(name, JSON.stringify(this._grid));
+	}
+
+	
 
 }

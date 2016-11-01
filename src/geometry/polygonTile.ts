@@ -43,12 +43,9 @@ export default class PolygonTile extends InteractiveDisplayObject{
 
 		this.clear(context, true);
 		context.fillStyle = "#FFFFFF";
-//		context.fillRect(0,0,this.size.x, this.size.y);
 		for (var i = 0; i < this._polygons.length; ++i) {
 			this._polygons[i].draw(context, true);
 		}
-		// context.rect(0,0,this.size.x, this.size.y);
-		// context.stroke();
 	}
 
 }

@@ -21,6 +21,13 @@ export default class PolygonGrid{
 		this._normalizedPolygons = [];
 		this._normalizedClipRect = new BoundingBox();
 	}
+	public setPolygonData(data:any){
+		this._polygons = [];
+
+		for (var i = data.length - 1; i >= 0; i--) {
+			this._polygons.push(new Polygon(data[i]));
+		}
+	}
 
 	public addPolygon(polygon:Polygon): void{
 		this._polygons.push(polygon);
@@ -32,10 +39,14 @@ export default class PolygonGrid{
 
 	public deletePolyUnderPoint(point:Point):Polygon | void{
 		var poly = this.polygonUnder(point);
+		return this.deletePolygon(poly);
+	}
+
+	public deletePolygon(poly:Polygon){
 		if(poly){
 			var index = this._polygons.indexOf(poly);
 			if(index > -1){this._polygons.splice(index, 1);}
-			return poly
+			return poly;
 		}
 		return null;
 	}
@@ -95,6 +106,17 @@ export default class PolygonGrid{
 			this._polygons[i].draw(context, true);
 		}
 		
+	}
+
+	public crop(bounds: any){
+		console.log("cropping");
+
+		for(var i = 0; i < this._polygons.length; ++i){
+			if(!this._polygons[i].inside(bounds)){
+				this.deletePolygon(this._polygons[i]);
+				i = 0;
+			}
+		}
 	}
 
 	public normalize(newBounds: Polygon, rotate?:number):void{

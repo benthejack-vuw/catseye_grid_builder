@@ -70,12 +70,12 @@ class GUICallback{
 	protected _callback:Function;
 	protected _action:string;
 
-	constructor(itemID:string, listenerAction:string, callback:(value?:any, element?:HTMLInputElement)=>void){
+	constructor(itemID:string, listenerAction:string, callback:(value?:any, element?:HTMLInputElement, event?:Event)=>void){
 		this._object = document.getElementById(itemID);
 		this._action = listenerAction;
 		this._callbackWrapper = function(ev:UIEvent){
 			var input:HTMLInputElement = ev.currentTarget as HTMLInputElement;
-			callback(input.value, input);
+			callback(input.value, input, ev);
 		}
 	}
 

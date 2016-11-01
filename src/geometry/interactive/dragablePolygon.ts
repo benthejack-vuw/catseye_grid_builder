@@ -1,4 +1,5 @@
 import Point from "../point"
+import BoundingBox from "../boundingBox"
 import Polygon from "../polygon"
 import SnapGrid from "../snapGrid"
 import DragablePoint from "./dragablePoint"
@@ -36,13 +37,18 @@ export class DragablePolygon extends InteractiveDisplayObject{
 
 	public draw(context:CanvasRenderingContext2D):void{		
 		
-		context.beginPath();
+		context.save();
 		context.strokeStyle = "#000000";
+		context.setLineDash([5, 5]);
+
+		context.beginPath();
 		context.moveTo(this._points[0].localPosition.x, this._points[0].localPosition.y);
 		for(var i = 1; i <= this._points.length; ++i){
 			context.lineTo(this._points[i%this._points.length].localPosition.x, this._points[i%this._points.length].localPosition.y);
 		}
 		context.stroke();
+		context.restore();
+
 	}
 
 	public addCorner(pt:DragablePoint):void{
@@ -82,18 +88,6 @@ export class DragableRect extends DragablePolygon{
 		var tr:DragablePoint = DragablePoint.fromData(position.offsetCopy(size.x, 0));
 		var br:DragablePoint = DragablePoint.fromData(position.offsetCopy(size.x, size.y));
 		var bl:DragablePoint = DragablePoint.fromData(position.offsetCopy(0, size.y));
-		
-		// tl.addConstraint(tr, Direction.y);
-		// tl.addConstraint(bl, Direction.x);
-
-		// tr.addConstraint(tl, Direction.y);
-		// tr.addConstraint(br, Direction.x);
-
-		// bl.addConstraint(br, Direction.y);
-		// bl.addConstraint(tl, Direction.x);
-
-		// br.addConstraint(bl, Direction.y);
-		// br.addConstraint(tr, Direction.x);
 
 		this.addCorner(tl);
 		this.addCorner(tr);

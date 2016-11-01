@@ -108,7 +108,7 @@ export default class MouseInteractionHandler extends InteractionHandler{
 
 	private mouseButtonAction(action:InteractionEventType, e:MouseEvent):void{
 
-		if(action === InteractionEventType.release){this._domListenerElement.focus();}
+		//if(action === InteractionEventType.release){this._domListenerElement.focus();}
 
 		var button:MouseButton = MouseButtonConverter.fromString(MouseButton[e.which]);
 		this.set_local_mouse_position(e);

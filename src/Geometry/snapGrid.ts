@@ -37,9 +37,9 @@ export default class SnapGrid extends InteractiveDisplayObject{
 	public draw(context:CanvasRenderingContext2D):void{
 		
 		for (var i = 0; i < this._points.length; i++) {
-			context.fillStyle = DrawingUtils.rgb(255,0,0);
+			context.fillStyle = DrawingUtils.rgba(50,0,0,100);
 			context.beginPath();
-			context.arc(this._points[i].x, this._points[i].y, 5, 0, 2 * Math.PI);
+			context.arc(this._points[i].x, this._points[i].y, 2, 0, 2 * Math.PI);
 			context.fill();
 		}
 

@@ -31,7 +31,7 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 	
 		//add all the necessary event listeners
 		this._domListenerElement.addEventListener( "mouseenter", this.focus, false );
-		this._domListenerElement.addEventListener( "mousedown", this.focus, false );
+	//	this._domListenerElement.addEventListener( "mousedown", this.focus, false );
 
 		this._domListenerElement.addEventListener( "keydown", this.keyDown, false );
 		this._domListenerElement.addEventListener( "keypress", this.keyPressed, false );
@@ -43,7 +43,7 @@ export default class KeyboardInteractionHandler extends InteractionHandler{
 	public stop(){
 		//remove the event listeners
 		this._domListenerElement.removeEventListener( "mouseenter", this.focus, false );
-		this._domListenerElement.removeEventListener( "mousedown", this.focus, false );
+		//this._domListenerElement.removeEventListener( "mousedown", this.focus, false );
 
 		this._domListenerElement.removeEventListener( "keydown", this.keyDown, false );
 		this._domListenerElement.removeEventListener( "keypress", this.keyPressed, false );

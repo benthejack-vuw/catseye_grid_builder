@@ -38,6 +38,10 @@ export default class Rectangle {
         this.topLeft.y = y;
     }
 
+    public draw(context:CanvasRenderingContext2D){
+        context.strokeRect(this.x, this.y, this.width, this.height);
+    }
+
     // Create a copy of this rectangle.
     public copy(): Rectangle {
         return new Rectangle(this.x, this.y, this.width, this.height);
