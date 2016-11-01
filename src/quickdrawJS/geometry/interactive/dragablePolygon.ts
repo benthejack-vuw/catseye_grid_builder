@@ -1,11 +1,11 @@
 import Point from "../point"
 import BoundingBox from "../boundingBox"
 import Polygon from "../polygon"
-import SnapGrid from "../snapGrid"
+import SnapGrid from "./snapGrid"
 import DragablePoint from "./dragablePoint"
 import {Direction} from "./dragablePoint"
 import * as DrawingUtils from "../../util/drawingUtils"
-import InteractiveDisplayObject from "../../interaction/interactiveDisplayObject"
+import InteractiveDisplayObject from "../../canvas/interactiveDisplayObject"
 
 export class DragablePolygon extends InteractiveDisplayObject{
 

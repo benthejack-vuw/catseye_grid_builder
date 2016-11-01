@@ -5,7 +5,7 @@ import Polygon from "./polygon";
 import BoundingBox from "./boundingBox";
 import Rectangle from "./rectangle";
 import Line from "./line";
-import SnapGrid from "./snapGrid"
+import SnapGrid from "./interactive/snapGrid"
 import Transform from "../util/transform"
 
 export default class PolygonGrid{
@@ -109,8 +109,6 @@ export default class PolygonGrid{
 	}
 
 	public crop(bounds: any){
-		console.log("cropping");
-
 		for(var i = 0; i < this._polygons.length; ++i){
 			if(!this._polygons[i].inside(bounds)){
 				this.deletePolygon(this._polygons[i]);

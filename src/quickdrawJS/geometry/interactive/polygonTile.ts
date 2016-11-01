@@ -1,7 +1,7 @@
-import InteractiveDisplayObject from "../interaction/interactiveDisplayObject"
-import Point from "./point"
-import Polygon from "./polygon"
-import * as DomUtils from "../util/domUtils"
+import InteractiveDisplayObject from "../../canvas/interactiveDisplayObject"
+import Point from "../point"
+import Polygon from "../polygon"
+import * as DomUtils from "../../util/domUtils"
 
 export default class PolygonTile extends InteractiveDisplayObject{
 	

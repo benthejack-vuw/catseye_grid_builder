@@ -1,8 +1,8 @@
-import InteractionManager from "./interaction/interactionHandler/interactionManager"
+import InteractionManager from "../quickdrawJS/interaction/interactionHandler/interactionManager"
 import PolyGridBuilder from "./polyGridBuilder"
-import Stage from "./interaction/stage";
-import Point from "./geometry/point"
-import * as DrawingUtils from "./util/drawingUtils";
+import Stage from "../quickdrawJS/canvas/stage";
+import Point from "../quickdrawJS/geometry/point"
+import * as DrawingUtils from "../quickdrawJS/util/drawingUtils";
 
 addEventListener("load", (): void => {
 

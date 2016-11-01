@@ -1,11 +1,11 @@
 import DataError from "../../error/data"
 import Point from "../point"
-import SnapGrid from "../snapGrid"
+import SnapGrid from "./snapGrid"
 import Circle from "../circle"
 import {MouseData} from "../../interaction/mouseData"
 import "../../util/mathUtils"
 import * as DrawingUtils from "../../util/drawingUtils"
-import InteractiveDisplayObject from "../../interaction/interactiveDisplayObject"
+import InteractiveDisplayObject from "../../canvas/interactiveDisplayObject"
 
 const DEFAULT_POINT_SIZE:number = 10;	
 

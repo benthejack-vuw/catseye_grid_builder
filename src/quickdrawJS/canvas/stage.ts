@@ -1,4 +1,4 @@
-import InteractionManager from "./interactionHandler/interactionManager"
+import InteractionManager from "../interaction/interactionHandler/interactionManager"
 import Transform from "../util/transform" 
 import {MutableMouseData} from "../interaction/mouseData"
 import {MouseData} from "../interaction/mouseData"

@@ -1,7 +1,7 @@
-import Point from "./point";
-import InteractiveDisplayObject from "../interaction/interactiveDisplayObject"
-import BoundingBox from "./boundingBox";
-import * as DrawingUtils from "../util/drawingUtils";
+import Point from "../point";
+import InteractiveDisplayObject from "../../canvas/interactiveDisplayObject"
+import BoundingBox from "../boundingBox";
+import * as DrawingUtils from "../../util/drawingUtils";
 
 export default class SnapGrid extends InteractiveDisplayObject{
 	

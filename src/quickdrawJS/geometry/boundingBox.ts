@@ -1,4 +1,3 @@
-
 import Point from "./point"
 import Rectangle from "./rectangle"
 import Transform from "../util/transform"
