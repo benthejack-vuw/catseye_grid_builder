@@ -1,3 +1,7 @@
 TO DO:
 	interaction manager -> implement keyboard regexs
-	grid -> rotation and scaling
+	interaction manager -> mouse wheel scrolling functionality
+	interactions to implement -> mouse wheel zoom, middle mouse button drag to translate, keyboard shortcuts for functionality
+	
+	catseye -> tabs for different creation modes
+	catseye -> mirroring

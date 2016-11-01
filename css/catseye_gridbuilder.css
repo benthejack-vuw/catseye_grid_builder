@@ -4,7 +4,7 @@
 	left:20px;
 	top:20px;
 	background-color: #FFF;
-	opacity: 0.5;
+	opacity: 0.9;
 	width:150px;
 	height:300px;
 }
@@ -12,5 +12,9 @@
 
 #controls input{
 	width:100%;
+	margin-bottom: 10px;
+}
+
+#controls button{
 	margin-bottom: 10px;
 }

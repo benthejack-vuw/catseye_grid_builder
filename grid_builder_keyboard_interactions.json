@@ -45,6 +45,11 @@
 		},
 
 		"toggleMode":{
+			
+			"attributes":{
+				"style":"width:100%;"
+			},
+
 			"callbacks":{
 				"click":"toggleMode"
 			}
@@ -54,6 +59,25 @@
 			"callbacks":{
 				"click":"saveTile"
 			}	
+		},
+
+		"previewTile":{
+			"callbacks":{
+				"click":"previewTile"
+			}	
+		},
+
+		"crop":{
+			"callbacks":{
+				"click":"cropTiles"
+			}	
+		},
+
+		"loadFile":{
+			"callbacks":{
+				"change":"loadFile"
+			}	
 		}
+
 	}
 }
