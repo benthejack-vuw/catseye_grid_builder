@@ -106,7 +106,7 @@ export default class PolyGridBuilder extends DisplayObject{
 			this._polygon_ghost.draw(context, true);
 		}
 
-		if(this._tileSelector){
+		if(this._mode == GridMode.tile && this._tileSelector){
 			var pts:Array<Point> = []
 			var rotate:Transform = new Transform();
 			rotate.rotate(this._rotate);
@@ -197,10 +197,13 @@ export default class PolyGridBuilder extends DisplayObject{
 		this.removeChild(this._snapGrid);
 		this._snapGrid = this._grid.generateSnapGrid(2)
 		this.addChild(this._snapGrid);
-		var box:BoundingBox = this._snapGrid.boundingBox;
-		this._tileSelector = new DragableRect(new Point(box.x, box.y), new Point(box.width, box.height));
-		this._tileSelector.snapToGrid(this._snapGrid);
+		if(!this._tileSelector){
+			var box:BoundingBox = this._snapGrid.boundingBox;
+			this._tileSelector = new DragableRect(new Point(box.x, box.y), new Point(box.width, box.height));
+			this._tileSelector.snapToGrid(this._snapGrid);
+		}
 		this._snapGrid.addChild(this._tileSelector);
+
 	}
 
 	public delete_poly = ()=>{
