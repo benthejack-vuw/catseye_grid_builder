@@ -1,0 +1,30 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script language="javascript" type="text/javascript" src="catseye-grid-builder.bundle.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/catseye.css">
+  <link rel="stylesheet" type="text/css" href="./css/gridBuilder.css">
+  <!-- this line removes any default padding and style. you might only need one of these values set. -->
+  <style> body {padding: 0; margin: 0;} </style>
+</head>
+
+<body>
+	<div id="canvas_container"></div>
+
+	<div id="controls">
+		<input type="file" id="loadFile" name="file"/>
+		<output id="list"></output>
+		<label>Grid name</label>
+		<input type="text" id="fileName"/>
+		<label>rotation</label>
+		<input type="range" id="rotationSlider"/>
+		<label>scale</label>
+		<input type="range" id="scaleSlider"/>
+		<button id="toggleMode">toggle mode</button>
+		<button id="crop">crop tiles</button>
+		<button id="previewTile">preview tile</button>
+		<button id="saveTile">save tile</button>
+	</div>
+	
+</body>
+</html>

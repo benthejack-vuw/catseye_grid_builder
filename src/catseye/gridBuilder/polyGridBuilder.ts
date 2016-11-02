@@ -1,25 +1,25 @@
-import InteractiveDisplayObject from "../quickdrawJS/canvas/interactiveDisplayObject"
-import Point from "../quickdrawJS/geometry/point"
-import Line from "../quickdrawJS/geometry/line"
-import PolygonGrid from "../quickdrawJS/geometry/polygonGrid"
-import PolygonTile from "../quickdrawJS/geometry/interactive/polygonTile"
-import Polygon from "../quickdrawJS/geometry/polygon"
-import RegularPolygon from "../quickdrawJS/geometry/regularPolygon"
-import SnapGrid from "../quickdrawJS/geometry/interactive/snapGrid"
-import {MouseData} from "../quickdrawJS/interaction/mouseData"
-import {MouseButton} from "../quickdrawJS/interaction/mouseData"
-import * as DrawingUtils from "../quickdrawJS/util/drawingUtils"
-import * as DomUtils from "../quickdrawJS/util/domUtils"
-import {DragableRect} from "../quickdrawJS/geometry/interactive/dragablePolygon"
-import BoundingBox from "../quickdrawJS/geometry/boundingBox"
-import Transform from "../quickdrawJS/util/transform"
+import DisplayObject from "../../quickdrawJS/canvas/displayObject"
+import Point from "../../quickdrawJS/geometry/point"
+import Line from "../../quickdrawJS/geometry/line"
+import PolygonGrid from "../../quickdrawJS/geometry/polygonGrid"
+import PolygonTile from "../../quickdrawJS/geometry/interactive/polygonTile"
+import Polygon from "../../quickdrawJS/geometry/polygon"
+import RegularPolygon from "../../quickdrawJS/geometry/regularPolygon"
+import SnapGrid from "../../quickdrawJS/geometry/interactive/snapGrid"
+import {MouseData} from "../../quickdrawJS/interaction/mouseData"
+import {MouseButton} from "../../quickdrawJS/interaction/mouseData"
+import * as DrawingUtils from "../../quickdrawJS/util/drawingUtils"
+import * as DomUtils from "../../quickdrawJS/util/domUtils"
+import DragableRect from "../../quickdrawJS/geometry/interactive/dragableRect"
+import BoundingBox from "../../quickdrawJS/geometry/boundingBox"
+import Transform from "../../quickdrawJS/util/transform"
 
 enum GridMode{
 	create,
 	tile
 }
 
-export default class PolyGridBuilder extends InteractiveDisplayObject{
+export default class PolyGridBuilder extends DisplayObject{
 
 	private _grid:PolygonGrid;
 	private _selected_edge:Line;
@@ -48,7 +48,6 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 		this._polygon_ghost = new RegularPolygon();
 		this._polygon_ghost.initialize_regular_polygon(this._next_poly_sides, new Point(0,0), this._start_radius);
 		this.clearColor(180);
-		this.clearsEachFrame = true;
 		this._mode = GridMode.create;
 		this._translate = new Point(window.innerWidth/2, window.innerHeight/2);
 		this._rotate = 0;
@@ -74,14 +73,16 @@ export default class PolyGridBuilder extends InteractiveDisplayObject{
 		this.applyTransformations();
 	}
 
-	public contains(pt:Point):boolean{
+	public contains(local_pt:Point):boolean{
 		return true;
 	}
 
 	public draw(context:CanvasRenderingContext2D):void{
 
+		this.clear(context);
+
 		if(this._polyTile){
-			const pattern = context.createPattern(this._polyTile.cachedCanvas, "repeat");
+			const pattern = context.createPattern(this._polyTile.canvas, "repeat");
 			const width = this._size.x;
         	const height = this._size.y;
         	context.save();

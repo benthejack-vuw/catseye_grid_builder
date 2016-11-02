@@ -1,0 +1,11 @@
+{
+	"gui":{
+
+		"load-image":{
+			"callbacks":{
+				"change":"loadImage"
+			}
+		}
+
+	}
+}

@@ -1,9 +1,9 @@
-import InteractiveDisplayObject from "../../canvas/interactiveDisplayObject"
+import DisplayObject from "../../canvas/displayObject"
 import Point from "../point"
 import Polygon from "../polygon"
 import * as DomUtils from "../../util/domUtils"
 
-export default class PolygonTile extends InteractiveDisplayObject{
+export default class PolygonTile extends DisplayObject{
 	
 	private _polygons:Array<Polygon>;
 	private once:boolean = true;

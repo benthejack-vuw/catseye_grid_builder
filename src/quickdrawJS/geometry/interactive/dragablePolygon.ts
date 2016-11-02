@@ -1,3 +1,10 @@
+/*
+*	A collection of draggable Points, can be used as a "selector"
+*
+*	Copyright Ben Jack 2016
+*
+*/
+
 import Point from "../point"
 import BoundingBox from "../boundingBox"
 import Polygon from "../polygon"
@@ -5,9 +12,9 @@ import SnapGrid from "./snapGrid"
 import DragablePoint from "./dragablePoint"
 import {Direction} from "./dragablePoint"
 import * as DrawingUtils from "../../util/drawingUtils"
-import InteractiveDisplayObject from "../../canvas/interactiveDisplayObject"
+import DisplayObject from "../../canvas/displayObject"
 
-export class DragablePolygon extends InteractiveDisplayObject{
+export default class DragablePolygon extends DisplayObject{
 
 	private _points:Array<DragablePoint>;
 	private _snapGrid:SnapGrid;
@@ -77,22 +84,3 @@ export class DragablePolygon extends InteractiveDisplayObject{
 	}
 
 };
-
-
-export class DragableRect extends DragablePolygon{
-
-	constructor(position:Point, size:Point){
-		super(new Point(0,0), new Point(0,0));
-
-		var tl:DragablePoint = DragablePoint.fromData(position.copy());
-		var tr:DragablePoint = DragablePoint.fromData(position.offsetCopy(size.x, 0));
-		var br:DragablePoint = DragablePoint.fromData(position.offsetCopy(size.x, size.y));
-		var bl:DragablePoint = DragablePoint.fromData(position.offsetCopy(0, size.y));
-
-		this.addCorner(tl);
-		this.addCorner(tr);
-		this.addCorner(br);
-		this.addCorner(bl);
-	}
-
-}

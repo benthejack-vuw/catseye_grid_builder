@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  entry: ["babel-polyfill", path.join(__dirname, "src/catseye/catseye-grid-builder.ts")],
+  entry: ["babel-polyfill", path.join(__dirname, "src/catseye/gridBuilder/catseye-grid-builder.ts")],
   output: {
     path: __dirname,
     filename: "catseye-grid-builder.bundle.js"

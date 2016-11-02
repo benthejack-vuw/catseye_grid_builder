@@ -1,0 +1,56 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script language="javascript" type="text/javascript" src="catseye-pattern-builder.bundle.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/catseye.css">
+  <link rel="stylesheet" type="text/css" href="./css/patternBuilder.css">
+  <!-- this line removes any default padding and style. you might only need one of these values set. -->
+  <style> body {padding: 0; margin: 0;} </style>
+</head>
+
+<body>
+  <body>
+    <section id="interface">
+      <div id="image-inputs">
+        <input id="load-image">Load Image</button>
+        <button id="save-tile" disabled>Save Tile</button>
+        <div id="save-image-group" class="group">
+          <button id="save-image" disabled>Save Image</button>
+          <div id="save-auxiliary" class="group auxiliary">
+            <div class="labelled">
+              <label for="save-width">Width</label>
+              <input id="save-width" class="dimension"
+                     type="number" min="1" value="1000">
+              <label for="save-width">px</label>
+            </div>
+            <div class="labelled">
+              <label for="save-height">Height</label>
+              <input id="save-height" class="dimension"
+                     type="number" min="1" value="1000">
+              <label for="save-height">px</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="tile-group" class="group">
+        <div id="group">
+          <div id="image-selection">
+            <canvas id="selection-canvas"></canvas>
+          </div>
+        </div>
+        <div id="tile-auxiliary" class="group auxiliary">
+          <button id="toggle-grid">Show Grid</button>
+          <div class="labelled">
+            <label for="tile-scale">Tile Scale</label>
+            <input id="tile-scale" class="dimension"
+                   type="number" min="1" value="100">
+            <label for="tile-scale">%</label>
+          </div>
+          <button id="tile-reset">Reset</button>
+        </div>
+      </div>
+    </section>
+    <section id="preview">
+    </section>
+</body>
+</html>

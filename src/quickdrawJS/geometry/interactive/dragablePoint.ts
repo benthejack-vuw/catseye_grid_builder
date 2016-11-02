@@ -1,3 +1,10 @@
+/*
+*	An interactive point that can be dragged
+*
+*	Copyright Ben Jack 2016
+*
+*/
+
 import DataError from "../../error/data"
 import Point from "../point"
 import SnapGrid from "./snapGrid"
@@ -5,11 +12,11 @@ import Circle from "../circle"
 import {MouseData} from "../../interaction/mouseData"
 import "../../util/mathUtils"
 import * as DrawingUtils from "../../util/drawingUtils"
-import InteractiveDisplayObject from "../../canvas/interactiveDisplayObject"
+import DisplayObject from "../../canvas/displayObject"
 
 const DEFAULT_POINT_SIZE:number = 10;	
 
-export default class DragablePoint extends InteractiveDisplayObject{
+export default class DragablePoint extends DisplayObject{
 
 	private _constraints:Array<PointLink>
 	private _snapGrid:SnapGrid;
@@ -44,8 +51,8 @@ export default class DragablePoint extends InteractiveDisplayObject{
 		this._constraints.push(new PointLink(this, slave, direction));
 	}
 
-	public contains(pt:Point):boolean{
-		return Math.dist(pt.x, pt.y, 0, 0) < this._radius;
+	public contains(local_pt:Point):boolean{
+		return Math.dist(local_pt.x, local_pt.y, 0, 0) < this._radius;
 	}
 
 	public mouseDragged(data:MouseData):void{

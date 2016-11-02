@@ -1,9 +1,16 @@
+/*
+*	A snapgrid is a collection of points that can be used for snapping interactions 
+*	to by using the closest method
+*
+*	Copyright Ben Jack 2016
+*/
+
 import Point from "../point";
-import InteractiveDisplayObject from "../../canvas/interactiveDisplayObject"
+import DisplayObject from "../../canvas/displayObject"
 import BoundingBox from "../boundingBox";
 import * as DrawingUtils from "../../util/drawingUtils";
 
-export default class SnapGrid extends InteractiveDisplayObject{
+export default class SnapGrid extends DisplayObject{
 	
 	private _points:Array<Point>; //these points are local to the parent object
 
@@ -11,6 +18,10 @@ export default class SnapGrid extends InteractiveDisplayObject{
 		super(new Point(0, 0), new Point(0,0));
 		
 		this._points = local_to_parent_points;
+	}
+
+	public contains(pt:Point){
+		return false;
 	}
 
 	public addedToStage():void{
