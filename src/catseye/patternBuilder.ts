@@ -1,5 +1,5 @@
-import DisplayObject from "../../quickdrawJS/canvas/displayObject"
-import Point from "../../quickdrawJS/geometry/point"
+import DisplayObject from "../quickdrawJS/canvas/displayObject"
+import Point from "../quickdrawJS/geometry/point"
 
 export default class PatternBuilder extends DisplayObject{	
 

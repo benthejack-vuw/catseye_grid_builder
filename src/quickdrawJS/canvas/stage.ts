@@ -66,13 +66,16 @@ export default class Stage extends DisplayObject{
 
 		this._interactionManager = new InteractionManager(this, this._canvas, stageInteractions);
 		this._interactionManager.setTransformMatrix(this._matrix);
+
+		window.requestAnimationFrame(this.drawStage);
 	}
 
 	
 	public get drawingContext():CanvasRenderingContext2D{
 		return this.stageCanvas.getContext("2d");
 	}
-	public draw(){
+
+	public drawStage = () => {
 		var ctx:CanvasRenderingContext2D = this.renderingContext;
 
 		if(this._modifiedMatrix)		
@@ -85,6 +88,8 @@ export default class Stage extends DisplayObject{
 
 		super.draw(ctx);
 		this.drawChildren(ctx);
+
+		window.requestAnimationFrame(this.drawStage);
 	}
 
 	public contains(pt:Point):boolean{
