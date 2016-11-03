@@ -64,6 +64,10 @@ export default class PolyGridBuilder extends DisplayObject{
 		reader.onload = (e) => {
 		  var tileObj = JSON.parse(reader.result);
 		  this._grid.setPolygonData(tileObj.polygons);
+		  this.setRotationSlider();
+		  this._tileSelector = undefined;
+		  this._snapGrid = undefined;
+		  this._polyTile = undefined;
 		}
 
 		reader.readAsText(obj.files[0]);
