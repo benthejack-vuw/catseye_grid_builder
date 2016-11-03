@@ -10,4 +10,8 @@ export default class PatternBuilder extends DisplayObject{
 	public loadImage = (val:any, obj:any)=>{
 	}
 
+	public contains(pt:Point){
+		return true;
+	}
+
 }
