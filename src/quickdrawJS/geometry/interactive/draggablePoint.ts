@@ -16,7 +16,7 @@ import DisplayObject from "../../canvas/displayObject"
 
 const DEFAULT_POINT_SIZE:number = 10;	
 
-export default class DragablePoint extends DisplayObject{
+export default class DraggablePoint extends DisplayObject{
 
 	private _constraints:Array<PointLink>
 	private _snapGrid:SnapGrid;
@@ -28,12 +28,12 @@ export default class DragablePoint extends DisplayObject{
 		this._radius = radius;
 	}
 
-    public static fromData(data: any): DragablePoint {
+    public static fromData(data: any): DraggablePoint {
         if (typeof data.x !== "number" || typeof data.y !== "number") {
             throw new DataError("Point", "x and y must be numbers");
         }
 
-        return new DragablePoint(new Point(data.x, data.y), DEFAULT_POINT_SIZE);
+        return new DraggablePoint(new Point(data.x, data.y), DEFAULT_POINT_SIZE);
     }
 
 	public draw(context:CanvasRenderingContext2D):void{
@@ -47,7 +47,7 @@ export default class DragablePoint extends DisplayObject{
 		context.fill();
 	}
 
-	public addConstraint(slave:DragablePoint, direction:Direction):void{
+	public addConstraint(slave:DraggablePoint, direction:Direction):void{
 		this._constraints.push(new PointLink(this, slave, direction));
 	}
 
@@ -60,6 +60,9 @@ export default class DragablePoint extends DisplayObject{
 		for(var i = 0; i < this._constraints.length; ++i){
 			this._constraints[i].apply();
 		}
+		if(this._parent.mouseDragged){
+			this._parent.mouseDragged(data);
+		}
 	}
 
 	public moveTo(pt:Point):void{
@@ -67,7 +70,6 @@ export default class DragablePoint extends DisplayObject{
 			this.globalPosition = this._snapGrid.closest(pt);
 		}else{
 			this.globalPosition = pt;	
-			console.log(this.localPosition);
 		}
 	}
 
@@ -88,11 +90,11 @@ export enum Direction{
 
 class PointLink{
 
-	public _master:DragablePoint;
-	public _slave:DragablePoint;
+	public _master:DraggablePoint;
+	public _slave:DraggablePoint;
 	public _direction:Direction;
 
-	constructor(master:DragablePoint, slave:DragablePoint, direction:Direction){
+	constructor(master:DraggablePoint, slave:DraggablePoint, direction:Direction){
 		this._master = master;
 		this._slave  = slave;
 		this._direction = direction;

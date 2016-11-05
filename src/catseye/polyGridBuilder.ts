@@ -10,7 +10,7 @@ import {MouseData} from "../quickdrawJS/interaction/mouseData"
 import {MouseButton} from "../quickdrawJS/interaction/mouseData"
 import * as DrawingUtils from "../quickdrawJS/util/drawingUtils"
 import * as DomUtils from "../quickdrawJS/util/domUtils"
-import DragableRect from "../quickdrawJS/geometry/interactive/dragableRect"
+import DraggableRect from "../quickdrawJS/geometry/interactive/DraggableRect"
 import BoundingBox from "../quickdrawJS/geometry/boundingBox"
 import Transform from "../quickdrawJS/util/transform"
 
@@ -29,14 +29,14 @@ export default class PolyGridBuilder extends DisplayObject{
 	private _polygon_ghost:RegularPolygon;
 	private _snapGrid:SnapGrid;
 	private _mode:GridMode;
-	private _tileSelector:DragableRect;
+	private _tileSelector:DraggableRect;
 
 	private _translate:Point;
 	private _rotate:number;
 	private _scale:number;
 
 	private _polyTile:PolygonTile;
-	//private _bounds_selector:DragablePolygon;
+	//private _bounds_selector:DraggablePolygon;
 
 	constructor(radius:number){
 		super(new Point(0,0), new Point(window.innerWidth,window.innerHeight));
@@ -86,19 +86,13 @@ export default class PolyGridBuilder extends DisplayObject{
 		this.clear(context);
 
 		if(this._polyTile){
-			const pattern = context.createPattern(this._polyTile.canvas, "repeat");
-			const width = this._size.x;
-        	const height = this._size.y;
         	context.save();
         	context.rotate(-this._rotate);
         	context.scale(1.0/this._scale, 1.0/this._scale);
-        	context.rect(-width / 2, -height / 2, width, height);
-        	context.fillStyle = pattern;
-        	context.fill();
-        	
-        	context.rect(-width / 2, -height / 2, width, height);
+        	this._polyTile.patternRect(context, new Point(-this._size.x / 2, -this._size.y / 2), this._size);
+			context.rect(-this._size.x / 2, -this._size.y / 2, this._size.x, this._size.y);
 			context.fillStyle = DrawingUtils.greyA(0, 130);
-        	context.fill();
+    		context.fill();
         	context.restore();
 		}
 
@@ -203,7 +197,7 @@ export default class PolyGridBuilder extends DisplayObject{
 		this.addChild(this._snapGrid);
 		if(!this._tileSelector){
 			var box:BoundingBox = this._snapGrid.boundingBox;
-			this._tileSelector = new DragableRect(new Point(box.x, box.y), new Point(box.width, box.height));
+			this._tileSelector = new DraggableRect(new Point(box.x, box.y), new Point(box.width, box.height));
 			this._tileSelector.snapToGrid(this._snapGrid);
 		}
 		this._snapGrid.addChild(this._tileSelector);

@@ -3,7 +3,7 @@
 
 		"load-image":{
 			"callbacks":{
-				"change":"loadImage"
+				"click":"loadImage"
 			}
 		}
 

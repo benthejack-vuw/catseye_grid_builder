@@ -9,14 +9,15 @@ import Point from "../point"
 import BoundingBox from "../boundingBox"
 import Polygon from "../polygon"
 import SnapGrid from "./snapGrid"
-import DragablePoint from "./dragablePoint"
-import {Direction} from "./dragablePoint"
+import DraggablePoint from "./DraggablePoint"
+import {Direction} from "./DraggablePoint"
 import * as DrawingUtils from "../../util/drawingUtils"
+import {MouseData} from "../../interaction/mouseData"
 import DisplayObject from "../../canvas/displayObject"
 
-export default class DragablePolygon extends DisplayObject{
+export default class DraggablePolygon extends DisplayObject{
 
-	private _points:Array<DragablePoint>;
+	private _points:Array<DraggablePoint>;
 	private _snapGrid:SnapGrid;
 
 	constructor(position:Point, size:Point){
@@ -43,7 +44,6 @@ export default class DragablePolygon extends DisplayObject{
 	}
 
 	public draw(context:CanvasRenderingContext2D):void{		
-		
 		context.save();
 		context.strokeStyle = "#000000";
 		context.setLineDash([5, 5]);
@@ -58,7 +58,7 @@ export default class DragablePolygon extends DisplayObject{
 
 	}
 
-	public addCorner(pt:DragablePoint):void{
+	public addCorner(pt:DraggablePoint):void{
 		if(this._snapGrid)
 			pt.snapToGrid(this._snapGrid)
 
@@ -81,6 +81,12 @@ export default class DragablePolygon extends DisplayObject{
 
 	public toPolygon():Polygon{
 		return new Polygon(this.points);
+	}
+
+	public mouseDragged(data:MouseData){
+		if(this._parent.mouseDragged){
+			this._parent.mouseDragged(data);
+		}
 	}
 
 };

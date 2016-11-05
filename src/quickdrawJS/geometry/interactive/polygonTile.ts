@@ -40,12 +40,18 @@ export default class PolygonTile extends DisplayObject{
 	}
 
 	public draw(context:CanvasRenderingContext2D){
-
 		this.clear(context, true);
 		context.fillStyle = "#FFFFFF";
 		for (var i = 0; i < this._polygons.length; ++i) {
 			this._polygons[i].draw(context, true);
 		}
+	}
+
+	public patternRect(context:CanvasRenderingContext2D, position:Point, size:Point){
+		const pattern = context.createPattern(this.canvas, "repeat");
+    	context.rect(position.x, position.y, size.x, size.y);
+    	context.fillStyle = pattern;
+    	context.fill();
 	}
 
 }
