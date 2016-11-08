@@ -21,36 +21,26 @@ export default class PatternBuilder extends DisplayObject{
 	constructor(){
 		super(new Point(0,0), new Point(window.innerWidth, window.innerHeight));
 		this.setCacheAsCanvas(true);
-		var empty = new Point(0,0);
-		this._textureCoordinates = [empty, empty, empty];
+		this._textureCoordinates = [new Point(0,0), new Point(1,1), new Point(0,1)];
 		this._selectionStage = new Stage("image-selection", new Point(260,260));
 		this.setupTile();
 	}
 
-	public loadImage = (val:any, obj:any)=>{
-		
-        DomUtils.selectImage().then((file)=>{
-        	return DomUtils.readImageAsURL(file);
-        }).then((imageURL)=>{
-        	return DomUtils.buildImageFromURL(imageURL);
-        }).then((image)=>{
-        	this.setImage(image);
-        }).catch((error)=>{
-        	console.log(error);
-        });
-
-	}
+	public loadImage = async ()=>{
+        const file = await DomUtils.selectImage();
+        console.log("file selected");
+        const url = await DomUtils.readImageAsURL(file);
+       	const image = await DomUtils.buildImageFromURL(url);
+        this.setImage(image);
+    }
 
 	public loadGrid = (val:any, obj:any)=>{
 		
-		(async () => {
-            // Prompt for an image.
-            const file = await DomUtils.selectFile();
-            // Load the image as a pattern and store it if possible.
-            const grid = await DomUtils.readFileAsJSON(file);
-		
-			this.setGrid(grid);
-        })();
+        DomUtils.selectFile().then((file)=>{
+        	return DomUtils.readFileAsJSON(file);
+        }).then((grid)=>{
+        	this.setGrid(grid);
+        });
 
 	}
 
@@ -73,15 +63,17 @@ export default class PatternBuilder extends DisplayObject{
 		this._selectionStage.removeChild(this._imageSelector);
 		this._imageSelector = new ImageAreaSelector(this._texture, 260, this.updateTextureCoordinates);
 		this._selectionStage.addChild(this._imageSelector);
+		this._glTile.updateTexture(image);
 	}
 
 	public setGrid(grid:any){
 		this._grid = grid;
+		this._glTile.updateGrid(grid);
 	}
 
 	public setupTile(){
 		this._glTile = new GLPolyTile(new Point(0,0), new Point(2048,2048), this._texture, this._grid);
-		
+
 		if(this._imageSelector)
 			this._textureCoordinates = this._imageSelector.selection;
 

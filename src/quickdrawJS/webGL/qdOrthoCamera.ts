@@ -57,7 +57,7 @@ export default class QDOrthoCamera{
 	    glMatrix.mat4.multiply(this._viewProjectionMatrix, this._pMatrix, this._viewMatrix);
 
 	    // Set the matrix.
-	    this._gl.uniformMatrix4fv(this._location, false, this._pMatrix);
+	    this._gl.uniformMatrix4fv(this._location, false, this._viewProjectionMatrix);
 	}
 
 }

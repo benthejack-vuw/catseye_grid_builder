@@ -40,16 +40,19 @@ export function selectImage(): Promise<File> {
     const selector = document.createElement("input");
     selector.type = "file";
     selector.accept = "image/*";
+    selector.setAttribute("style", "display:none;");
+    document.body.appendChild(selector);
 
     // Run the callback once a change occurs.
     return new Promise((resolve: (file: File) => void): void => {
-        selector.addEventListener("change", function (): void {
-            const image = this.files[0];
+        selector.addEventListener("change", ()=>{
+            const image = selector.files[0];
 
             // Check if a file was provided. Might be worth checking the type of
             // the file is an image in the future.
             if (image) {
                 resolve(image);
+                document.body.removeChild(selector);
             }
         });
 
@@ -64,7 +67,8 @@ export function selectFile(): Promise<File> {
     // Construct a new file selector for images.
     const selector = document.createElement("input");
     selector.type = "file";
-
+    selector.setAttribute("style", "display:none;");
+    document.body.appendChild(selector);
     // Run the callback once a change occurs.
     return new Promise((resolve: (file: File) => void): void => {
         selector.addEventListener("change", function (): void {
@@ -74,6 +78,7 @@ export function selectFile(): Promise<File> {
             // the file is an image in the future.
             if (file) {
                 resolve(file);
+                document.body.removeChild(selector);
             }
         });
 

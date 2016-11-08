@@ -8,7 +8,8 @@ export default class QDGLTexture{
 
 	constructor(name:string, gl:WebGLRenderingContext, program:WebGLProgram, textureUnit?:number){
 		this._gl = gl;
-		this._location = this._gl.getAttribLocation(program, name);
+		this._location = this._gl.getUniformLocation(program, name);
+
 		this._texture = this._gl.createTexture();
 		this._textureUnit = textureUnit === undefined ? 0 : textureUnit;
 		console.log(this._location);

@@ -29,6 +29,7 @@ export default class QDOrthoGLCanvas{
 	    }
 
 	    this._shaderProgram = QDShaderCompiler.createProgram(this._gl, vertexShader, fragmentShader);
+
 	    this._gl.useProgram(this._shaderProgram);
 
 	    this.setView(size);
@@ -69,11 +70,6 @@ export default class QDOrthoGLCanvas{
 	}
 
 	public render(mode:number, dataSize:number){
-		this._gl.clear(this._gl.COLOR_BUFFER_BIT);
-		var keys = Object.keys(this._buffers);
-		for (var i = 0; i < keys.length; ++i) {
-			this._buffers[keys[i]].send();
-		}
 		this._gl.drawArrays(mode, 0, dataSize);
 	}
 
