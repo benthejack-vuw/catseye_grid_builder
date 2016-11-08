@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "glMatrix": "registry:dt/gl-matrix#2.2.2+20160815161326"
+  }
+}

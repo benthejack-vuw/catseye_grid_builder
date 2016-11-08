@@ -57,6 +57,14 @@ export default class Point {
             this.y - point.y);
     }
 
+    public asArray():Array<number>{
+       return [this.x, this.y];
+    }
+
+    public as3DArray():Array<number>{
+       return [this.x, this.y, 0.0];
+    }
+
     // Convert this point to a JSON string.
     public toJSON(): any {
         return {"x":this.x, "y":this.y};

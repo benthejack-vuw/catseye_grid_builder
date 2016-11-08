@@ -134,7 +134,9 @@ export default class Polygon{
 		return closest;
 	}
 
-	public draw(context: CanvasRenderingContext2D, close: boolean): void{
+	public draw(context: CanvasRenderingContext2D, close: boolean, scale?:number): void{
+
+		scale = scale === undefined ? 1 : scale;
 
 		let verts = this._vertices.length;
 		
@@ -142,9 +144,9 @@ export default class Polygon{
 			context.beginPath();
 		}
 		
-		context.moveTo(this._vertices[0].x, this._vertices[0].y);
+		context.moveTo(this._vertices[0].x*scale, this._vertices[0].y*scale);
 		for(let i = 1; i <= verts; ++i){
-			context.lineTo(this._vertices[i%verts].x, this._vertices[i%verts].y);
+			context.lineTo(this._vertices[i%verts].x*scale, this._vertices[i%verts].y*scale);
 		}
 
 		if(close){

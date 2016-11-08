@@ -32,16 +32,19 @@ export default class ImageAreaSelector extends DisplayObject{
 		context.drawImage(this._unscaledImage, 0,0, this.size.x, this.size.y);
 	}
 
-	//propogates down from DraggablePolygon (this._imageSelector)
-	public mouseDragged(data:MouseData){
-
+	public get selection():Array<Point>{
 		let pts:Array<Point> = [];
 
 		for (var i = 0; i < this._selector.points.length; ++i) {
 			pts.push(new Point(this._selector.points[i].x/this.size.x, this._selector.points[i].y/this.size.y));
 		}
 
-		this._changeCallback(pts);
+		return pts;
+	}
+
+	//propogates down from DraggablePolygon (this._imageSelector)
+	public mouseDragged(data:MouseData){
+		this._changeCallback(this.selection);
 	}
 
 	public contains(pt:Point){

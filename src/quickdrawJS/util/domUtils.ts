@@ -58,6 +58,46 @@ export function selectImage(): Promise<File> {
     });
 }
 
+// Prompt the user to select an image, calling the given function if the user
+// makes a choice.
+export function selectFile(): Promise<File> {
+    // Construct a new file selector for images.
+    const selector = document.createElement("input");
+    selector.type = "file";
+
+    // Run the callback once a change occurs.
+    return new Promise((resolve: (file: File) => void): void => {
+        selector.addEventListener("change", function (): void {
+            const file = this.files[0];
+
+            // Check if a file was provided. Might be worth checking the type of
+            // the file is an image in the future.
+            if (file) {
+                resolve(file);
+            }
+        });
+
+        // Simulate a click on the input, triggering the prompt.
+        selector.dispatchEvent(new MouseEvent("click"));
+    });
+}
+
+// Read the given image file into an image element.
+export function readFileAsJSON(file: File): Promise<string> {
+    return new Promise(function (resolve, reject) {
+        const reader = new FileReader();
+
+        // Run the callback once the file is successfully loaded.
+        reader.addEventListener("load", () => resolve(JSON.parse(reader.result)));
+
+        // Reject with the error if the load fails.
+        reader.addEventListener("error", reject);
+
+        // Read the file as a URL.
+        reader.readAsText(file);
+    });
+}
+
 // Read the given image file into an image element.
 export function readImageAsURL(file: File): Promise<string> {
     return new Promise(function (resolve, reject) {

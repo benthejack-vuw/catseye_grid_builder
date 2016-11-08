@@ -19,8 +19,5 @@ export default class GLMirrorPolygon extends Polygon{
 
 		super(interpVerts);
 	}
-
-	public draw(){
-
-	}
+	
 }

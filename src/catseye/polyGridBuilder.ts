@@ -255,6 +255,8 @@ export default class PolyGridBuilder extends DisplayObject{
 	public saveTile = ()=>{
 		var name:string = (document.getElementById("fileName") as HTMLInputElement).value;
 		name = name.length > 0 ? name+".json" : "tilegrid.json"
+		var bounds = this._tileSelector.toPolygon();
+		this._grid.normalize(bounds, this._rotate);
 		DomUtils.downloadTextAsFile(name, JSON.stringify(this._grid));
 	}
 
