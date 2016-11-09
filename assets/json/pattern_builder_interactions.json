@@ -11,6 +11,35 @@
 				"click":"loadGrid"
 			}
 		},
+		"toggle-grid":{
+			"callbacks":{
+				"change":"toggleGridDisplay"
+			}
+		},
+
+		"save-image":{
+			"callbacks":{
+				"click":"saveImage"
+			}
+		},
+
+		"save-tile":{
+			"callbacks":{
+				"click":"saveTile"
+			}
+		},
+
+		"save-width":{
+			"callbacks":{
+				"change":"saveWidth"
+			}
+		},
+
+		"save-height":{
+			"callbacks":{
+				"change":"saveHeight"
+			}
+		},
 
 		"tile-scale":{
 			"callbacks":{

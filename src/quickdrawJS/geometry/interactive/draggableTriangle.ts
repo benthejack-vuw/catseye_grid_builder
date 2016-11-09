@@ -19,8 +19,9 @@ export default class DraggableTriangle extends DraggablePolygon{
 		var bl:DraggablePoint = DraggablePoint.fromData(position.offsetCopy(0, size.y));
 
 		this.addCorner(tl);
-		this.addCorner(br);
 		this.addCorner(bl);
+		this.addCorner(br);
+
 	}
 
 }

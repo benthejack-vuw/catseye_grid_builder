@@ -155,7 +155,21 @@ export default class Polygon{
 			context.stroke();
 		}
 
-	};
+	}
+
+	public drawFan(context: CanvasRenderingContext2D, scale?:number): void{
+
+		scale = scale === undefined ? 1 : scale;
+
+		let verts = this._vertices.length;
+		var centroid = this.centroid;
+
+		for(let i = 0; i < verts; ++i){
+			context.moveTo(centroid.x*scale, centroid.y*scale);
+			context.lineTo(this._vertices[i].x*scale, this._vertices[i].y*scale);
+		}
+
+	}
 
 	public toJSON(){
 		let data:Array<any> = [];

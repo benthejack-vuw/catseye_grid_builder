@@ -11,6 +11,8 @@ export default class GLPolyTile extends DisplayObject{
   private _texture:HTMLImageElement;
   private _grid:any;
 
+  private _showGrid:boolean;
+
 	private _glCanvas:OrthoGLCanvas;
 
   private _maxSize:Point;
@@ -19,6 +21,8 @@ export default class GLPolyTile extends DisplayObject{
 	constructor(position:Point, maxSize:Point, texture:HTMLImageElement, grid:any){
     super(position, maxSize);
     this._maxSize = maxSize.copy();
+    this._scale = 1;
+    this._showGrid = false;
     this.clearColor(0);
 
     this.setCacheAsCanvas(true);
@@ -31,8 +35,16 @@ export default class GLPolyTile extends DisplayObject{
     this.updateTexture(texture);
 	}
 
+  public get renderCanvas(){
+    return this._glCanvas.canvas;
+  }
+
   public setSelection(coords:Array<Point>){
     this._textureSelection = coords;
+  }
+
+  public showGrid(val:any){
+    this._showGrid = val;
   }
 
   public updateTexture(image:HTMLImageElement){
@@ -43,9 +55,9 @@ export default class GLPolyTile extends DisplayObject{
   public updateGrid(grid:any){
     this._grid = grid === undefined || !grid ? hexGrid : grid;
 
-    this.size.y = this._size.x * this._grid.normalized_clipRect.height;
+    this.size = new Point(this._maxSize.x * this._scale, this._maxSize.x * this._scale * this._grid.normalized_clipRect.height);
     this._canvas.height = this.size.y;
-    this._glCanvas.setView(this._size);
+    this._glCanvas.setView(new Point(this._maxSize.x, this._maxSize.x * this._grid.normalized_clipRect.height));
     this._polygons = [];
     
     for (var i = 0; i < this._grid.normalized_polygons.length; ++i) {
@@ -57,9 +69,30 @@ export default class GLPolyTile extends DisplayObject{
       
       if(this._texture){
         this.drawPolygons();
-        context.drawImage(this._glCanvas.canvas,0,0);
+        context.drawImage(this._glCanvas.canvas,0,0, this._size.x, this.size.y);
+      }
+      
+      if(this._showGrid){
+        this.drawGrid(context);
       }
 
+  }
+
+  public drawGrid(context:CanvasRenderingContext2D){
+     context.beginPath();
+     for (var i = 0; i < this._polygons.length; ++i) {
+      context.strokeStyle = "#FF0000";
+      context.setLineDash([0]);
+      this._polygons[i].draw(context, false, this.size.x);
+     }
+     context.stroke();
+     context.beginPath();
+     for (var i = 0; i < this._polygons.length; ++i) {
+      context.strokeStyle = "#0000FF";
+      context.setLineDash([5, 5]);
+      this._polygons[i].drawFan(context, this.size.x);
+    }
+    context.stroke();
   }
 
   private drawPolygons(){
@@ -79,7 +112,6 @@ export default class GLPolyTile extends DisplayObject{
   public set scale(scale:number){
     this._scale = scale;
     this.size = new Point(this._maxSize.x*scale, this._maxSize.y*scale*this._grid.normalized_clipRect.height);
-    this._glCanvas.setView(this.size);
   }
 
    public patternRect(context:CanvasRenderingContext2D, position:Point, size:Point, scale:number){
