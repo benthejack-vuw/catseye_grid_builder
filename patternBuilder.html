@@ -9,55 +9,66 @@
 </head>
 
 <body id="body">
-    <section id="interface">
+    <section id="interface" class="noSelect">
       <div id="image-inputs">
        
-        <button id="load-image">Load Image</button>
-        <button id="load-grid">Load Grid</button>
-        <button id="save-tile" >Save Tile</button>
+        <button id="load-image" class="percent50">Load Image</button>
+        <button id="load-grid" class="percent50">Load Grid</button>  
        
-        <div id="save-image-group" class="group">
-          <button id="save-image" >Save Image</button>
-          <div id="save-auxiliary" class="group auxiliary">
-       
-            <div class="labelled">
-              <label for="save-width">Width</label>
-              <input id="save-width" class="dimension"
-                     type="number" min="1" value="1000">
-              <label for="save-width">px</label>
-            </div>
-
-            <div class="labelled">
-              <label for="save-height">Height</label>
-              <input id="save-height" class="dimension"
-                     type="number" min="1" value="1000">
-              <label for="save-height">px</label>
-            </div>
-
-          </div>
-        </div>
+      <div id="image-selection">
       </div>
-      <div id="tile-group" class="group">
-        <div id="group">
-          <div id="image-selection">
-          </div>
-        </div>
-        <div id="tile-auxiliary" class="group auxiliary">
+
+      <div class="interfaceSection">
+
+        <div class="labelled percent100">        
+          <label for="tile-scale">Scale</label>
+          <input id="tile-scale-slider" type="range">
+          <input id="tile-scale-box" type="number">
           <input type="checkbox" id="toggle-grid"/>
-          <div class="labelled">
-            <label for="tile-scale">Tile Scale</label>
-            <input id="tile-scale" type="range">
-            <label for="tile-scale">%</label>
-          </div>
-          <button id="tile-reset">Reset</button>
+          <label for="toggle-grid">Show Grid</label>
         </div>
+
+        <div class="labelled percent50">
+          <label for="save-width">Width</label>
+          <input id="save-width" class="dimension"
+                 type="number" min="1" value="1000">
+        </div>
+
+        <div class="labelled percent50">
+          <label for="save-height">Height</label>
+          <input id="save-height" class="dimension"
+                 type="number" min="1" value="1000">
+        </div>
+
+        <div class="labelled percent100">
+          <button id="save-image" class="percent50">Save Image</button>
+          <button id="save-tile" class="percent50">Save Tile</button>
+        </div>
+
       </div>
+      
+      <button id="reset" class="percent50">RESET</button>
+
+      <div id="grid-selection">
+
+        <ul>
+          <li id="showDefaultGrids">Default Grids</li>
+          <li id="showCustomGrids">Custom Grids</li>
+        </ul>
+
+        <div id="default-grids"></div>
+        <div id="custom-grids"></div>
+      </div>
+      
     </section>
-    <section id="catseye-main">
-    </section>
+
+    <section id="catseye-main"></section>
+
     <image id="defaultImage" src="./assets/images/defaultImage.png" style="display:none;"/>
+
     <script type="text/javascript">
       catseye.patternBuilder();
     </script>
+
 </body>
 </html>

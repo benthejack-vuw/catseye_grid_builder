@@ -221,25 +221,30 @@ export default class Polygon{
 
 	public normalizedPointArray(bounding_box:Rectangle, rotation?:number):Array<Point>{
 		let pts:Array<Point> = [];
+		let bug:any;
 		let pt:Point = new Point(bounding_box.x, bounding_box.y);
 		let sz:Point = new Point(bounding_box.width, bounding_box.height);
 		var rotationMatrix:Transform = new Transform();
+		
 		if(rotation){
 			rotationMatrix.rotate(rotation);
 		}
+
 		for (let i = 0; i < this._vertices.length; i++) {
 			
 			let v:Point = this._vertices[i];
+			
 			if(rotation){
 				v = rotationMatrix.transformPoint(v);
 			}
+
 			let xOut = ((v.x - pt.x)/sz.x);
 			let yOut = ((v.y - pt.y)/sz.x);
-			let ptOut = new Point(xOut, yOut);
 			
-			pts.push(ptOut);
+			pts.push(new Point(xOut, yOut));
 		}
 		return pts;
+
 	}
 
 	public completely_inside(bounding_box:any):boolean{

@@ -129,6 +129,7 @@ export default class PolygonGrid{
 				this._normalizedPolygons.push(this._polygons[i].normalizedPointArray(this._clipRect, rotate));
 			}
 		}
+
 	}
 
 	public toJSON():any{

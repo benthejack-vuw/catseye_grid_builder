@@ -16,6 +16,15 @@ export function fetchJSONFile(path:string, callback:Function) {
     httpRequest.send(); 
 }
 
+export function dataURLfromImage(image:HTMLImageElement):string{
+    var canvas = document.createElement("canvas");
+    canvas.width = image.width;
+    canvas.height = image.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(image,0,0);
+    return canvas.toDataURL();
+}
+
 export function downloadTextAsFile(filename:string, text:string) {
     var pom = document.createElement('a');
     pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));

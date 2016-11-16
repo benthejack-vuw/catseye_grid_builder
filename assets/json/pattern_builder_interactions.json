@@ -41,7 +41,14 @@
 			}
 		},
 
-		"tile-scale":{
+		"reset":{
+			"callbacks":{
+				"click":"reset"
+			}
+		},
+
+
+		"tile-scale-slider":{
 			"callbacks":{
 				"input":"changeScale"
 			},
@@ -51,8 +58,17 @@
 				"value":1,
 				"step":0.001
 			}
-			
+		},
+		"tile-scale-box":{
+			"callbacks":{
+				"input":"changeScale"
+			},
+			"attributes":{
+				"min":0.001,
+				"max":2,
+				"value":1,
+				"step":0.001
+			}
 		}
-
 	}
 }

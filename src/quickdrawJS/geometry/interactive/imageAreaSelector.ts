@@ -12,19 +12,39 @@ export default class ImageAreaSelector extends DisplayObject{
 	protected _unscaledImage:HTMLImageElement;
 	protected _tile:PolygonTile;
 
-	constructor(image:HTMLImageElement, displayWidth:number, changeCallback:(pts:Array<Point>)=>void){
-		let scale = displayWidth/image.width;
-		let size:Point = new Point(displayWidth, image.height*scale);
-		super(new Point(0,0), size);
+	constructor(image:HTMLImageElement, displaySize:number, changeCallback:(pts:Array<Point>)=>void){
+		let size:Point;
+		let scale:number;
+
+		if(image.width > image.height){
+			scale =  displaySize/image.width;
+			size = new Point(displaySize, image.height * scale);
+		}else{
+		    scale = displaySize/image.height
+		    size = new Point(image.width * scale, displaySize);
+		}
+
+		super(new Point(displaySize/2 - size.x/2, displaySize/2 - size.y/2), size);
 		this._changeCallback = changeCallback;
 		this._unscaledImage = image;
-		this.setCacheAsCanvas(true);
 	}
 
 	public addedToStage(){
-		console.log("ADDED");
 		this._selector = new DraggableTriangle(new Point(0,0), this._size);
 		this.addChild(this._selector);
+	}
+
+	public setTextureCoords(pts:any){
+		var out:Array<Point> = [];
+		for (var i = 0; i < pts.length; ++i) {
+			const pt = new Point(pts[i].x, pts[i].y);
+			var pt2 = pt.copy();
+			pt2.x *= this.size.x;
+			pt2.y *= this.size.y;
+			this._selector.setPoint(i, pt2);
+			out.push(pt);
+		}
+		this._changeCallback(out);
 	}
 
 	public draw(context:CanvasRenderingContext2D):void{
@@ -48,7 +68,7 @@ export default class ImageAreaSelector extends DisplayObject{
 	}
 
 	public contains(pt:Point){
-		return true;
+		return this.inBounds(pt);
 	}
 
 }

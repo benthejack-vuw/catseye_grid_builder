@@ -4,9 +4,54 @@
 	left:20px;
 	top:2.5vh;
 	background-color: #FFF;
-	opacity: 0.9;
-	width:200px;
+	opacity: 0.98;
+	width:300px;
 	height:95vh;
+	overflow-y: hidden;
+}
+
+.noselect{
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+     -khtml-user-select: none; /* Konqueror */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+.percent50{
+	width:50%;
+	float:left;
+}
+
+.percent100{
+	width:100%;
+	float:left;
+}
+
+.labelled{
+	float: left;
+	margin-top: 20px;
+}
+
+.labelled label{
+	float:left;
+	width:100%;
+	text-align: center;
+}
+
+.labelled input{
+	float:left;
+	width:100%;
+}
+
+#tile-scale-slider{
+	width:80%;
+}
+
+#tile-scale-box{
+	width:18%;
 }
 
 #interface button{

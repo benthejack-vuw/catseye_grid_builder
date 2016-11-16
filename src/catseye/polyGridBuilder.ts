@@ -13,6 +13,7 @@ import * as DomUtils from "../quickdrawJS/util/domUtils"
 import DraggableRect from "../quickdrawJS/geometry/interactive/DraggableRect"
 import BoundingBox from "../quickdrawJS/geometry/boundingBox"
 import Transform from "../quickdrawJS/util/transform"
+import * as LocalStore from "../quickdrawJS/storage/localStore"
 
 enum GridMode{
 	create,
@@ -253,11 +254,18 @@ export default class PolyGridBuilder extends DisplayObject{
 	}
 
 	public saveTile = ()=>{
+		this.generateTile();
 		var name:string = (document.getElementById("fileName") as HTMLInputElement).value;
 		name = name.length > 0 ? name+".json" : "tilegrid.json"
-		var bounds = this._tileSelector.toPolygon();
-		this._grid.normalize(bounds, this._rotate);
-		DomUtils.downloadTextAsFile(name, JSON.stringify(this._grid));
+		DomUtils.downloadTextAsFile(name, JSON.stringify(this._grid.toJSON()));
+
+		if(LocalStore.contains("customGrids")){
+			var grids = LocalStore.getJSON("customGrids");
+			grids.push(this._grid.toJSON());
+			LocalStore.storeJSON("customGrids", grids);
+		}else{
+			LocalStore.storeJSON("customGrids", [this._grid.toJSON()]);
+		}
 	}
 
 	

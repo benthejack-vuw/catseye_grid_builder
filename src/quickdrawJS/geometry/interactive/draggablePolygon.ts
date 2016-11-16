@@ -58,6 +58,14 @@ export default class DraggablePolygon extends DisplayObject{
 
 	}
 
+	public setPoint(index:number, position:Point){
+		try{
+			this._points[index].localPosition = position;
+		}catch(e){
+			console.log(e);
+		}
+	}
+
 	public addCorner(pt:DraggablePoint):void{
 		if(this._snapGrid)
 			pt.snapToGrid(this._snapGrid)

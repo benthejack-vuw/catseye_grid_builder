@@ -1,0 +1,49 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+#default-grids #custom-grids{
+	float:left;
+	overflow-y: scroll;
+}
+
+#grid-selection {
+	width:100%;
+	height: ;
+	float: left;
+}
+
+#grid-selection ul{
+	width:100%;
+	float:left;
+	padding:0;
+}
+
+#grid-selection li{
+	box-sizing: border-box;
+	list-style-type: none;
+
+	width:50%;
+	margin:0;
+	background-color: #CCC;
+	float:left;
+}
+
+#grid-selection li:hover{
+	background-color: #EEE;
+	cursor:default;
+}
+
+#grid-selection img{
+	border: 1px solid; 
+	width:40%;
+	margin: 5%;
+}
+
+#grid-selection img:hover{
+	opacity: 0.5;
+}

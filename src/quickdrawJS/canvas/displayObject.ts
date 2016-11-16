@@ -137,7 +137,7 @@ export default class DisplayObject{
 	//1) If this.setCacheAsCanvas(true) has been called, this will return its own canvas context
 	//2) If it has been added to child
 	public get canvas():HTMLCanvasElement{
-		if(this._canvas)
+		if(this._cacheAsCanvas)
 			return this._canvas;
 		else if(this._parent)
 			return this._parent.canvas;
@@ -291,8 +291,7 @@ export default class DisplayObject{
 
 	//immediately force a redraw this object
 	public redraw():void{
-		var context:CanvasRenderingContext2D = this.renderingContext;	
-		this.preDraw(context); 
+		var context:CanvasRenderingContext2D = this.preDraw();
 		this.draw(context);
 		this.drawChildren(context);
 		this.drawOverChildren(context);
@@ -361,7 +360,9 @@ export default class DisplayObject{
 	}
 	
 	//sets up the rendering context and local positioning
-	protected preDraw(context:CanvasRenderingContext2D):CanvasRenderingContext2D{				
+	protected preDraw():CanvasRenderingContext2D{				
+		
+		let context = this.renderingContext;
 		context.save();
 
 		if(!this._cacheAsCanvas){
@@ -385,7 +386,7 @@ export default class DisplayObject{
 			var child:DisplayObject = this._children[i];
 			if(child.needsRedraw){
 				child.update();
-				var childContext:CanvasRenderingContext2D = child.preDraw(context);
+				var childContext:CanvasRenderingContext2D = child.preDraw();
 				child.draw(childContext);
 				child.drawOverChildren(childContext);
 				child.postDraw(childContext);

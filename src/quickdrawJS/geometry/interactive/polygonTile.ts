@@ -25,18 +25,19 @@ export default class PolygonTile extends DisplayObject{
 		this._polygons = [];
 
 		var transformPoly = (pts:Array<any>)=>{
+			let ptsOut:Array<any> = [];
 			for(let i = 0; i < pts.length; ++i){
-				pts[i].x *= this.size.x;
-				pts[i].y *= this.size.x; //scale proportionally
+				ptsOut[i] = new Point(pts[i].x * this.size.x, pts[i].y * this.size.x);//scale proportionally
 			}
-			return pts;
+			return ptsOut;
 		}
 
 		var polys = jsonData.normalized_polygons;
 		for(var i = 0; i < polys.length; ++i){		
-			this._polygons.push(new Polygon(transformPoly(polys[i])));
+			var poly = new Polygon(transformPoly(polys[i]));
+			this._polygons.push(poly);
 		}
-
+		
 	}
 
 	public draw(context:CanvasRenderingContext2D){
