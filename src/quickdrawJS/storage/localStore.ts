@@ -46,6 +46,12 @@ export function contains(name:string):boolean{
     } 
 }
 
+export function clearAll(){
+    if (supported()) {
+      localStorage.clear();  
+    } 
+}
+
 export function supported():boolean{
 	return typeof localStorage === "object";
 }

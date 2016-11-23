@@ -6,11 +6,13 @@ import * as DomUtils from "../../util/domUtils"
 export default class PolygonTile extends DisplayObject{
 	
 	private _polygons:Array<Polygon>;
+	private _baseSize:Point;
 	private once:boolean = true;
 
 	//tiledata can either be a string containing a url to the tile file OR a straight JSON object
 	constructor(position:Point, size:Point, tileData:any){
 		super(position, size);
+		this._baseSize = size.copy();
 		if(typeof(tileData) === "string"){
 			DomUtils.fetchJSONFile(tileData, this.setData);
 		}else{
@@ -21,7 +23,8 @@ export default class PolygonTile extends DisplayObject{
 	}
 
 	public setData(jsonData:any){
-		this.size.y *= jsonData.normalized_clipRect.height;
+		this.size.x = this._baseSize.x * jsonData.edge_normalized_clipRect.width;
+		this.size.y = this._baseSize.y * jsonData.edge_normalized_clipRect.height;
 		this._polygons = [];
 
 		var transformPoly = (pts:Array<any>)=>{

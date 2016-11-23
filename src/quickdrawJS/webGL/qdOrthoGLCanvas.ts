@@ -13,6 +13,7 @@ export default class QDOrthoGLCanvas{
 	private _shaderProgram:WebGLProgram;
 
 	private _camera:QDOrthoCamera;
+	private _cameraMatrixName:string;
 	private _buffers:any;
 	private _textures:any;
 
@@ -34,6 +35,7 @@ export default class QDOrthoGLCanvas{
 
 	    this.setView(size);
 
+	    this._cameraMatrixName = cameraMatrixName;
 	    this._camera = new QDOrthoCamera(new Point(0,0), new Point(1, 1), cameraMatrixName, this._gl, this._shaderProgram);
 	    this._camera.update();
 
@@ -62,11 +64,20 @@ export default class QDOrthoGLCanvas{
 		this._textures[name].set(image);
 	}
 
-	public setView(size:Point){
+	public setView(size:Point, boundingBox?:Point){
 		this._size = size;
 		this._canvas.width = this._size.x;
 		this._canvas.height = this._size.y;
-	    this._gl.viewport(0, 0, this._size.x, this._size.x);
+	    this._gl.viewport(0, 0, this._gl.drawingBufferWidth, this._gl.drawingBufferHeight);
+
+
+	    if(boundingBox === undefined)
+	   		this._camera = new QDOrthoCamera(new Point(0,0), new Point(1, size.y/size.x), this._cameraMatrixName, this._gl, this._shaderProgram);
+	   	else
+	   		this._camera = new QDOrthoCamera(new Point(0,0), new Point(boundingBox.x, boundingBox.y), this._cameraMatrixName, this._gl, this._shaderProgram);
+
+	    this._camera.update();
+
 	}
 
 	public render(mode:number, dataSize:number){

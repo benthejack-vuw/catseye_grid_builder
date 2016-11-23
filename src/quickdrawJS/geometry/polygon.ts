@@ -219,7 +219,7 @@ export default class Polygon{
 		return false;
 	}
 
-	public normalizedPointArray(bounding_box:Rectangle, rotation?:number):Array<Point>{
+	public normalizedPointArray(bounding_box:Rectangle, rotation?:number, devisor?:number):Array<Point>{
 		let pts:Array<Point> = [];
 		let bug:any;
 		let pt:Point = new Point(bounding_box.x, bounding_box.y);
@@ -238,8 +238,10 @@ export default class Polygon{
 				v = rotationMatrix.transformPoint(v);
 			}
 
-			let xOut = ((v.x - pt.x)/sz.x);
-			let yOut = ((v.y - pt.y)/sz.x);
+			let xOut = (v.x - pt.x);
+			xOut /= devisor === undefined ? sz.x : devisor;
+			let yOut = (v.y - pt.y);
+			yOut /= devisor === undefined ? sz.x : devisor;//looks like a bug, but yOut should be devided by the same amount as x (sz.x or devisor)
 			
 			pts.push(new Point(xOut, yOut));
 		}

@@ -9,8 +9,8 @@ import Point from "../point"
 import BoundingBox from "../boundingBox"
 import Polygon from "../polygon"
 import SnapGrid from "./snapGrid"
-import DraggablePoint from "./DraggablePoint"
-import {Direction} from "./DraggablePoint"
+import DraggablePoint from "./draggablePoint"
+import {Direction} from "./draggablePoint"
 import * as DrawingUtils from "../../util/drawingUtils"
 import {MouseData} from "../../interaction/mouseData"
 import DisplayObject from "../../canvas/displayObject"
@@ -28,7 +28,7 @@ export default class DraggablePolygon extends DisplayObject{
 	public get points():Array<Point>{
 		var pts:Array<Point> = [];
 		
-		for (var i = this._points.length - 1; i >= 0; i--) {
+		for (var i = 0; i < this._points.length; i++) {
 			pts.push(this._points[i].localPosition);
 		}
 

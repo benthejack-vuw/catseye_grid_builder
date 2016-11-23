@@ -32,7 +32,7 @@ export default class GLPolyTile extends DisplayObject{
     
     this._glCanvas = new OrthoGLCanvas(this._size, vertexShader, fragmentShader, "u_matrix");
 
-    this.updateGrid(GridStorage.HexGrid);
+    this.updateGrid(GridStorage.SquareGrid);
     this.updateTexture(texture);
 	}
 
@@ -54,15 +54,18 @@ export default class GLPolyTile extends DisplayObject{
   }
 
   public updateGrid(grid:any){
-    this._grid = grid === undefined || !grid ? GridStorage.HexGrid : grid;
+    this._grid = grid === undefined || !grid ? GridStorage.SquareGrid : grid;
 
-    this.size = new Point(this._maxSize.x * this._scale, this._maxSize.x * this._scale * this._grid.normalized_clipRect.height);
-    this._canvas.height = this.size.y;
-    this._glCanvas.setView(new Point(this._maxSize.x, this._maxSize.x * this._grid.normalized_clipRect.height));
+    this.size = new Point(this._maxSize.x * this._scale * this._grid.edge_normalized_clipRect.width, this._maxSize.y * this._scale * this._grid.edge_normalized_clipRect.height);
+
+    var viewSize = new Point(this._maxSize.x, this._maxSize.y * this._grid.normalized_clipRect.height);
+    viewSize.scale(2);
+    var polygonViewBoundingBox = new Point(this._grid.edge_normalized_clipRect.width, this._grid.edge_normalized_clipRect.height);
+    this._glCanvas.setView(viewSize, polygonViewBoundingBox);
     this._polygons = [];
     
-    for (var i = 0; i < this._grid.normalized_polygons.length; ++i) {
-      this._polygons.push(new GLMirrorPoly(this._grid.normalized_polygons[i]));
+    for (var i = 0; i < this._grid.edge_normalized_polygons.length; ++i) {
+      this._polygons.push(new GLMirrorPoly(this._grid.edge_normalized_polygons[i]));
     }
   }
 
@@ -70,7 +73,7 @@ export default class GLPolyTile extends DisplayObject{
       
       if(this._texture){
         this.drawPolygons();
-        context.drawImage(this._glCanvas.canvas,0,0, this._size.x, this.size.y);
+        context.drawImage(this._glCanvas.canvas,0,0, this.size.x, this.size.y);
       }
       
       if(this._showGrid){
@@ -84,14 +87,14 @@ export default class GLPolyTile extends DisplayObject{
      for (var i = 0; i < this._polygons.length; ++i) {
       context.strokeStyle = "#FF0000";
       context.setLineDash([0]);
-      this._polygons[i].draw(context, false, this.size.x);
+      this._polygons[i].draw(context, false, this.size.x/this._grid.edge_normalized_clipRect.width);
      }
      context.stroke();
      context.beginPath();
      for (var i = 0; i < this._polygons.length; ++i) {
       context.strokeStyle = "#0000FF";
       context.setLineDash([5, 5]);
-      this._polygons[i].drawFan(context, this.size.x);
+      this._polygons[i].drawFan(context, this.size.x/this._grid.edge_normalized_clipRect.width);
     }
     context.stroke();
   }
@@ -112,7 +115,7 @@ export default class GLPolyTile extends DisplayObject{
 
   public set scale(scale:number){
     this._scale = scale;
-    this.size = new Point(this._maxSize.x*scale, this._maxSize.y*scale*this._grid.normalized_clipRect.height);
+    this.size = new Point(this._maxSize.x * this._scale * this._grid.edge_normalized_clipRect.width, this._maxSize.y * this._scale * this._grid.edge_normalized_clipRect.height);
   }
 
    public patternRect(context:CanvasRenderingContext2D, position:Point, size:Point, scale:number){

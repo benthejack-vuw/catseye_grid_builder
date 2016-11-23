@@ -27,7 +27,7 @@ export default class QDOrthoCamera{
 	    this._gl = gl;
 	    this._location = this._gl.getUniformLocation(program, name);
 
-	    glMatrix.mat4.ortho(this._pMatrix, topLeft.x, bottomRight.x, topLeft.y, bottomRight.y, -1, 1);
+	    glMatrix.mat4.ortho(this._pMatrix, topLeft.x, bottomRight.x, bottomRight.y, topLeft.y, -1, 1);
 
 	    this.eye = [0, 0, 1];
 	    this.up = [0, 1, 0];

@@ -25,6 +25,7 @@ export default class PatternBuilder extends DisplayObject{
 	private _dirtyScaleHack:number = -1; //in chrome the slider seems to glitch when value is set in code the first time this forces a refresh
 
 	constructor(){
+
 		super(new Point(0,0), new Point(window.innerWidth, window.innerHeight));
 		this._saveSize = new Point(
 			parseInt((document.getElementById("save-width") as HTMLInputElement).value), 
@@ -59,16 +60,18 @@ export default class PatternBuilder extends DisplayObject{
 	}
 
 	public reset = ()=>{
-		let img = document.getElementById("defaultImage") as HTMLImageElement;
-		this.setImage(img);
-		LocalStore.remove("selectionImage");
-		this.changeScale(1, null);
-		this.setGrid(null);
-		this.updateTextureCoordinates(this._imageSelector.selection);
-		this._dirty = true;
+		if(confirm("This will revert the image and texture co-ordinates back to their defaults. Are you SURE you want to do this?")){
+			let img = document.getElementById("defaultImage") as HTMLImageElement;
+			this.setImage(img);
+			LocalStore.remove("selectionImage");
+			this.changeScale(1, null);
+			this.setGrid(null);
+			this.updateTextureCoordinates(this._imageSelector.selection);
+			this._dirty = true;
 
-		var imgUrl = DomUtils.dataURLfromImage(img);
-		LocalStore.store("selectionImage", imgUrl);
+			var imgUrl = DomUtils.dataURLfromImage(img);
+			LocalStore.store("selectionImage", imgUrl);
+		}
 
 	}
 
@@ -91,7 +94,6 @@ export default class PatternBuilder extends DisplayObject{
 	}
 
 	public addedToStage(){
-		//this.addChild(this._glTile);
 	}
 
 	public loadImage = async ()=>{
@@ -109,6 +111,8 @@ export default class PatternBuilder extends DisplayObject{
         	return DomUtils.readFileAsJSON(file);
         }).then((grid)=>{
         	this.setGrid(grid);
+        	GridStorage.saveGrid(grid);
+			GridStorage.createCustomGridSelectors("custom-grids",this);
         });
 
 	}
@@ -142,7 +146,7 @@ export default class PatternBuilder extends DisplayObject{
 
 	public changeScale = (val:any, obj:any)=>{
 
-		val = Math.clamp(val, 0.001, 2);
+		val = Math.clamp(val, 0.005, 1);
 		const box = document.getElementById("tile-scale-box") as HTMLInputElement;
 		const slider = document.getElementById("tile-scale-slider") as HTMLInputElement;
 		
@@ -155,9 +159,16 @@ export default class PatternBuilder extends DisplayObject{
 			box.value = val;
 		}
 
-		this._glTile.scale = val;
+		this._glTile.scale = val*.25;
 		LocalStore.store("scale", val);
 		this._dirty = true;
+	}
+
+	public clearLocalStore = ()=>{
+		if(confirm("WARNING: This wil delete ALL your settings and custom grids from the browsers localStore. Are you SURE you want to do this?")){
+			LocalStore.clearAll();
+			location.reload();
+		}
 	}
 
 	public draw(context:CanvasRenderingContext2D){
@@ -204,7 +215,7 @@ export default class PatternBuilder extends DisplayObject{
 		if(this._glTile)
 			this._glTile.destroy();
 
-		this._glTile = new GLPolyTile(new Point(0,0), new Point(2048,2048), this._texture, this._grid);
+		this._glTile = new GLPolyTile(new Point(0,0), new Point(1024,1024), this._texture, this._grid);
 		this.setImage(this._texture);
 
 		if(this._imageSelector)

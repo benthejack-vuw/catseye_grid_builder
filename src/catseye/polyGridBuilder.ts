@@ -10,10 +10,11 @@ import {MouseData} from "../quickdrawJS/interaction/mouseData"
 import {MouseButton} from "../quickdrawJS/interaction/mouseData"
 import * as DrawingUtils from "../quickdrawJS/util/drawingUtils"
 import * as DomUtils from "../quickdrawJS/util/domUtils"
-import DraggableRect from "../quickdrawJS/geometry/interactive/DraggableRect"
+import DraggableRect from "../quickdrawJS/geometry/interactive/draggableRect"
 import BoundingBox from "../quickdrawJS/geometry/boundingBox"
 import Transform from "../quickdrawJS/util/transform"
 import * as LocalStore from "../quickdrawJS/storage/localStore"
+import GridStorage from "./grids/gridStorage";
 
 enum GridMode{
 	create,
@@ -235,7 +236,7 @@ export default class PolyGridBuilder extends DisplayObject{
 	public generateTile(){
 		if(this._mode == GridMode.tile){
 			var bounds = this._tileSelector.toPolygon();	
-			this._grid.normalize(bounds, this._rotate);
+			this._grid.normalize(bounds, this._rotate, this._start_radius);
 			this._polyTile = new PolygonTile(new Point(-window.innerWidth/2+100, window.innerHeight/2-300), new Point(100,100), this._grid.toJSON());
 			this._polyTile.redraw();			
 		}
@@ -258,14 +259,7 @@ export default class PolyGridBuilder extends DisplayObject{
 		var name:string = (document.getElementById("fileName") as HTMLInputElement).value;
 		name = name.length > 0 ? name+".json" : "tilegrid.json"
 		DomUtils.downloadTextAsFile(name, JSON.stringify(this._grid.toJSON()));
-
-		if(LocalStore.contains("customGrids")){
-			var grids = LocalStore.getJSON("customGrids");
-			grids.push(this._grid.toJSON());
-			LocalStore.storeJSON("customGrids", grids);
-		}else{
-			LocalStore.storeJSON("customGrids", [this._grid.toJSON()]);
-		}
+		GridStorage.saveGrid(this._grid.toJSON());
 	}
 
 	
