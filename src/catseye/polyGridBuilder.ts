@@ -61,23 +61,19 @@ export default class PolyGridBuilder extends DisplayObject{
 		this.applyTransformations();
 	}
 
-	public loadFile = (val:any, obj:any)=>{
-	  	
-	  	this._mode = GridMode.create;
-	  	this.removeChild(this._snapGrid);
 
-	  	var reader = new FileReader();
+	public loadGrid = (val:any, obj:any)=>{
+		console.log("HERE");
+        DomUtils.selectFile().then((file)=>{
+        	return DomUtils.readFileAsJSON(file);
+        }).then((grid:any)=>{
+        	this._grid.setPolygonData(grid.polygons);
+		  	this.setRotationSlider();
+		  	this._tileSelector = undefined;
+		  	this._snapGrid = undefined;
+		  	this._polyTile = undefined;
+        });
 
-		reader.onload = (e) => {
-		  var tileObj = JSON.parse(reader.result);
-		  this._grid.setPolygonData(tileObj.polygons);
-		  this.setRotationSlider();
-		  this._tileSelector = undefined;
-		  this._snapGrid = undefined;
-		  this._polyTile = undefined;
-		}
-
-		reader.readAsText(obj.files[0]);
 	}
 
 	public addedToStage():void{

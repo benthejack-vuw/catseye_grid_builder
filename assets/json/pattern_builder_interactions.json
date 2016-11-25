@@ -13,7 +13,7 @@
 		},
 		"toggle-grid":{
 			"callbacks":{
-				"change":"toggleGridDisplay"
+				"click":"toggleGridDisplay"
 			}
 		},
 

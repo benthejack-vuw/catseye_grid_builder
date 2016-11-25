@@ -1,5 +1,8 @@
 html {
   box-sizing: border-box;
+  font-family:sans-serif;
+  ms-text-size-adjust:100%;
+  -webkit-text-size-adjust:100%;
 }
 
 *, *:before, *:after {
@@ -9,14 +12,81 @@ html {
 
 #interface{
 	position:fixed;
-	padding:10px;
-	left:20px;
+	padding:15px;
+	left:2.5vh;
 	top:2.5vh;
 	background-color: #FFF;
 	opacity: 0.98;
 	width:300px;
-	height:auto;
+	height:95vh;
 	overflow-y: hidden;
+}
+
+.percent50{
+	width:50%;
+	float:left;
+}
+
+.percent100{
+	width:100%;
+	float:left;
+}
+
+.labelled{
+	float: left;
+	margin-top: 20px;
+}
+
+.labelled label{
+	float:left;
+	width:100%;
+	text-align: center;
+}
+
+.labelled input{
+	float:left;
+	width:100%;
+}
+
+#tile-scale-slider{
+	width:80%;
+}
+
+#tile-scale-box{
+	width:18%;
+}
+
+
+
+.centered{
+	position:relative;
+	float: left;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#interface select{
+	margin-bottom: 5%;
+}
+
+#interface button{
+	border: 1px;
+	border-radius: 2px;
+	margin-bottom: 5%;
+	color:#222;
+	font-size: 0.8em;
+	text-transform: uppercase;
+
+	width:45%;
+}
+
+
+#interface button:hover{
+	background-color: #DDD;
+}
+
+.right{
+	margin-left: 7.5%;
 }
 
 body{

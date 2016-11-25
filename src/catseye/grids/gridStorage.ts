@@ -66,8 +66,6 @@ export default class GridStorage{
 		canvas.width = w/2-20;
 		canvas.height = w/2-20;
 		var ctx = canvas.getContext("2d");
-		ctx.fillStyle = "#AAA";
-		ctx.fillRect(0,0,canvas.width, canvas.height);
 		tile.patternRect(ctx, new Point(0,0), new Point(canvas.width, canvas.height), true);
 
 		var container = document.createElement("div");

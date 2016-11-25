@@ -12,8 +12,8 @@
     <section id="interface" class="noSelect">
       <div id="image-inputs">
        
-        <button id="load-image" class="percent50">Load Image</button>
-        <button id="load-grid" class="percent50">Load Grid</button>  
+        <button id="load-image" >Load Image</button>
+        <button id="load-grid" class="right">Load Grid</button>  
        
       <div id="image-selection">
       </div>
@@ -24,8 +24,7 @@
           <label for="tile-scale">Scale</label>
           <input id="tile-scale-slider" type="range">
           <input id="tile-scale-box" type="number">
-          <label for="toggle-grid">Show Grid</label>
-          <input type="checkbox" id="toggle-grid"/>
+          <button id="toggle-grid" value="Show Grid" style="width:100%; margin-top:5%;">Show Grid</button>
         </div>
 
         <div class="labelled percent50">
@@ -42,18 +41,21 @@
 
         <div class="labelled percent100">
           <label for="save-format">Image Format</label>
-          <select id="save-format" class="percent100">
+          <select id="save-format" class="percent100"/>
+        </div>
+
+        <div class="labelled percent100">
             <option value="png">PNG</option>
             <option value="jpeg">JPEG</option>
           </select>
-          <button id="save-image" class="percent50">Save Image</button>
-          <button id="save-tile" class="percent50">Save Tile</button>
+          <button id="save-image" >Save Image</button>
+          <button id="save-tile" class="right">Save Tile</button>
         </div>
 
       </div>
       
-      <button id="reset" class="percent50">RESET</button>
-      <button id="clear-storage" class="percent50">DELETE EVERYTHING</button>
+      <button id="reset">RESET</button>
+      <button id="clear-storage" class="right">DELETE ALL</button>
 
       <ul>  
         <li id="showDefaultGrids">Default Grids</li>

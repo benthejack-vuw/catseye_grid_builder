@@ -8,43 +8,7 @@
                                   not supported by any browser */
 }
 
-.percent50{
-	width:50%;
-	float:left;
-}
 
-.percent100{
-	width:100%;
-	float:left;
-}
-
-.labelled{
-	float: left;
-	margin-top: 20px;
-}
-
-.labelled label{
-	float:left;
-	width:100%;
-	text-align: center;
-}
-
-.labelled input{
-	float:left;
-	width:100%;
-}
-
-#tile-scale-slider{
-	width:80%;
-}
-
-#tile-scale-box{
-	width:18%;
-}
-
-#interface button{
-	margin-bottom: 10px;
-}
 
 
 #default-grids #custom-grids{
@@ -54,22 +18,25 @@
 #grid-selection {
 	width:100%;
 	float: left;
-	max-height: 300px;
-	height:auto;
 	overflow-y: scroll;
+	background-color: #EEE;
+
 }
 
 ul{
 	width:100%;
 	float:left;
 	padding:0;
+	margin:0;
 }
 
 li{
 	box-sizing: border-box;
 	list-style-type: none;
 
+	border-radius: 10px 0px 0px 0px;
 	width:50%;
+	padding: 5px 10px 5px 10px;
 	margin:0;
 	background-color: #CCC;
 	float:left;
@@ -77,6 +44,14 @@ li{
 
 li:hover{
 	background-color: #EEE;
+	cursor:default;
+}
+
+.selected{
+	background-color: #EEE;
+}
+
+canvas:hover{
 	cursor:default;
 }
 

@@ -79,9 +79,9 @@
 			}	
 		},
 
-		"loadFile":{
+		"loadGrid":{
 			"callbacks":{
-				"change":"loadFile"
+				"click":"loadGrid"
 			}	
 		}
 

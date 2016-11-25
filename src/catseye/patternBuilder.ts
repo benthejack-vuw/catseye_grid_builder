@@ -23,6 +23,7 @@ export default class PatternBuilder extends DisplayObject{
 	private _saveSize:Point;
 
 	private _dirtyScaleHack:number = -1; //in chrome the slider seems to glitch when value is set in code the first time this forces a refresh
+	private _showGrid:boolean;
 
 	constructor(){
 
@@ -94,7 +95,7 @@ export default class PatternBuilder extends DisplayObject{
 			}
 		}catch(e){
 			alert("your local data has been corrupted, your workspace has been reset");
-			this.reset(true);
+			this.clearLocalStore();
 		}
 	}
 
@@ -149,7 +150,9 @@ export default class PatternBuilder extends DisplayObject{
 	}
 
 	public toggleGridDisplay = (val:any, obj:any)=>{
-		this._glTile.showGrid(obj.checked);
+		this._showGrid = !this._showGrid;
+		this._glTile.showGrid(this._showGrid);
+		obj.innerHTML = this._showGrid ? "Hide Grid" : "Show Grid";
 		this._dirty = true;
 	}
 
@@ -248,6 +251,9 @@ export default class PatternBuilder extends DisplayObject{
 		var customGrids = document.getElementById("custom-grids");
 		customGrids.setAttribute("style", "display:none");
 		defaultGrids.setAttribute("style", "");
+		
+		document.getElementById("showCustomGrids").setAttribute("class", "");
+		document.getElementById("showDefaultGrids").setAttribute("class", "selected");
 	}
 
 	public showCustomGrids = ()=>{
@@ -255,6 +261,8 @@ export default class PatternBuilder extends DisplayObject{
 		var customGrids = document.getElementById("custom-grids");
 		defaultGrids.setAttribute("style", "display:none");
 		customGrids.setAttribute("style", "");
+		document.getElementById("showDefaultGrids").setAttribute("class", "");
+		document.getElementById("showCustomGrids").setAttribute("class", "selected");
 	}
 
 }

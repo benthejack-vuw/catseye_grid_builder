@@ -31,11 +31,20 @@ function initializeCatseye(){
 		var patternBuilderInteractions = new InteractionManager(pattern_builder, stage.stageCanvas, "./assets/json/pattern_builder_interactions.json");
 		stage.addChild(pattern_builder);
 
+		var fitGridSelector = ()=>{
+			var totalHeight = document.getElementById("interface").clientHeight;
+			var gridBox = document.getElementById("grid-selection");
+			gridBox.style.height = (totalHeight - gridBox.offsetTop - 7.5)+"px";
+		}
+
+		fitGridSelector();
+
 		window.addEventListener("resize", ()=>{
 			stage.size = new Point(window.innerWidth, window.innerHeight);
 			pattern_builder.size = new Point(window.innerWidth, window.innerHeight);
 			pattern_builder.dirty = true;
 			pattern_builder.redraw();
+			fitGridSelector();
 		});
 
 	};
