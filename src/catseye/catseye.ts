@@ -34,7 +34,7 @@ function initializeCatseye(){
 		var fitGridSelector = ()=>{
 			var totalHeight = document.getElementById("interface").clientHeight;
 			var gridBox = document.getElementById("grid-selection");
-			gridBox.style.height = (totalHeight - gridBox.offsetTop - 7.5)+"px";
+			gridBox.style.height = (totalHeight - gridBox.offsetTop - 15)+"px";
 		}
 
 		fitGridSelector();

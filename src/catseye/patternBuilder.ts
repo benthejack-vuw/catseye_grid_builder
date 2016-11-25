@@ -45,6 +45,8 @@ export default class PatternBuilder extends DisplayObject{
 
 		GridStorage.createDefaultGridSelectors("default-grids",this);
 		GridStorage.createCustomGridSelectors("custom-grids",this);
+		this.showDefaultGrids();
+
 	}
 
 	public set dirty(dirty:boolean){
