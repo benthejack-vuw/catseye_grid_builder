@@ -53,6 +53,18 @@
 			}	
 		},
 
+		"showDefaultGrids":{
+			"callbacks":{
+				"click":"showDefaultGrids"
+			}	
+		},
+
+		"showCustomGrids":{
+			"callbacks":{
+				"click":"showCustomGrids"
+			}	
+		},
+
 
 		"tile-scale-slider":{
 			"callbacks":{

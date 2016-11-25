@@ -13,38 +13,24 @@ export default class GridStorage{
 	public static createDefaultGridSelectors(parentElementID:string, callbackObject:any):void{
 		
 		let parentElement = document.getElementById(parentElementID);
+		let w = parentElement.clientWidth;
 
 		for (var i = 0; i < GridStorage.defaultGrids.length; ++i) {
 			
 			let grid = GridStorage.defaultGrids[i];
-			let w = parentElement.clientWidth;
 			let tile:PolyTile = new PolyTile(new Point(0,0), new Point(w/30,w/30), grid);
 			tile.redraw();
 
-			var canvas = document.createElement("canvas");
-			canvas.width = w/2-20;
-			canvas.height = w/2-20;
-			var ctx = canvas.getContext("2d");
-			tile.patternRect(ctx, new Point(0,0), new Point(canvas.width, canvas.height));
-
-			var url = canvas.toDataURL();
-			var img:HTMLImageElement = document.createElement("img") as HTMLImageElement;
-			img.setAttribute("src",url);
-
-			parentElement.appendChild(img);
-
-			img.addEventListener("click", ()=>{
-				callbackObject.setGrid(grid);
-			})
-
+			GridStorage.createGridButton(parentElement, tile, callbackObject, grid, null, false);
 		}
 	}
 
 	public static createCustomGridSelectors(parentElementID:string, callbackObject:any):void{
 
 		let parentElement = document.getElementById(parentElementID);
-		parentElement.setAttribute("style", "display:block");
+		let w = parentElement.clientWidth;
 
+		parentElement.setAttribute("style", "display:block");
 		parentElement.innerHTML = "";
 
 		if(LocalStore.contains("customGrids")){
@@ -52,30 +38,69 @@ export default class GridStorage{
 			for (var i = 0; i < grids.length; ++i) {
 				
 				let grid = grids[i];
-				let w = parentElement.clientWidth;
-				let tile:PolyTile = new PolyTile(new Point(0,0), new Point(w/30,w/30), grid);
-				tile.redraw();
 
-				var canvas = document.createElement("canvas");
-				canvas.width = w/2-20;
-				canvas.height = w/2-20;
-				var ctx = canvas.getContext("2d");
-				tile.patternRect(ctx, new Point(0,0), new Point(canvas.width, canvas.height));
+				try{
+					let tile:PolyTile = new PolyTile(new Point(0,0), new Point(w/30,w/30), grid);
+					tile.redraw();
 
-				var url = canvas.toDataURL();
-				var img:HTMLImageElement = document.createElement("img") as HTMLImageElement;
-				img.setAttribute("src",url);
+					GridStorage.createGridButton(parentElement, tile, callbackObject, grid, grids, true);
 
-				parentElement.appendChild(img);
-
-				img.addEventListener("click", ()=>{
-					callbackObject.setGrid(grid);
-				})
+				}catch(e){
+					console.log("error",e);
+					grids.splice(i, 1);
+					i--;
+					continue;
+				}
 
 			}
+			LocalStore.storeJSON("customGrids", grids); //update with any broken grids removed
 		}
 
 		parentElement.setAttribute("style", "display:none");
+	}
+
+	public static createGridButton(parentElement:HTMLElement, tile:PolyTile, callbackObject:any, grid:any, allGrids:any, deletable:boolean){
+		let w = parentElement.clientWidth;
+
+		var canvas = document.createElement("canvas");
+		canvas.width = w/2-20;
+		canvas.height = w/2-20;
+		var ctx = canvas.getContext("2d");
+		ctx.fillStyle = "#AAA";
+		ctx.fillRect(0,0,canvas.width, canvas.height);
+		tile.patternRect(ctx, new Point(0,0), new Point(canvas.width, canvas.height), true);
+
+		var container = document.createElement("div");
+		parentElement.appendChild(container);
+
+
+		if(deletable){
+			var deleteButton = document.createElement("div");
+			deleteButton.setAttribute("class", "delete-button");
+			container.appendChild(deleteButton);
+
+			deleteButton.addEventListener("click", (e)=>{
+				if(confirm("are you sure you want to delete this grid?")){
+					parentElement.removeChild(container);
+					var ind = allGrids.indexOf(grid);
+					allGrids.splice(ind, 1);	
+					LocalStore.storeJSON("customGrids", allGrids); //update with any broken grids removed
+				}
+			});
+		}
+
+		var highlight = document.createElement("div");
+		highlight.setAttribute("class", "highlight");
+		container.appendChild(highlight);
+		var url = canvas.toDataURL();
+		container.setAttribute("style", "background-image:url("+url+")");
+		container.setAttribute("class", "grid-selector");
+		container.style.width = (w/2-30)+"px";
+		container.style.height = (w/2-30)+"px";
+
+		container.addEventListener("click", (e)=>{
+			callbackObject.setGrid(grid);
+		});
 	}
 
 	public static saveGrid(gridJSON:any){
@@ -87,6 +112,8 @@ export default class GridStorage{
 			LocalStore.storeJSON("customGrids", [gridJSON]);
 		}
 	}
+
+	
 
 }
 

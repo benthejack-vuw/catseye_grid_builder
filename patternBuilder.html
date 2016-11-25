@@ -41,6 +41,11 @@
         </div>
 
         <div class="labelled percent100">
+          <label for="save-format">Image Format</label>
+          <select id="save-format" class="percent100">
+            <option value="png">PNG</option>
+            <option value="jpeg">JPEG</option>
+          </select>
           <button id="save-image" class="percent50">Save Image</button>
           <button id="save-tile" class="percent50">Save Tile</button>
         </div>
@@ -50,13 +55,11 @@
       <button id="reset" class="percent50">RESET</button>
       <button id="clear-storage" class="percent50">DELETE EVERYTHING</button>
 
+      <ul>  
+        <li id="showDefaultGrids">Default Grids</li>
+        <li id="showCustomGrids">Custom Grids</li>
+      </ul>
       <div id="grid-selection">
-
-        <ul>
-          <li id="showDefaultGrids">Default Grids</li>
-          <li id="showCustomGrids">Custom Grids</li>
-        </ul>
-
         <div id="default-grids"></div>
         <div id="custom-grids"></div>
       </div>

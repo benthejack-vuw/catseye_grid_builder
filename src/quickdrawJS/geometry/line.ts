@@ -20,17 +20,25 @@ export default class Line{
 	  var l2 = this.dist2(this[0], this[1]);
 	  if (l2 === 0){return this.dist2(p, this[0]);}
 	  var t = ((p.x - this[0].x) * (this[1].x - this[0].x) + (p.y - this[0].y) * (this[1].y - this[0].y)) / l2;
-	  t = Math.max(0, Math.min(1, t));
-	  return this.dist2(p, new Point(this[0].x + t * (this[1].x - this[0].x),
-	                    this[0].y + t * (this[1].y - this[0].y)));
+	  if (t < 0) return this.dist2(p, this[0]);
+	  if (t > 1) return this.dist2(p, this[1]);
+	  return this.dist2(p, new Point(this[0].x + t * (this[1].x - this[0].x), this[0].y + t * (this[1].y - this[0].y)));
 	}
 
 	public distanceToPoint(p:Point):number { return Math.sqrt(this.distToSegmentSquared(p)); };
+
+	public centreDistanceToPoint(p:Point):number{
+		return Math.sqrt(this.dist2(this.centrePoint, p));
+	}
 
 	public angle(reverse:boolean):number{
 		var one = reverse ? this[0] : this[1];
 		var two = reverse ? this[1] : this[0];
 		return Math.atan2(one.y - two.y, one.x - two.x);
+	}
+
+	public get centrePoint():Point{
+		return new Point(Math.lerp(this[0].x, this[1].x, 0.5), Math.lerp(this[0].y, this[1].y, 0.5));
 	}
 
 	public get length(){

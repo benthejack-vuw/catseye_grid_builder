@@ -70,7 +70,9 @@ export default class GLPolyTile extends DisplayObject{
   }
 
 	public draw(context:CanvasRenderingContext2D){
-      
+
+      this.clear(context, true);
+
       if(this._texture){
         this.drawPolygons();
         context.drawImage(this._glCanvas.canvas,0,0, this.size.x, this.size.y);

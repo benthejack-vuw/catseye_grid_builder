@@ -126,6 +126,12 @@ export default class Polygon{
 		let closest:Line = null;
 		for(let i = 0; i < this._edges.length; ++i){
 			let dist = this._edges[i].distanceToPoint(pt);
+			if(Math.abs(dist-min_dist) < 1){
+				min_dist = dist;
+				var currentCD = this._edges[i].centreDistanceToPoint(pt);
+				var lastCD = closest.centreDistanceToPoint(pt);
+				closest = currentCD < lastCD ? this._edges[i] : closest; 
+			}
 			if(dist < min_dist){
 				closest = this._edges[i];
 				min_dist = dist;

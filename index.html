@@ -2,13 +2,17 @@
 <head>
   <meta charset="UTF-8">
   <script language="javascript" type="text/javascript" src="catseye-grid-builder.bundle.js"></script>
-  <link rel="stylesheet" type="text/css" href="./css/catseye_gridbuilder.css">
+  <link rel="stylesheet" type="text/css" href="./css/catseye.css">
   <!-- this line removes any default padding and style. you might only need one of these values set. -->
   <style> body {padding: 0; margin: 0;} </style>
 </head>
 
 <body>
-	<a href="./patternBuilder.html">Pattern Builder</a>
-	<a href="./gridBuilder.html">Grid Builder</a>
+	<div id="patternLink" class="halfScreenSelector" onclick="window.location='./patternBuilder.html'">
+		Pattern Builder
+	</div>
+	<div id="gridLink" class="halfScreenSelector" onclick="window.location='./gridBuilder.html'">
+		Grid Builder
+	</div>
 </body>
 </html>

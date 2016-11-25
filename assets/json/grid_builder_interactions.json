@@ -61,6 +61,12 @@
 			}	
 		},
 
+		"saveTileImage":{
+			"callbacks":{
+				"click":"saveTileImage"
+			}	
+		},
+
 		"previewTile":{
 			"callbacks":{
 				"click":"previewTile"

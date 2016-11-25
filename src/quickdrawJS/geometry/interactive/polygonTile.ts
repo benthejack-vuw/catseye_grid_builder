@@ -43,19 +43,31 @@ export default class PolygonTile extends DisplayObject{
 		
 	}
 
-	public draw(context:CanvasRenderingContext2D){
+	public draw(context:CanvasRenderingContext2D, fill?:boolean){
 		this.clear(context, true);
-		context.fillStyle = "#FFFFFF";
+		context.save();
+		context.fillStyle = "#FFF"
+
 		for (var i = 0; i < this._polygons.length; ++i) {
-			this._polygons[i].draw(context, true);
+			context.beginPath();
+			this._polygons[i].draw(context, false);
+			if(fill)context.fill();
+			context.stroke();
 		}
+
+		context.restore();
 	}
 
-	public patternRect(context:CanvasRenderingContext2D, position:Point, size:Point){
+	public patternRect(context:CanvasRenderingContext2D, position:Point, size:Point, fill?:boolean){
+		this.draw(this.renderingContext, fill);
 		const pattern = context.createPattern(this.canvas, "repeat");
     	context.rect(position.x, position.y, size.x, size.y);
     	context.fillStyle = pattern;
     	context.fill();
+	}
+
+	public saveImage(name:string){
+		DomUtils.downloadCanvasImage(this.canvas, name, "png");
 	}
 
 }

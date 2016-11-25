@@ -31,6 +31,7 @@ export default class PatternBuilder extends DisplayObject{
 			parseInt((document.getElementById("save-width") as HTMLInputElement).value), 
 			parseInt((document.getElementById("save-height") as HTMLInputElement).value)
 		);
+
 		this.setCacheAsCanvas(true);
 		this._textureCoordinates = [new Point(0,0), new Point(1,1), new Point(0,1)];
 		this._selectionStage = new Stage("image-selection", new Point(280,280));
@@ -43,54 +44,58 @@ export default class PatternBuilder extends DisplayObject{
 
 		GridStorage.createDefaultGridSelectors("default-grids",this);
 		GridStorage.createCustomGridSelectors("custom-grids",this);
-
-		var defaultGrids = document.getElementById("default-grids");
-		var customGrids = document.getElementById("custom-grids");
-
-		document.getElementById("showDefaultGrids").addEventListener("click", ()=>{
-			customGrids.setAttribute("style", "display:none");
-			defaultGrids.setAttribute("style", "");
-		});
-
-		document.getElementById("showCustomGrids").addEventListener("click", ()=>{
-			defaultGrids.setAttribute("style", "display:none");
-			customGrids.setAttribute("style", "");
-		});
-		
 	}
 
-	public reset = ()=>{
-		if(confirm("This will revert the image and texture co-ordinates back to their defaults. Are you SURE you want to do this?")){
+	public set dirty(dirty:boolean){
+		this._dirty = true;
+	}
+
+	public reset = (skipConfirm?:boolean)=>{
+		if(skipConfirm || confirm("This will revert the image and texture co-ordinates back to their defaults. Are you SURE you want to do this?")){
 			let img = document.getElementById("defaultImage") as HTMLImageElement;
 			this.setImage(img);
 			LocalStore.remove("selectionImage");
-			this.changeScale(1, null);
+			this.changeScale(0.5, null);
 			this.setGrid(null);
 			this.updateTextureCoordinates(this._imageSelector.selection);
 			this._dirty = true;
 
 			var imgUrl = DomUtils.dataURLfromImage(img);
 			LocalStore.store("selectionImage", imgUrl);
+			location.reload();
 		}
 
 	}
 
 	public loadLastSession(){
 	
-		const self = this;
+		try{	
+			const self = this;
 
-		DomUtils.buildImageFromURL(LocalStore.get("selectionImage")).then(
-			(image)=>{
-				self.setImage(image);
-				this._imageSelector.setTextureCoords(LocalStore.getJSON("texCoords"));
+			if(LocalStore.contains("selectionImage")){
+				DomUtils.buildImageFromURL(LocalStore.get("selectionImage")).then(
+					(image)=>{
+						self.setImage(image);
+						this._imageSelector.setTextureCoords(LocalStore.getJSON("texCoords"));
+						this._imageSelector.forceUpdate();
+					}
+				)
 			}
-		)
-		
-		self.setGrid(LocalStore.getJSON("currentGrid"));
-		const val = LocalStore.get("scale");
-		self.changeScale(val, null);
-		this._dirtyScaleHack = val;
-		this._dirty = true;
+			
+			if(LocalStore.contains("currentGrid")){
+				self.setGrid(LocalStore.getJSON("currentGrid"));
+			}
+
+			if(LocalStore.contains("currentGrid")){
+				const val = LocalStore.get("scale");
+				self.changeScale(val, null);
+				this._dirtyScaleHack = val;
+				this._dirty = true;
+			}
+		}catch(e){
+			alert("your local data has been corrupted, your workspace has been reset");
+			this.reset(true);
+		}
 	}
 
 	public addedToStage(){
@@ -103,6 +108,7 @@ export default class PatternBuilder extends DisplayObject{
        	const image = await DomUtils.buildImageFromURL(url);
         this.setImage(image);
         LocalStore.store("selectionImage", url);
+        this._imageSelector.forceUpdate();
     }
 
 	public loadGrid = (val:any, obj:any)=>{
@@ -113,6 +119,7 @@ export default class PatternBuilder extends DisplayObject{
         	this.setGrid(grid);
         	GridStorage.saveGrid(grid);
 			GridStorage.createCustomGridSelectors("custom-grids",this);
+			this.showCustomGrids();
         });
 
 	}
@@ -123,12 +130,14 @@ export default class PatternBuilder extends DisplayObject{
 		canvas.height = this._saveSize.y;
 		this._glTile.redraw();
 		this._glTile.patternRect(canvas.getContext("2d"), new Point(0,0), this._saveSize, this._tileScale);
-        DomUtils.downloadCanvasImage(canvas, "catseyePattern.jpg");
+		var sel = document.getElementById('save-format') as HTMLInputElement;
+        DomUtils.downloadCanvasImage(canvas, "catseyePattern", sel.value);
 	}
 
 	public saveTile = (val:any, obj:any)=>{
 		this._glTile.redraw();
-        DomUtils.downloadCanvasImage(this._glTile.renderCanvas, "catseyePattern.jpg");
+		var sel = document.getElementById('save-format') as HTMLInputElement;
+        DomUtils.downloadCanvasImage(this._glTile.renderCanvas, "catseyePattern", sel.value);
 	}
 
 	public saveWidth = (val:any)=>{
@@ -167,7 +176,7 @@ export default class PatternBuilder extends DisplayObject{
 	public clearLocalStore = ()=>{
 		if(confirm("WARNING: This wil delete ALL your settings and custom grids from the browsers localStore. Are you SURE you want to do this?")){
 			LocalStore.clearAll();
-			location.reload();
+			this.reset(true);
 		}
 	}
 
@@ -182,6 +191,7 @@ export default class PatternBuilder extends DisplayObject{
 			this.clear(context, true);
 			this._glTile.redraw();
 			this._dirty = false;
+			if(context.canvas.width > 0 && context.canvas.height > 0)
 			this._glTile.patternRect(context, new Point(0,0), this._size, this._tileScale);
 		}
 
@@ -196,7 +206,8 @@ export default class PatternBuilder extends DisplayObject{
 
 	public setImage(image:HTMLImageElement){
 		this._texture = image;
-		this._selectionStage.removeChild(this._imageSelector);
+		if(this._imageSelector)
+			this._selectionStage.removeChild(this._imageSelector);
 		this._imageSelector = new ImageAreaSelector(this._texture, this._selectionStage.size.x, this.updateTextureCoordinates);
 		this._selectionStage.addChild(this._imageSelector);
 		this._glTile.updateTexture(image);
@@ -230,6 +241,20 @@ export default class PatternBuilder extends DisplayObject{
 
 	public contains(pt:Point){
 		return true;
+	}
+
+	public showDefaultGrids = ()=>{
+		var defaultGrids = document.getElementById("default-grids");
+		var customGrids = document.getElementById("custom-grids");
+		customGrids.setAttribute("style", "display:none");
+		defaultGrids.setAttribute("style", "");
+	}
+
+	public showCustomGrids = ()=>{
+		var defaultGrids = document.getElementById("default-grids");
+		var customGrids = document.getElementById("custom-grids");
+		defaultGrids.setAttribute("style", "display:none");
+		customGrids.setAttribute("style", "");
 	}
 
 }
