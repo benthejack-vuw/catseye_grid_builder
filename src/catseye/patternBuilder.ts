@@ -89,12 +89,13 @@ export default class PatternBuilder extends DisplayObject{
 				self.setGrid(LocalStore.getJSON("currentGrid"));
 			}
 
-			if(LocalStore.contains("currentGrid")){
+			if(LocalStore.contains("scale")){
 				const val = LocalStore.get("scale");
 				self.changeScale(val, null);
 				this._dirtyScaleHack = val;
 				this._dirty = true;
 			}
+			
 		}catch(e){
 			alert("your local data has been corrupted, your workspace has been reset");
 			this.clearLocalStore();
