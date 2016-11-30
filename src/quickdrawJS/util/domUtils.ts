@@ -12,7 +12,7 @@ export function fetchJSONFile(path:string, callback:Function) {
             }
         }
     };
-    httpRequest.open('GET', path, false);  
+    httpRequest.open('GET', path);  
     httpRequest.send(); 
 }
 
