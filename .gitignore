@@ -4,3 +4,4 @@
 node_modules/
 .codekit-cache/
 npm-debug.log
+*.DS_Store
