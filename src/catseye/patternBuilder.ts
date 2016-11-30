@@ -5,7 +5,7 @@ import Stage from "../quickdrawJS/canvas/stage"
 import DisplayObject from "../quickdrawJS/canvas/displayObject"
 import ImageAreaSelector from "../quickdrawJS/geometry/interactive/imageAreaSelector"
 import Point from "../quickdrawJS/geometry/point"
-import * as DomUtils from "../quickdrawJS/util/domUtils"
+import * as DomUtils from "../quickdrawJS/util/domUtilss"
 
 export default class PatternBuilder extends DisplayObject{	
 

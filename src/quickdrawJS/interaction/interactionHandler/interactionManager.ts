@@ -2,7 +2,7 @@ import Transform from "../../util/transform"
 import GUIInteractionHandler from "./guiInteractionHandler"
 import KeyboardInteractionHandler from "./keyboardInteractionHandler"
 import MouseInteractionHandler from "./mouseInteractionHandler"
-import * as DomUtils from "../../util/domutils"
+import * as DomUtils from "../../util/domUtilss"
 
 
 /*
