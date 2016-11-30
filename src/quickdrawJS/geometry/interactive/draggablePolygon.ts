@@ -28,7 +28,7 @@ export default class DraggablePolygon extends DisplayObject{
 	public get points():Array<Point>{
 		var pts:Array<Point> = [];
 		
-		for (var i = this._points.length - 1; i >= 0; i--) {
+		for (var i = 0; i < this._points.length; ++i) {
 			pts.push(this._points[i].localPosition);
 		}
 
