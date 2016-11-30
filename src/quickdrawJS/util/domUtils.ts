@@ -155,15 +155,17 @@ function dataURLtoBlob(dataUrl:any) {
     return new Blob([u8arr], {type:mime});
 }
 
-export function downloadCanvasImage(canvas:HTMLCanvasElement, name:string){
+export function downloadCanvasImage(canvas:HTMLCanvasElement, name:string, type?:string){
       var link = document.createElement("a") as
         HTMLAnchorElement & { download: string };
-      var imgData = canvas.toDataURL("image/jpeg");
+
+      var mime = type === undefined ? "image/jpeg" : "image/"+type;
+      var imgData = canvas.toDataURL(mime);
       var strDataURI = imgData.substr(22, imgData.length);
       var blob = dataURLtoBlob(imgData);
       var objurl = URL.createObjectURL(blob);
 
-      link.download = name;
+      link.download = type !== undefined ? name+"."+type : name+".jpeg";
 
       link.href = objurl;
 

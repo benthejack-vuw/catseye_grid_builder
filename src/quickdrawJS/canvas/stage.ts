@@ -81,7 +81,7 @@ export default class Stage extends DisplayObject{
 		if(this._modifiedMatrix)		
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 		
-		this.clear(ctx);
+		this.clear(ctx, true);
 
 		if(this._modifiedMatrix)
 			this._matrix.apply(ctx);

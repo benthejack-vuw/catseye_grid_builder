@@ -6,8 +6,8 @@
 
 
 import Point from "../point"
-import DraggablePoint from "./DraggablePoint"
-import DraggablePolygon from "./DraggablePolygon"
+import DraggablePoint from "./draggablePoint"
+import DraggablePolygon from "./draggablePolygon"
 
 export default class DraggableRect extends DraggablePolygon{
 

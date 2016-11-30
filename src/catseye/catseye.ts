@@ -30,11 +30,25 @@ function initializeCatseye(){
 		var pattern_builder:PatternBuilder = new PatternBuilder();
 		var patternBuilderInteractions = new InteractionManager(pattern_builder, stage.stageCanvas, "./assets/json/pattern_builder_interactions.json");
 		stage.addChild(pattern_builder);
+
+		window.addEventListener("resize", ()=>{
+			stage.size = new Point(window.innerWidth, window.innerHeight);
+			pattern_builder.size = new Point(window.innerWidth, window.innerHeight);
+			pattern_builder.dirty = true;
+			pattern_builder.redraw();
+		});
+
 	};
 
 	(<any>window).catseye.initializeGridBuilder = ()=>{
 		var grid_builder:PolyGridBuilder = new PolyGridBuilder(60);
 		var gridbuilderInteractions = new InteractionManager(grid_builder, stage.stageCanvas, "./assets/json/grid_builder_interactions.json");
 		stage.addChild(grid_builder);	
+
+		window.addEventListener("resize", ()=>{
+			stage.size = new Point(window.innerWidth, window.innerHeight);
+			grid_builder.size = new Point(window.innerWidth, window.innerHeight);
+			grid_builder.redraw();
+		});
 	};
 }

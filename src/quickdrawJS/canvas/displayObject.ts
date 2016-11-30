@@ -163,10 +163,8 @@ export default class DisplayObject{
 
 	public set size(size:Point){
 		this._size = size;
-		if(this._cacheAsCanvas){
-			this._canvas.width = size.x;
-			this._canvas.height = size.y;
-		}
+		this.canvas.width = size.x;
+		this.canvas.height = size.y;
 	}
 
 	//Set the position relative to the position of its parent DisplayObject

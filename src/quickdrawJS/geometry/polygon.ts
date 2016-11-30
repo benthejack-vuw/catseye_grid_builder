@@ -126,6 +126,12 @@ export default class Polygon{
 		let closest:Line = null;
 		for(let i = 0; i < this._edges.length; ++i){
 			let dist = this._edges[i].distanceToPoint(pt);
+			if(Math.abs(dist-min_dist) < 1){
+				min_dist = dist;
+				var currentCD = this._edges[i].centreDistanceToPoint(pt);
+				var lastCD = closest.centreDistanceToPoint(pt);
+				closest = currentCD < lastCD ? this._edges[i] : closest; 
+			}
 			if(dist < min_dist){
 				closest = this._edges[i];
 				min_dist = dist;
@@ -219,7 +225,7 @@ export default class Polygon{
 		return false;
 	}
 
-	public normalizedPointArray(bounding_box:Rectangle, rotation?:number):Array<Point>{
+	public normalizedPointArray(bounding_box:Rectangle, rotation?:number, devisor?:number):Array<Point>{
 		let pts:Array<Point> = [];
 		let bug:any;
 		let pt:Point = new Point(bounding_box.x, bounding_box.y);
@@ -238,8 +244,10 @@ export default class Polygon{
 				v = rotationMatrix.transformPoint(v);
 			}
 
-			let xOut = ((v.x - pt.x)/sz.x);
-			let yOut = ((v.y - pt.y)/sz.x);
+			let xOut = (v.x - pt.x);
+			xOut /= devisor === undefined ? sz.x : devisor;
+			let yOut = (v.y - pt.y);
+			yOut /= devisor === undefined ? sz.x : devisor;//looks like a bug, but yOut should be devided by the same amount as x (sz.x or devisor)
 			
 			pts.push(new Point(xOut, yOut));
 		}

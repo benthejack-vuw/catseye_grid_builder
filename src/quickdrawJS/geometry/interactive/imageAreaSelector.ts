@@ -71,4 +71,8 @@ export default class ImageAreaSelector extends DisplayObject{
 		return this.inBounds(pt);
 	}
 
+	public forceUpdate(){
+		this._changeCallback(this.selection);
+	}
+
 }

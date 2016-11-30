@@ -14,6 +14,8 @@ export default class PolygonGrid{
 	public _clipRect:Rectangle;
 	public _normalizedPolygons:Array<Array<Point>>;
 	public _normalizedClipRect:Rectangle;
+	public _edgeNormalizedPolygons:Array<Array<Point>>;
+	public _edgeNormalizedClipRect:Rectangle;
 
 	constructor(){
 		this._polygons = [];
@@ -117,16 +119,24 @@ export default class PolygonGrid{
 		}
 	}
 
-	public normalize(newBounds: Polygon, rotate?:number):void{
+	public normalize(newBounds: Polygon, rotate?:number, edgeLength?:number):void{
 		var boundaryTestRect = new BoundingBox(newBounds.copy().points);
 		newBounds.rotate(rotate);
 		this._clipRect = new BoundingBox(newBounds.points);
 		this._normalizedClipRect = this._clipRect.copy().normalize();
-
 		this._normalizedPolygons = [];
+		this._edgeNormalizedClipRect = this._clipRect.copy();
+		this._edgeNormalizedClipRect.scale(1.0/edgeLength);
+		this._edgeNormalizedClipRect.x = 0;
+		this._edgeNormalizedClipRect.y = 0;
+		this._edgeNormalizedPolygons = []; 
+
 		for(var i = 0; i < this._polygons.length; ++i){
 			if(this._polygons[i].inside(boundaryTestRect)){
 				this._normalizedPolygons.push(this._polygons[i].normalizedPointArray(this._clipRect, rotate));
+				
+				if(edgeLength !== undefined)
+					this._edgeNormalizedPolygons.push(this._polygons[i].normalizedPointArray(this._clipRect, rotate, edgeLength));
 			}
 		}
 
@@ -142,7 +152,9 @@ export default class PolygonGrid{
 			polygons: this._polygons,
 			bounds: this._clipRect,
 			normalized_clipRect: this._normalizedClipRect,
-			normalized_polygons: this._normalizedPolygons
+			normalized_polygons: this._normalizedPolygons,
+			edge_normalized_clipRect: this._edgeNormalizedClipRect,
+			edge_normalized_polygons: this._edgeNormalizedPolygons,
 		};
 
 		return out;

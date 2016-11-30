@@ -10,10 +10,11 @@ import {MouseData} from "../quickdrawJS/interaction/mouseData"
 import {MouseButton} from "../quickdrawJS/interaction/mouseData"
 import * as DrawingUtils from "../quickdrawJS/util/drawingUtils"
 import * as DomUtils from "../quickdrawJS/util/domUtils"
-import DraggableRect from "../quickdrawJS/geometry/interactive/DraggableRect"
+import DraggableRect from "../quickdrawJS/geometry/interactive/draggableRect"
 import BoundingBox from "../quickdrawJS/geometry/boundingBox"
 import Transform from "../quickdrawJS/util/transform"
 import * as LocalStore from "../quickdrawJS/storage/localStore"
+import GridStorage from "./grids/gridStorage";
 
 enum GridMode{
 	create,
@@ -37,8 +38,7 @@ export default class PolyGridBuilder extends DisplayObject{
 	private _scale:number;
 
 	private _polyTile:PolygonTile;
-	//private _bounds_selector:DraggablePolygon;
-
+	
 	constructor(radius:number){
 		super(new Point(0,0), new Point(window.innerWidth,window.innerHeight));
 		this._grid = new PolygonGrid();
@@ -53,6 +53,12 @@ export default class PolyGridBuilder extends DisplayObject{
 		this._translate = new Point(window.innerWidth/2, window.innerHeight/2);
 		this._rotate = 0;
 		this._scale = 1;
+	}
+
+	public set size(newSize:Point){
+		super.size = newSize;
+		this._translate = new Point(window.innerWidth/2, window.innerHeight/2);
+		this.applyTransformations();
 	}
 
 	public loadFile = (val:any, obj:any)=>{
@@ -84,13 +90,17 @@ export default class PolyGridBuilder extends DisplayObject{
 
 	public draw(context:CanvasRenderingContext2D):void{
 
-		this.clear(context);
+
+		context.save();
+		context.translate(-this._size.x / 2, -this._size.y / 2);
+		this.clear(context, true);
+		context.restore();
 
 		if(this._polyTile){
         	context.save();
         	context.rotate(-this._rotate);
         	context.scale(1.0/this._scale, 1.0/this._scale);
-        	this._polyTile.patternRect(context, new Point(-this._size.x / 2, -this._size.y / 2), this._size);
+        	this._polyTile.patternRect(context, new Point(-this._size.x / 2, -this._size.y / 2), this._size, true);
 			context.rect(-this._size.x / 2, -this._size.y / 2, this._size.x, this._size.y);
 			context.fillStyle = DrawingUtils.greyA(0, 130);
     		context.fill();
@@ -100,7 +110,7 @@ export default class PolyGridBuilder extends DisplayObject{
 		this._grid.draw(context);
 
 		if(this._mode == GridMode.create && this._polygon_ghost){
-			context.strokeStyle = DrawingUtils.grey(200);
+			context.strokeStyle = DrawingUtils.grey(100);
 			context.fillStyle = DrawingUtils.rgba(255, 255, 255, 50);
 			this._polygon_ghost.draw(context, true);
 		}
@@ -120,14 +130,12 @@ export default class PolyGridBuilder extends DisplayObject{
 			context.restore();
 		}
 
-
 	}
 
 	public mouseMoved(i_mouseData:MouseData){
 
 		if(this._mode == GridMode.create){
 			this._mouseData = i_mouseData;
-			
 			var new_edge = this._grid.closestEdge(this._mouseData.position);
 			
 			if(!this._grid.isEmpty()){
@@ -199,10 +207,9 @@ export default class PolyGridBuilder extends DisplayObject{
 		if(!this._tileSelector){
 			var box:BoundingBox = this._snapGrid.boundingBox;
 			this._tileSelector = new DraggableRect(new Point(box.x, box.y), new Point(box.width, box.height));
-			this._tileSelector.snapToGrid(this._snapGrid);
 		}
+		this._tileSelector.snapToGrid(this._snapGrid);
 		this._snapGrid.addChild(this._tileSelector);
-
 	}
 
 	public delete_poly = ()=>{
@@ -229,13 +236,15 @@ export default class PolyGridBuilder extends DisplayObject{
 		}else if(this._mode = GridMode.tile){
 			this._mode = GridMode.create;
 			this.removeChild(this._snapGrid);
+			this._snapGrid = null;
+
 		}
 	}
 
 	public generateTile(){
 		if(this._mode == GridMode.tile){
 			var bounds = this._tileSelector.toPolygon();	
-			this._grid.normalize(bounds, this._rotate);
+			this._grid.normalize(bounds, this._rotate, this._start_radius);
 			this._polyTile = new PolygonTile(new Point(-window.innerWidth/2+100, window.innerHeight/2-300), new Point(100,100), this._grid.toJSON());
 			this._polyTile.redraw();			
 		}
@@ -254,17 +263,22 @@ export default class PolyGridBuilder extends DisplayObject{
 	}
 
 	public saveTile = ()=>{
-		this.generateTile();
-		var name:string = (document.getElementById("fileName") as HTMLInputElement).value;
-		name = name.length > 0 ? name+".json" : "tilegrid.json"
-		DomUtils.downloadTextAsFile(name, JSON.stringify(this._grid.toJSON()));
+		if(this._mode == GridMode.tile){
+			this.generateTile();
+			var name:string = (document.getElementById("fileName") as HTMLInputElement).value;
+			name = name.length > 0 ? name+".json" : "tilegrid.json"
+			DomUtils.downloadTextAsFile(name, JSON.stringify(this._grid.toJSON()));
+			GridStorage.saveGrid(this._grid.toJSON());
+		}
+	}
 
-		if(LocalStore.contains("customGrids")){
-			var grids = LocalStore.getJSON("customGrids");
-			grids.push(this._grid.toJSON());
-			LocalStore.storeJSON("customGrids", grids);
-		}else{
-			LocalStore.storeJSON("customGrids", [this._grid.toJSON()]);
+
+	public saveTileImage = ()=>{
+		if(this._mode == GridMode.tile){
+			this.generateTile();
+			var name:string = (document.getElementById("fileName") as HTMLInputElement).value;
+			name = name.length > 0 ? name : "catseyeGrid"
+			this._polyTile.saveImage(name);
 		}
 	}
 

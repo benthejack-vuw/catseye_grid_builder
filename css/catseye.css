@@ -6,44 +6,46 @@ html {
   box-sizing: inherit;
 }
 
-#default-grids #custom-grids{
-	float:left;
-	overflow-y: scroll;
+
+#interface{
+	position:fixed;
+	padding:10px;
+	left:20px;
+	top:2.5vh;
+	background-color: #FFF;
+	opacity: 0.98;
+	width:300px;
+	height:auto;
+	overflow-y: hidden;
 }
 
-#grid-selection {
-	width:100%;
-	height: ;
-	float: left;
+body{
+	background-image: url("../assets/images/checker.png");
 }
 
-#grid-selection ul{
-	width:100%;
-	float:left;
-	padding:0;
-}
-
-#grid-selection li{
-	box-sizing: border-box;
-	list-style-type: none;
-
+.halfScreenSelector{
 	width:50%;
-	margin:0;
-	background-color: #CCC;
+	height:100vh;
 	float:left;
+	margin:0;
+	text-align: center;
+	font-size: 40pt;
+	color: #000;
+	text-decoration: none;
 }
 
-#grid-selection li:hover{
-	background-color: #EEE;
-	cursor:default;
-}
-
-#grid-selection img{
-	border: 1px solid; 
-	width:40%;
-	margin: 5%;
-}
-
-#grid-selection img:hover{
+.halfScreenSelector:hover{
 	opacity: 0.5;
+}
+
+#patternLink{
+	background-image: url("../assets/images/patternTile.png");
+	background-repeat: repeat;
+	background-position: right top;
+}
+
+#gridLink{
+	background-image: url("../assets/images/gridTile.png");
+	background-repeat: repeat;
+	background-position: left top;
 }

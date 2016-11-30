@@ -6,8 +6,8 @@
 
 
 import Point from "../point"
-import DraggablePoint from "./DraggablePoint"
-import DraggablePolygon from "./DraggablePolygon"
+import DraggablePoint from "./draggablePoint"
+import DraggablePolygon from "./draggablePolygon"
 
 export default class DraggableTriangle extends DraggablePolygon{
 
@@ -18,9 +18,9 @@ export default class DraggableTriangle extends DraggablePolygon{
 		var br:DraggablePoint = DraggablePoint.fromData(position.offsetCopy(size.x, size.y));
 		var bl:DraggablePoint = DraggablePoint.fromData(position.offsetCopy(0, size.y));
 
-		this.addCorner(tl);
-		this.addCorner(bl);
 		this.addCorner(br);
+		this.addCorner(bl);
+		this.addCorner(tl);
 
 	}
 
