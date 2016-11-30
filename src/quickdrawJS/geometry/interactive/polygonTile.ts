@@ -1,7 +1,7 @@
 import DisplayObject from "../../canvas/displayObject"
 import Point from "../point"
 import Polygon from "../polygon"
-import * as DomUtils from "../../util/domUtilss"
+import * as DomUtils from "../../util/domUtils"
 
 export default class PolygonTile extends DisplayObject{
 	
