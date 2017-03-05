@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: ["babel-polyfill", "gl-matrix", path.join(__dirname, "src/catseye.ts")],
+  entry: ["gl-matrix", path.join(__dirname, "src/catseye.ts")],
   output: {
     path: __dirname,
     filename: "catseye.bundle.js"
@@ -19,7 +19,8 @@ module.exports = {
         {
           loader:"babel-loader",
           options:{
-            presets:"es2015"
+            presets:"es2015",
+            plugins:["transform-runtime"]
           },
         },
         {
@@ -29,12 +30,11 @@ module.exports = {
       },
     ]
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        dead_code: true,
-        warnings: false
-      }
-    })
-  ]
+  resolveLoader: {
+    modules: ['node_modules']
+  },
+  devtool: "source-map",
+  devServer: {
+    inline: true
+  }
 };
