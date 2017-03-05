@@ -1,28 +1,40 @@
 const path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
-  entry: ["gl-matrix", "babel-polyfill", path.join(__dirname, "src/catseye/catseye.ts")],
+  entry: ["babel-polyfill", "gl-matrix", path.join(__dirname, "src/catseye.ts")],
   output: {
     path: __dirname,
     filename: "catseye.bundle.js"
   },
   resolve: {
-    extensions: ["", ".js", ".ts"]
+    extensions: [".js", ".ts"]
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
-        loaders: ["babel?presets=es2015", "ts"]
+        use: [
+        {
+          loader:"babel-loader",
+          options:{
+            presets:"es2015"
+          },
+        },
+        {
+          loader:"ts-loader"
+        }]
+
       },
     ]
   },
-  resolveLoader: {
-    root: path.join(__dirname, 'node_modules')
-  },
-  devtool: "source-map",
-  devServer: {
-    inline: true
-  }
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        dead_code: true,
+        warnings: false
+      }
+    })
+  ]
 };
