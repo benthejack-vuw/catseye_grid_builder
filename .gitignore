@@ -1,5 +1,6 @@
 /*/min
 /min
+lib/
 *-min.js
 node_modules/
 .codekit-cache/

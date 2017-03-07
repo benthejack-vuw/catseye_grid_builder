@@ -1,9 +1,18 @@
 {
-  "version": "1.8",
+  "version": "2.2.1",
   "compilerOptions": {
+
     "target": "ES2015",
-    "noImplicitAny": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "outDir": "./lib",
     "sourceMap": true
   },
-  "exclude": ["node_modules"]
+  "compileOnSave":false,
+  "exclude": ["node_modules", "lib"]
 }
