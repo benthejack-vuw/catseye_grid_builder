@@ -12,13 +12,28 @@
 		},
 
 		"release":{
+			"any":"key_release",
 			"delete": "delete_poly",
-			"backspace": "delete_poly"
+			"backspace": "delete_poly",
+			"d":"delete_poly"
 		}
 	},
 
 	"gui":{
 		
+		"polygonSides":{
+			"attributes":{
+				"min":3,
+				"max":25,
+				"step":1,
+				"value":6
+			},
+
+			"callbacks":{
+				"change":"change_current_poly"
+			}
+		},
+
 		"rotationSlider":{
 			"attributes":{
 				"min":0,
@@ -77,6 +92,12 @@
 			"callbacks":{
 				"click":"cropTiles"
 			}	
+		},
+
+		"snap-rotate":{
+			"callbacks":{
+				"click":"snapToSelection"
+			}
 		},
 
 		"loadGrid":{

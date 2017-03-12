@@ -1,12 +1,12 @@
 import * as DomUtils from "bj-utils/lib/util/domUtils"
-import {DrawingUtils} from "bj-utils"
-import {Storage as LocalStore} from "bj-utils"
-import {BJMath} from "bj-utils"
-import {Transform} from "bj-utils"
-import {Point} from "bj-utils"
+import * as DrawingUtils from "bj-utils/lib/util/drawingUtils"
+import * as LocalStore from "bj-utils/lib/storage/localStore"
+import * as BJMath from "bj-utils/lib/util/mathUtils"
+import {Transform} from "bj-utils/lib/util/transform"
+import {Point} from "bj-utils/lib/geometry/point"
 
-import {MouseData} from "interaction-centre"
-import {MouseButton} from "interaction-centre"
+import {MouseData} from "interaction-centre/lib/mouseData"
+import {MouseButton} from "interaction-centre/lib/mouseData"
 
 import {DisplayObject} from "quick-canvas"
 import {Line} from "quick-canvas"
@@ -175,7 +175,10 @@ export class PolyGridBuilder extends DisplayObject{
 
 	public setRotationSlider(){
 	 	DomUtils.editDomElementAttr("rotationSlider", "max", BJMath.TWO_PI);
-	 	DomUtils.editDomElementAttr("rotationSlider", "step", BJMath.TWO_PI/(this._grid.first.length*2));
+	 	if(this._grid._polygons.length > 0)
+	 		DomUtils.editDomElementAttr("rotationSlider", "step", BJMath.TWO_PI/(this._grid.first.length*2));
+		else
+			DomUtils.editDomElementAttr("rotationSlider", "step", BJMath.TWO_PI/this._next_poly_sides);
 	}
 
 	public applyTransformations(){
@@ -185,9 +188,15 @@ export class PolyGridBuilder extends DisplayObject{
 		this.parent.stage.scale(this._scale, this._scale);
 	}
 
-	public change_current_poly = (last_pressed:string) =>{
-		this._next_poly_sides = parseInt(last_pressed);
+	public change_current_poly = (sides:string, e:Event) =>{
+		this._next_poly_sides = parseInt(sides);
+		
+		let guiControl = document.getElementById("polygonSides") as HTMLInputElement;
+		if(e.target != guiControl){
+			guiControl.value = sides;
+		}
 
+		
 		this._polygon_ghost = new RegularPolygon();
 		if(this._grid.isEmpty()){
 			this._polygon_ghost.initialize_regular_polygon(this._next_poly_sides, new Point(0,0), this._start_radius);
@@ -212,6 +221,10 @@ export class PolyGridBuilder extends DisplayObject{
 		this._snapGrid.addChild(this._tileSelector);
 	}
 
+	public key_release = (key)=>{
+		console.log(key);
+	}
+
 	public delete_poly = ()=>{
 		this._grid.deletePolyUnderPoint(this._mouseData.position);
 		if(this._grid.isEmpty()){
@@ -224,6 +237,15 @@ export class PolyGridBuilder extends DisplayObject{
 		this.applyTransformations();
 	}
 
+	public snapToSelection = ()=>{
+		if(this._mode == GridMode.tile){
+			let pt1 = this._tileSelector.points[0];
+			let pt2 = this._tileSelector.points[1];
+			this._rotate = -Math.atan2(pt2.y-pt1.y, pt2.x-pt1.x);
+			this.applyTransformations();
+		}
+	}
+
 	public changeScale = (value:number)=>{
 		this._scale = value;
 		this.applyTransformations();
@@ -233,7 +255,7 @@ export class PolyGridBuilder extends DisplayObject{
 		if(this._mode == GridMode.create){
 			this.generate_snap_grid();
 			this._mode = GridMode.tile;
-		}else if(this._mode = GridMode.tile){
+		}else if(this._mode == GridMode.tile){
 			this._mode = GridMode.create;
 			this.removeChild(this._snapGrid);
 			this._snapGrid = null;

@@ -30,7 +30,7 @@
     "babel-polyfill": "^6.23.0",
     "bj-utils": "^1.0.11",
     "gl-matrix": "2.0",
-    "interaction-centre": "^1.0.10",
-    "quick-canvas": "^1.0.6"
+    "interaction-centre": "^1.1.7",
+    "quick-canvas": "^1.0.9"
   }
 }

@@ -12,7 +12,13 @@
 	<div id="catseye-main"></div>
 
 	<div id="interface">
-		
+
+
+		<div class="labelled percent100">
+			<label>current polygon (sides)</label>
+			<input id="polygonSides"  type="number" class="percent10"/>
+		</div>
+
 		<div class="labelled percent100">
 			<button id="loadGrid" class="percent50">Load Grid</button>
 		</div>
@@ -24,7 +30,8 @@
 		
 		<div class="labelled percent100">
 			<label>rotation</label>
-			<input type="range" id="rotationSlider" class="percent100"/>
+			<input type="range" id="rotationSlider" class="percent50"/>
+			<input type="button" id="snap-rotate" value="snap to selection" class="percent50"/>
 		</div>
 		
 		<div class="labelled percent100">
