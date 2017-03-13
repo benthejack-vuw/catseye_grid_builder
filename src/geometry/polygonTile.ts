@@ -15,18 +15,14 @@ export class PolygonTile extends DisplayObject{
 	constructor(position:Point, size:Point, tileData:any){
 		super(position, size);
 		this._baseSize = size.copy();
-		if(typeof(tileData) === "string"){
-			DomUtils.fetchJSONFile(tileData, this.setData);
-		}else{
-			this.setData(tileData);
-		}
-
+		this.setData(tileData);
 		this.setCacheAsCanvas(true);
 	}
 
 	public setData(jsonData:any){
 		this.size.x = this._baseSize.x * jsonData.edge_normalized_clipRect.width;
 		this.size.y = this._baseSize.y * jsonData.edge_normalized_clipRect.height;
+		console.log(this._baseSize.x, this._baseSize.y, this.size.x, this.size.y);
 		this._polygons = [];
 
 		var transformPoly = (pts:Array<any>)=>{
@@ -44,7 +40,7 @@ export class PolygonTile extends DisplayObject{
 		}
 
 	}
-
+	
 	public draw(context:CanvasRenderingContext2D, fill?:boolean){
 		this.clear(context, true);
 		context.save();

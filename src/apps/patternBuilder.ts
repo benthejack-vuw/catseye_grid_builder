@@ -7,16 +7,19 @@ import {Storage as LocalStore} from "bj-utils"
 import {Stage} from "quick-canvas"
 import {DisplayObject} from "quick-canvas"
 
-import {GridStorage} from "../grids/gridStorage"
+import {GridManager} from "../grids/gridManager"
 import {GLPolyTile} from "../webGL/GLPolyTile"
 import {ImageAreaSelector} from "../interactive/imageAreaSelector"
 
 
 export class PatternBuilder extends DisplayObject{
 
+	private _gridManager:GridManager;
+
 	private _selectionStage:Stage;
 	private _imageSelector:ImageAreaSelector;
 	private _textureCoordinates:Array<Point>;
+
 	private _glTile:GLPolyTile;
 	private _grid:any;
 	private _texture:HTMLImageElement;
@@ -48,8 +51,8 @@ export class PatternBuilder extends DisplayObject{
 			this.loadLastSession();
 		}
 
-		GridStorage.createDefaultGridSelectors("default-grids",this);
-		GridStorage.createCustomGridSelectors("custom-grids",this);
+		this._gridManager = new GridManager(this);
+
 		this.showDefaultGrids();
 
 	}
@@ -126,8 +129,7 @@ export class PatternBuilder extends DisplayObject{
         	return DomUtils.readFileAsJSON(file);
         }).then((grid)=>{
         	this.setGrid(grid);
-        	GridStorage.saveGrid(grid);
-			GridStorage.createCustomGridSelectors("custom-grids",this);
+        	this._gridManager.addFromData(grid, "custom-grids");
 			this.showCustomGrids();
         });
 

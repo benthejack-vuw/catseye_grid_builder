@@ -58,17 +58,13 @@ canvas:hover{
 	cursor:default;
 }
 
-.grid-selector{
+.grid-button{
 	float: left;
 	box-sizing: border-box;
 	border: 1px solid; 
-	width:40%;
+	height: 100px;
+	width: 40%;
 	margin: 5%;
-}
-
-.grid-selector button{
-	float:right;
-	opacity:1;
 }
 
 .delete-button{
@@ -78,8 +74,8 @@ canvas:hover{
 	top:0;
 	float: right;
 	z-index: 2;
-	width:10px;
-	height:10px;
+	width:15px;
+	height:15px;
 }
 
 .delete-button:hover{
