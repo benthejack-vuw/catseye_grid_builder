@@ -15,35 +15,31 @@
 
 
 		<div class="labelled percent100">
-			<label>current polygon (sides)</label>
-			<input id="polygonSides"  type="number" class="percent10"/>
+			<button id="loadGrid" class="percent100">Load Grid</button>
 		</div>
 
 		<div class="labelled percent100">
-			<button id="loadGrid" class="percent50">Load Grid</button>
-		</div>
-		
-		<div class="labelled percent100">
-			<label>Grid name</label>
-			<input type="text" id="fileName" value="catseye grid"/>
-		</div>
-		
-		<div class="labelled percent100">
-			<label>rotation</label>
-			<input type="range" id="rotationSlider" class="percent50"/>
-			<input type="button" id="snap-rotate" value="snap to selection" class="percent50"/>
-		</div>
+			<label>current polygon (sides)</label>
+			<input id="polygonSides"  type="number" class="percent10"/>
+		</div>		
 		
 		<div class="labelled percent100">
 			<label>scale</label>
 			<input type="range" id="scaleSlider" class="percent100"/>
 		</div>
 
-		<div class="labelled">
+		<div class="labelled percent100">
 			<button id="toggleMode" class="percent100">toggle mode</button>
-			<button id="crop">crop tiles</button>
+			<button id="snapRotation" class="percent100">snap rotation</button>
+			<button id="crop" class="left">crop tiles</button>
 			<button id="previewTile" class="right">preview tile</button>
-			<button id="saveTile">save tile</button>
+		</div>
+		<div class="labelled percent100">
+			<label>save as</label>
+			<input type="text" id="fileName" value="catseye grid"/>
+		</div>
+		<div class="labelled percent100">
+			<button id="saveTile" class="left">save tile</button>
 			<button id="saveTileImage" class="right">save tile image</button>
 		</div>
 	</div>

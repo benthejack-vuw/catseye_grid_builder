@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: ["gl-matrix", path.join(__dirname, "src/catseye.ts")],
+  entry: ["babel-polyfill", "gl-matrix", path.join(__dirname, "src/catseye.ts")],
   output: {
     path: __dirname,
     filename: "catseye.bundle.js"

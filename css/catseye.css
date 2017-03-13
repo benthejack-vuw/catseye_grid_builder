@@ -76,8 +76,6 @@ html {
 	color:#222;
 	font-size: 0.8em;
 	text-transform: uppercase;
-
-	width:45%;
 }
 
 
@@ -85,7 +83,12 @@ html {
 	background-color: #DDD;
 }
 
+.left{
+	width:45%;
+}
+
 .right{
+	width:45%;
 	margin-left: 7.5%;
 }
 

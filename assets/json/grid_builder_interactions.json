@@ -8,7 +8,8 @@
 			"6": "change_current_poly",
 			"7": "change_current_poly",
 			"8": "change_current_poly",
-			"9": "change_current_poly"
+			"9": "change_current_poly",
+			"control+d": "dataDump"
 		},
 
 		"release":{
@@ -31,18 +32,6 @@
 
 			"callbacks":{
 				"change":"change_current_poly"
-			}
-		},
-
-		"rotationSlider":{
-			"attributes":{
-				"min":0,
-				"max":3,
-				"step":0.1
-			},
-
-			"callbacks":{
-				"input":"changeRotation"
 			}
 		},
 
@@ -94,7 +83,7 @@
 			}	
 		},
 
-		"snap-rotate":{
+		"snapRotation":{
 			"callbacks":{
 				"click":"snapToSelection"
 			}

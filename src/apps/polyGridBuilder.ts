@@ -17,8 +17,10 @@ import {SnapGrid} from "quick-canvas"
 import {DraggableRect} from "quick-canvas"
 import {BoundingBox} from "quick-canvas"
 
+import {VertexAggregator} from "../geometry/vertexAggregator"
 import {PolygonTile} from "../geometry/polygonTile"
 import {GridStorage} from "../grids/gridStorage";
+
 
 enum GridMode{
 	create,
@@ -28,6 +30,7 @@ enum GridMode{
 export class PolyGridBuilder extends DisplayObject{
 
 	private _grid:PolygonGrid;
+	private _aggregator:VertexAggregator;
 	private _selected_edge:Line;
 	private _mouseData:MouseData;
 	private _start_radius:number;
@@ -46,6 +49,7 @@ export class PolyGridBuilder extends DisplayObject{
 	constructor(radius:number){
 		super(new Point(0,0), new Point(window.innerWidth,window.innerHeight));
 		this._grid = new PolygonGrid();
+		this._aggregator = new VertexAggregator(new Point(this._size.x/2, this._size.y/2));
 		this._selected_edge = null;
 		this._mouseData = null;
 		this._start_radius = radius;
@@ -72,7 +76,6 @@ export class PolyGridBuilder extends DisplayObject{
         	return DomUtils.readFileAsJSON(file);
         }).then((grid:any)=>{
         	this._grid.setPolygonData(grid.polygons);
-		  	this.setRotationSlider();
 		  	this._tileSelector = undefined;
 		  	this._snapGrid = undefined;
 		  	this._polyTile = undefined;
@@ -130,6 +133,8 @@ export class PolyGridBuilder extends DisplayObject{
 			context.restore();
 		}
 
+		this._aggregator.draw(context);
+
 	}
 
 	public mouseMoved(i_mouseData:MouseData){
@@ -160,25 +165,12 @@ export class PolyGridBuilder extends DisplayObject{
 
 	public mouseClicked(){
 
- 		//if(this._bounds_selector === null || this._bounds_selector === undefined){
-			this._grid.addPolygon(this._polygon_ghost);
-			this._polygon_ghost = new RegularPolygon();
-			this._selected_edge = this._grid.closestEdge(this._mouseData.position);
-			this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
+		this._grid.addPolygon(this._polygon_ghost);
+		this._aggregator.addPoly(this._polygon_ghost);
+		this._polygon_ghost = new RegularPolygon();
+		this._selected_edge = this._grid.closestEdge(this._mouseData.position);
+		this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
 
-		//}
-		if(this._grid.size <= 1){
-			this.setRotationSlider();
-		}
-
-	}
-
-	public setRotationSlider(){
-	 	DomUtils.editDomElementAttr("rotationSlider", "max", BJMath.TWO_PI);
-	 	if(this._grid._polygons.length > 0)
-	 		DomUtils.editDomElementAttr("rotationSlider", "step", BJMath.TWO_PI/(this._grid.first.length*2));
-		else
-			DomUtils.editDomElementAttr("rotationSlider", "step", BJMath.TWO_PI/this._next_poly_sides);
 	}
 
 	public applyTransformations(){
@@ -202,10 +194,6 @@ export class PolyGridBuilder extends DisplayObject{
 			this._polygon_ghost.initialize_regular_polygon(this._next_poly_sides, new Point(0,0), this._start_radius);
 		}else if(this._selected_edge){
 			this._polygon_ghost.initialize_from_line(this._next_poly_sides, this._selected_edge);
-		}
-
-		if(this._grid.size <= 1){
-			this.setRotationSlider();
 		}
 	}
 
@@ -304,6 +292,8 @@ export class PolyGridBuilder extends DisplayObject{
 		}
 	}
 
-
+	public dataDump = ()=>{
+		DomUtils.downloadTextAsFile("dump", JSON.stringify(this._aggregator.dump()));
+	}
 
 }
