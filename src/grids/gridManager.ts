@@ -4,7 +4,7 @@ import * as DomUtils from "bj-utils/lib/util/domUtils"
 import {GridStorage} from "./gridStorage"
 import {PolygonTile} from "../geometry/polygonTile"
 
- 
+
 const tabs:string[] = ["default-grids", "custom-grids"];
 
 
@@ -29,7 +29,7 @@ export class GridManager{
 	}
 
 	private generateButton(tab:string, deletable:boolean):GridButton{
-		return new GridButton(this, 
+		return new GridButton(this,
 							  document.getElementById(tab),
 							  this._callbackObject,
 							  deletable);
@@ -67,8 +67,8 @@ class GridButton{
 	private _data:any;
 
 	constructor(private _manager:GridManager,
-				private _parentElement:HTMLElement, 
-		        private _callbackObject:any, 
+				private _parentElement:HTMLElement,
+		        private _callbackObject:any,
 		        private _deletable:boolean = true){}
 
 	private build = (data:any)=>{
@@ -93,7 +93,7 @@ class GridButton{
 		let highlight = document.createElement("div");
 		highlight.setAttribute("class", "highlight");
 		this._domElement.appendChild(highlight);
-		
+
 		this._domElement.addEventListener("click", (e)=>{
 			this._callbackObject.setGrid(data);
 		});
