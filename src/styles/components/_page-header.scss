@@ -1,0 +1,21 @@
+.page-header{
+    background:$light-grey;
+    color: $dark-grey;
+    padding: $l-size 0;
+    margin-bottom: $l-size;
+}
+
+.page-header__title{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: $m-size;
+    font-weight: 50;
+    margin: 0;
+    
+    span{
+        font-weight: bold;  
+    }
+}
+
+.page-header__actions{
+    margin-top: $s-size;
+}

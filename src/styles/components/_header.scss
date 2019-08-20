@@ -1,0 +1,22 @@
+.header{
+    background: $dark-blue;
+}
+
+.header__layout{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: $s-size 0;
+}
+
+.header__home-link{
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: $s-size;
+    font-weight: 500;
+    text-decoration: none;
+
+    h1{
+        margin:0;
+    }
+}
