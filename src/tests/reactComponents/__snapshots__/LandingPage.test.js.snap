@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render LandingPage correctly 1`] = `
+<div>
+  <Link
+    to="/pattern-builder/"
+  >
+    <p>
+      Build a pattern
+    </p>
+  </Link>
+  <Link
+    to="/grid-builder/"
+  >
+    <p>
+      Build a grid
+    </p>
+  </Link>
+</div>
+`;

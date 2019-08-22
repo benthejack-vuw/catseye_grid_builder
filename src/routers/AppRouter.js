@@ -1,19 +1,23 @@
 import React from 'react'
 import {Router, Route, Switch} from 'react-router-dom'
 import { createBrowserHistory } from 'history'
-import PrivateRoute from './PrivateRoute'
-import PublicRoute from './PublicRoute'
-import LoginPage from '../reactComponents/pages/LoginPage'
-import NotFoundPage from '../reactComponents/pages/NotFoundPage'
 
+import GridBuilderPage from '../reactComponents/GridBuilderPage'
+import Header from '../reactComponents/Header'
+import LandingPage from '../reactComponents/LandingPage'
+import NotFoundPage from '../reactComponents/NotFoundPage'
+import PatternBuilderPage from '../reactComponents/PatternBuilderPage'
 
 export const history = createBrowserHistory();
 
 const AppRouter = () => (
     <div>
         <Router history={history}>
+            <Header/>
             <Switch>
-                <PublicRoute exact={true} path="/" component={LoginPage}/>
+                <Route exact={true} path="/" component= {LandingPage}/>
+                <Route path="/pattern-builder" component= { PatternBuilderPage }/>
+                <Route path="/grid-builder" component= { GridBuilderPage }/>
                 <Route component={NotFoundPage}/>
             </Switch>
         </Router>

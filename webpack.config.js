@@ -72,7 +72,9 @@ module.exports = (env)=>{
     ],
     devtool: devMode ? 'inline-source-map' : 'source-map',
     devServer:{
-      contentBase:path.join(__dirname, 'public'),
+      contentBase: path.resolve(__dirname, 'public'),
+      publicPath: '/assets/', //publicPath is relative to contentBase and doesn't seem to like absolute paths!
+      watchContentBase: true,
       historyApiFallback:true
     }
 
