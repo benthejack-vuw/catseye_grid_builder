@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render PatternOptionsPanel correctly 1`] = `
+<div>
+  <button
+    onClick={[Function]}
+  >
+    Load Image
+  </button>
+  <ImageAreaSelector
+    image="data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7"
+    size={
+      Object {
+        "x": 400,
+        "y": 400,
+      }
+    }
+    textureCoordinates={
+      Array [
+        Object {
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "x": 1,
+          "y": 0,
+        },
+        Object {
+          "x": 1,
+          "y": 1,
+        },
+      ]
+    }
+    updateCallback={[Function]}
+  />
+  <input
+    max={2}
+    min={0}
+    onChange={[Function]}
+    step={0.01}
+    type="range"
+  />
+</div>
+`;

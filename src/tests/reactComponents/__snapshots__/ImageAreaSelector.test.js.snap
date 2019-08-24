@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render ImageAreaSelector correctly 1`] = `
+<div>
+  <svg
+    height={400}
+    id="image-area-selector-container"
+    onMouseMove={[Function]}
+    width={400}
+  >
+    <image
+      id="image-area-selector-selecton-image"
+      onLoad={[Function]}
+      width="100%"
+      xlinkHref="data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7"
+    />
+    <line
+      key="selectionLine0"
+      stroke="black"
+      strokeDasharray="5, 5"
+      x1={0}
+      x2={400}
+      y1={0}
+      y2={0}
+    />
+    <line
+      key="selectionLine1"
+      stroke="black"
+      strokeDasharray="5, 5"
+      x1={400}
+      x2={400}
+      y1={0}
+      y2={400}
+    />
+    <line
+      key="selectionLine2"
+      stroke="black"
+      strokeDasharray="5, 5"
+      x1={400}
+      x2={0}
+      y1={400}
+      y2={0}
+    />
+    <circle
+      className="image-selection-circle"
+      cx={0}
+      cy={0}
+      key="selection0"
+      onMouseDown={[Function]}
+      r={20}
+    />
+    <circle
+      className="image-selection-circle"
+      cx={400}
+      cy={0}
+      key="selection1"
+      onMouseDown={[Function]}
+      r={20}
+    />
+    <circle
+      className="image-selection-circle"
+      cx={400}
+      cy={400}
+      key="selection2"
+      onMouseDown={[Function]}
+      r={20}
+    />
+  </svg>
+</div>
+`;

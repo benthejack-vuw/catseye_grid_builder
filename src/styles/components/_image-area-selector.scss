@@ -1,0 +1,14 @@
+.image-selection-circle{
+    fill:black;
+}
+  
+.image-selection-circle:hover{
+    fill:red;
+}
+
+.image-area-selector__image-alignment{
+    display: flex;
+    width:100%;
+    height: 100%;
+    align-content: center;
+}

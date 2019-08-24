@@ -3,6 +3,6 @@ import { shallow } from 'enzyme';
 import PatternBuilderPage from '../../reactComponents/PatternBuilderPage';
 
 test('should render PatternBuilderPage correctly', ()=>{
-    const wrapper = shallow(<PatternBuilderPage startLogout={()=>{}}/>);
+    const wrapper = shallow(<PatternBuilderPage/>);
     expect(wrapper).toMatchSnapshot();
 })

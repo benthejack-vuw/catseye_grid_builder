@@ -1,8 +1,14 @@
 import React from 'react'
 
+import PatternOptionsPanel from './PatternOptionsPanel'
+import GridSelectionPanel  from './GridSelectionPanel'
+import PatternDisplay from './PatternDisplay.js'
+
 const PatternBuilderPage = () => (
     <div>
-        Pattern Builder
+        <PatternDisplay/>
+        <PatternOptionsPanel/>
+        <GridSelectionPanel/>
     </div>
 )
 
