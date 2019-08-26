@@ -1,3 +1,4 @@
 node_modules
 .env*
 Old
+yarn-error.log
