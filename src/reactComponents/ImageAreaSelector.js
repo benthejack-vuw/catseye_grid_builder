@@ -2,6 +2,9 @@ import React from 'react'
 
 export default class ImageAreaSelector extends React.Component{
 
+    _svgContainerRef;
+    _svgImageRef;
+
 	constructor(props){
         super(props);
 
@@ -11,8 +14,38 @@ export default class ImageAreaSelector extends React.Component{
             selected: undefined
         }
 
+        this._svgContainerRef = React.createRef();
+        this._svgImageRef = React.createRef();
+
         document.addEventListener('mouseup', this.stopDragging);
     }
+
+    render = () => ( 
+        <div>
+            <svg 
+             ref={this._svgContainerRef}
+             width={this.state.size.x}
+             height={this.state.size.y}
+             onMouseMove={this.updateMouseCoords}
+            >
+                <image 
+                    ref={this._svgImageRef}
+                    xlinkHref={this.props.image && this.props.image.src}
+                    width='100%'
+                    onLoad={
+                        (() => {
+                            this.centerImage()
+                            this.constrainSelectorsToImage()
+                            this.setFromTextureCoordinates(this.props.textureCoordinates)
+                        })
+                    }
+                />
+
+                {this.dashedLines()}
+                {this.selectionCircles()}
+            </svg>
+        </div>
+    )
 
     componentDidMount = () => {
         this.centerImage();
@@ -24,7 +57,7 @@ export default class ImageAreaSelector extends React.Component{
     }
 
     updateMouseCoords = (e) => {
-        const rect = document.getElementById(`${this.idPrefix()}-container`).getBoundingClientRect();
+        const rect = this._svgContainerRef.current.getBoundingClientRect();
         const x = e.clientX - rect.left; 
         const y = e.clientY - rect.top;
 
@@ -65,13 +98,13 @@ export default class ImageAreaSelector extends React.Component{
     }
     
     imageBounds = () => {
-        const containerRect = document.getElementById(`${this.idPrefix()}-container`).getBoundingClientRect();
-        const imageRect = document.getElementById(`${this.idPrefix()}-selecton-image`).getBoundingClientRect();
+        const containerRect = this._svgContainerRef.current.getBoundingClientRect();
+        const imageRect = this._svgImageRef.current.getBoundingClientRect();
         return new DOMRect(imageRect.x - containerRect.x, imageRect.y - containerRect.y, imageRect.width, imageRect.height);
     }
 
     centerImage = () => {
-        const imageElem = document.getElementById(`${this.idPrefix()}-selecton-image`);
+        const imageElem = this._svgImageRef.current;
         const imageRect = imageElem.getBoundingClientRect();
         imageElem.setAttribute('x', (this.state.size.x-imageRect.width)/2 );
         imageElem.setAttribute('y', (this.state.size.y-imageRect.height)/2 );
@@ -118,36 +151,10 @@ export default class ImageAreaSelector extends React.Component{
                 className='image-selection-circle'                            
                 cx={pt.x}
                 cy={pt.y}
-                r={20}
+                r={10}
                 onMouseDown = {()=>{this.startDragging(index)}}
             />
         ))
     }
-
-    render = () => ( 
-        <div>
-            <svg id={`${this.idPrefix()}-container`}
-             width={this.state.size.x}
-             height={this.state.size.y}
-             onMouseMove={this.updateMouseCoords}
-            >
-                <image 
-                    id={`${this.idPrefix()}-selecton-image`}
-                    xlinkHref={this.props.image}
-                    width='100%'
-                    onLoad={
-                        (() => {
-                            this.centerImage()
-                            this.constrainSelectorsToImage()
-                            this.setFromTextureCoordinates(this.props.textureCoordinates)
-                        })
-                    }
-                />
-
-                {this.dashedLines()}
-                {this.selectionCircles()}
-            </svg>
-        </div>
-    )
 
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { DomUtils } from 'bj-utils'
 import { connect } from 'react-redux'
-import { updateTextureCoordinates, updateImage, updateScale } from '../actions/PatternBuilder'
+import { updateTextureCoordinates, startUpdateImage, updateScale } from '../actions/PatternBuilder'
 import ImageAreaSelector from './ImageAreaSelector'
 
 
@@ -16,7 +16,7 @@ export class PatternOptionsPanel extends React.Component{
         DomUtils.selectImage().then((file)=>{
             return DomUtils.readImageAsURL(file);
         }).then((imageContentURL)=>{
-            this.props.updateImage(imageContentURL);
+            this.props.startUpdateImage(imageContentURL);
         });
     }
 
@@ -25,7 +25,7 @@ export class PatternOptionsPanel extends React.Component{
     }
 
     render = ()=>(
-        <div>
+        <div className='pattern-options-panel'>
             <button onClick={this.loadImage}>Load Image</button>
             
             <ImageAreaSelector 
@@ -37,7 +37,7 @@ export class PatternOptionsPanel extends React.Component{
 
             <input 
                 type='range'
-                min={0}
+                min={0.01}
                 max={2}
                 step={0.01}
                 value={this.props.scale}
@@ -55,7 +55,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    updateImage: (image) => dispatch(updateImage(image)),
+    startUpdateImage: (image) => dispatch(startUpdateImage(image)),
     updateScale: (scale) => dispatch(updateScale(scale)),
     updateTexCoords: (coords) => dispatch(updateTextureCoordinates(coords)),
 });

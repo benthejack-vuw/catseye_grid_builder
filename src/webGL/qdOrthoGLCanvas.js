@@ -44,6 +44,7 @@ export class QDOrthoGLCanvas{
 			var unit = Object.keys(this._textures).length;
 			this._textures[uniformName] = new QDGLTexture(this._glCtx, this._shaderProgram, uniformName, unit);
 		}
+
 		this._textures[uniformName].set(image);
 	}
 

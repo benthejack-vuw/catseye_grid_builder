@@ -1,6 +1,6 @@
 
 const defaults = {
-    image: 'data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7',
+    image: undefined,
     scale: 0.5,
     showGrid: false,
     grid: undefined,
@@ -29,6 +29,12 @@ export default (state = defaults, {type, ...action}) => {
             return {
                 ...state,
                 scale: action.scale
+            }
+        case 'UPDATE_GRID':
+            console.log('UPDATING GRID')
+            return {
+                ...state,
+                grid: action.grid
             }
         default:
             return state;
